@@ -4,8 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CommercePortal.Persistence
 {
-    public static class ServiceRegistation
+    /// <summary>
+    /// Represents the service registration for the persistence layer.
+    /// </summary>
+    public static class ServiceRegistration
     {
+        /// <summary>
+        /// Adds the persistence services to the service collection.
+        /// </summary>
+        /// <param name="services">The service collection to add the services to.</param>
         public static void AddPersistenceServices(this IServiceCollection services)
         {
             services.AddDbContext<EfDbContext>(options =>

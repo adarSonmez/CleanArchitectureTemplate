@@ -2,11 +2,24 @@
 
 namespace CommercePortal.Domain.Entities
 {
+    /// <summary>
+    /// Represents an order entity.
+    /// </summary>
     public class Order : BaseEntity
     {
-        public string Description { get; set; }
-        public string Address { get; set; }
-        public Customer Customer { get; set; }
-        public ICollection<Product> Products { get; set; }
+        /// <summary>
+        /// Gets or sets the address of the order.
+        /// </summary>
+        public required string Address { get; set; }
+
+        /// <summary>
+        /// Gets or sets the navigation property to the customer who placed the order.
+        /// </summary>
+        public required Customer Customer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the products which are included in the order.
+        /// </summary>
+        public ICollection<Product> Products { get; set; } = [];
     }
 }
