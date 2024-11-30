@@ -19,18 +19,18 @@ namespace CommercePortal.Persistence
         {
             #region Database provider
 
-            services.AddDbContext<EfDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=CommercePortal;Username=postgres;Password=sneider14"), ServiceLifetime.Singleton);
+            services.AddDbContext<EfDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=CommercePortal;Username=postgres;Password="));
 
             #endregion Database provider
 
             #region Repository services
 
-            services.AddSingleton<IProductReadRepository, EfProductReadRepository>();
-            services.AddSingleton<IProductWriteRepository, EfProductWriteRepository>();
-            services.AddSingleton<IOrderReadRepository, EfOrderReadRepository>();
-            services.AddSingleton<IOrderWriteRepository, EfOrderWriteRepository>();
-            services.AddSingleton<ICustomerReadRepository, EfCustomerReadRepository>();
-            services.AddSingleton<ICustomerWriteRepository, EfCustomerWriteRepository>();
+            services.AddScoped<IProductReadRepository, EfProductReadRepository>();
+            services.AddScoped<IProductWriteRepository, EfProductWriteRepository>();
+            services.AddScoped<IOrderReadRepository, EfOrderReadRepository>();
+            services.AddScoped<IOrderWriteRepository, EfOrderWriteRepository>();
+            services.AddScoped<ICustomerReadRepository, EfCustomerReadRepository>();
+            services.AddScoped<ICustomerWriteRepository, EfCustomerWriteRepository>();
 
             #endregion Repository services
         }

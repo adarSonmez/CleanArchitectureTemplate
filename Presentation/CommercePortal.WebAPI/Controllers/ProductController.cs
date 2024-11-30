@@ -18,7 +18,7 @@ namespace CommercePortal.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async void Get()
+        public async Task Get()
         {
             // add some dummy data
 
