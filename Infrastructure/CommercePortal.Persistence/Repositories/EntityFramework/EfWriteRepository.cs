@@ -10,15 +10,14 @@ namespace CommercePortal.Persistence.Repositories.EntityFramework
     /// </summary>
     /// <typeparam name="TEntity">The type of entity.</typeparam>
     /// <typeparam name="TContext">The type of DbContext.</typeparam>
-    public class EfWriteRepository<TEntity, TContext> : IWriteRepository<TEntity>
+    public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
         where TEntity : BaseEntity
-        where TContext : EfDbContext, new()
     {
-        private readonly TContext _context;
+        private readonly DbContext _context;
 
-        public EfWriteRepository()
+        public EfWriteRepository(DbContext context)
         {
-            _context = new TContext();
+            _context = context;
             Table = _context.Set<TEntity>();
         }
 

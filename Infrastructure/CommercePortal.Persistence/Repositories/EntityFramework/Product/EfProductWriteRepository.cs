@@ -5,9 +5,9 @@ using CommercePortal.Persistence.Contexts;
 namespace CommercePortal.Persistence.Repositories.EntityFramework
 {
     /// <summary>
-    /// Represents the <see cref="Order"/> write repository.
+    /// Represents EntityFramework implementation of the <see cref="Product"/> write repository.
     /// </summary>
-    public class OrderWriteRepository : EfWriteRepository<Order, EfDbContext>, IOrderWriteRepository
+    public class EfProductWriteRepository(EfDbContext context) : EfWriteRepository<Product>(context), IProductWriteRepository
     {
     }
 }

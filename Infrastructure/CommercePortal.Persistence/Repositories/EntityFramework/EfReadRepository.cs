@@ -11,15 +11,14 @@ namespace CommercePortal.Persistence.Repositories.EntityFramework
     /// </summary>
     /// <typeparam name="TEntity">The type of entity.</typeparam>
     /// <typeparam name="TContext">The type of DbContext.</typeparam>
-    public class EfReadRepository<TEntity, TContext> : IReadRepository<TEntity>
+    public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         where TEntity : BaseEntity
-        where TContext : EfDbContext, new()
     {
-        private readonly TContext _context;
+        private readonly DbContext _context;
 
-        public EfReadRepository()
+        public EfReadRepository(DbContext context)
         {
-            _context = new TContext();
+            _context = context;
             Table = _context.Set<TEntity>();
         }
 

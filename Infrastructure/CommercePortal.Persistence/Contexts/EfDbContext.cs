@@ -6,7 +6,7 @@ namespace CommercePortal.Persistence.Contexts
     /// <summary>
     /// Represents the entity framework implementation of the <see cref="DbContext"/>.
     /// </summary>
-    public class EfDbContext : DbContext
+    public class EfDbContext(DbContextOptions<EfDbContext> options) : DbContext(options)
     {
         #region DbSet Properties
 
@@ -26,17 +26,5 @@ namespace CommercePortal.Persistence.Contexts
         public DbSet<Order> Orders { get; set; }
 
         #endregion DbSet Properties
-
-        #region Constructors
-
-        public EfDbContext()
-        {
-        }
-
-        public EfDbContext(DbContextOptions<EfDbContext> options) : base(options)
-        {
-        }
-
-        #endregion Constructors
     }
 }

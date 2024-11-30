@@ -5,9 +5,9 @@ using CommercePortal.Persistence.Contexts;
 namespace CommercePortal.Persistence.Repositories.EntityFramework
 {
     /// <summary>
-    /// Represents the <see cref="Product"/> read repository.
+    /// Represents EntityFramework implementation of the <see cref="Product"/> read repository.
     /// </summary>
-    public class ProductReadRepository : EfReadRepository<Product, EfDbContext>, IProductReadRepository
+    public class EfProductReadRepository(EfDbContext context) : EfReadRepository<Product>(context), IProductReadRepository
     {
     }
 }
