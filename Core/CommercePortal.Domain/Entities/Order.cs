@@ -15,7 +15,7 @@ public class Order : BaseEntity
     /// <summary>
     /// Gets or sets the navigation property to the customer who placed the order.
     /// </summary>
-    public required Customer Customer { get; set; }
+    public Customer Customer { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the products which are included in the order.
