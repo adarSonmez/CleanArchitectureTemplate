@@ -1,0 +1,20 @@
+root = true
+
+# All files
+[*]
+indent_style = space
+
+# Xml files
+
+# IDE0130: Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = silent
+
+
+# IDE0160: Convert to block scoped namespace
+csharp_style_namespace_declarations = file_scoped
+
+# IDE0161: Convert to file-scoped namespace
+dotnet_diagnostic.IDE0161.severity = suggestion
+
+[*.xml]
+indent_size = 2

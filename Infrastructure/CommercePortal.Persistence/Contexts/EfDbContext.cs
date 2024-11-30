@@ -1,30 +1,29 @@
 ﻿using CommercePortal.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CommercePortal.Persistence.Contexts
+namespace CommercePortal.Persistence.Contexts;
+
+/// <summary>
+/// Represents the entity framework implementation of the <see cref="DbContext"/>.
+/// </summary>
+public class EfDbContext(DbContextOptions<EfDbContext> options) : DbContext(options)
 {
+    #region DbSet Properties
+
     /// <summary>
-    /// Represents the entity framework implementation of the <see cref="DbContext"/>.
+    /// Gets or sets the products table.
     /// </summary>
-    public class EfDbContext(DbContextOptions<EfDbContext> options) : DbContext(options)
-    {
-        #region DbSet Properties
+    public DbSet<Product> Products { get; set; }
 
-        /// <summary>
-        /// Gets or sets the products table.
-        /// </summary>
-        public DbSet<Product> Products { get; set; }
+    /// <summary>
+    /// Gets or sets the customers table.
+    /// </summary>
+    public DbSet<Customer> Customers { get; set; }
 
-        /// <summary>
-        /// Gets or sets the customers table.
-        /// </summary>
-        public DbSet<Customer> Customers { get; set; }
+    /// <summary>
+    /// Gets or sets the orders table.
+    /// </summary>
+    public DbSet<Order> Orders { get; set; }
 
-        /// <summary>
-        /// Gets or sets the orders table.
-        /// </summary>
-        public DbSet<Order> Orders { get; set; }
-
-        #endregion DbSet Properties
-    }
+    #endregion DbSet Properties
 }

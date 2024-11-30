@@ -1,25 +1,24 @@
 ﻿using CommercePortal.Domain.Entities.Common;
 
-namespace CommercePortal.Domain.Entities
+namespace CommercePortal.Domain.Entities;
+
+/// <summary>
+/// Represents an order entity.
+/// </summary>
+public class Order : BaseEntity
 {
     /// <summary>
-    /// Represents an order entity.
+    /// Gets or sets the address of the order.
     /// </summary>
-    public class Order : BaseEntity
-    {
-        /// <summary>
-        /// Gets or sets the address of the order.
-        /// </summary>
-        public required string Address { get; set; }
+    public required string Address { get; set; }
 
-        /// <summary>
-        /// Gets or sets the navigation property to the customer who placed the order.
-        /// </summary>
-        public required Customer Customer { get; set; }
+    /// <summary>
+    /// Gets or sets the navigation property to the customer who placed the order.
+    /// </summary>
+    public required Customer Customer { get; set; }
 
-        /// <summary>
-        /// Gets or sets the products which are included in the order.
-        /// </summary>
-        public ICollection<Product> Products { get; set; } = [];
-    }
+    /// <summary>
+    /// Gets or sets the products which are included in the order.
+    /// </summary>
+    public ICollection<Product> Products { get; set; } = [];
 }
