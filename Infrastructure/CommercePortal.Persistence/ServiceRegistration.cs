@@ -19,7 +19,7 @@ public static class ServiceRegistration
     {
         #region Database provider
 
-        services.AddDbContext<EfDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=CommercePortal;Username=postgres;Password="));
+        services.AddDbContext<EfDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=CommercePortal;Username=postgres;Password=****"));
 
         #endregion Database provider
 

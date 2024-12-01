@@ -1,4 +1,6 @@
 ﻿using CommercePortal.Domain.Entities;
+using CommercePortal.Domain.Entities.Common;
+using CommercePortal.Persistence.Constants;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommercePortal.Persistence.Contexts;
@@ -26,4 +28,68 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : DbContext(opti
     public DbSet<Order> Orders { get; set; } = default!;
 
     #endregion DbSet Properties
+
+    #region Interceptors
+
+    /// <inheritdoc/>
+    public override async Task<int> SaveChangesAsync(CancellationToken token = default)
+    {
+        OnBeforeSaveChanges();
+        var result = await base.SaveChangesAsync(token);
+        OnAfterSaveChanges();
+
+        return result;
+    }
+
+    /// <inheritdoc/>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        # region Shadow Properties
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (!typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+                continue;
+
+            modelBuilder.Entity(entityType.ClrType).Property<DateTime>(CommonShadowProperties.CreatedDate);
+            modelBuilder.Entity(entityType.ClrType).Property<DateTime?>(CommonShadowProperties.ModifiedDate);
+            modelBuilder.Entity(entityType.ClrType).Property<DateTime?>(CommonShadowProperties.DeletedDate);
+        }
+
+        # endregion Shadow Properties
+    }
+
+    /// <summary>
+    /// Performs actions before saving changes in the DbContext.
+    /// </summary>
+    protected void OnBeforeSaveChanges()
+    {
+    }
+
+    /// <summary>
+    /// Performs actions after saving changes in the DbContext.
+    /// </summary>
+    protected void OnAfterSaveChanges()
+    {
+        var entries = ChangeTracker.Entries()
+            .Where(e => e is { Entity: BaseEntity, State: EntityState.Added or EntityState.Modified });
+
+        foreach (var entityEntry in entries)
+        {
+            if (entityEntry.State == EntityState.Added)
+                entityEntry.Property(CommonShadowProperties.CreatedDate).CurrentValue = DateTime.UtcNow;
+
+            entityEntry.Property(CommonShadowProperties.ModifiedDate).CurrentValue = DateTime.UtcNow;
+
+            // Soft delete handling
+            if (entityEntry.Property("IsDeleted").CurrentValue is not bool isDeleted || !isDeleted)
+                continue;
+
+            entityEntry.Property(CommonShadowProperties.DeletedDate).CurrentValue = DateTime.UtcNow;
+        }
+    }
+
+    #endregion Interceptors
 }
