@@ -1,4 +1,5 @@
 ﻿using CommercePortal.Application.Repositories.Products;
+using CommercePortal.Application.ViewModels.Products;
 using CommercePortal.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,18 +18,17 @@ public class ProductController : ControllerBase
         _productWriteRepository = productWriteRepository;
     }
 
-    [HttpGet]
-    public async Task Get()
+    [HttpPost]
+    public async Task<IActionResult> CreateProduct(CreateProductVM product)
     {
-        // add some dummy data
-
-        var entities = await _productWriteRepository.AddRangeAsync(
-        [
-            new Product { Name = "Product 1", Price = 100 },
-            new Product { Name = "Product 2", Price = 200 },
-            new Product { Name = "Product 3", Price = 300 }
-        ]);
-
-        await _productWriteRepository.SaveChangesAsync();
+        var productEntity = new Product
+        {
+            Name = product.Name,
+            Description = product.Description,
+            Stock = product.Stock,
+            Price = product.Price
+        };
+        await _productWriteRepository.AddAsync(productEntity);
+        return Ok();
     }
 }

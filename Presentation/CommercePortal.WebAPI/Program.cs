@@ -1,9 +1,14 @@
 using CommercePortal.Persistence;
+using CommercePortal.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+// Register services from other layers
+builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
