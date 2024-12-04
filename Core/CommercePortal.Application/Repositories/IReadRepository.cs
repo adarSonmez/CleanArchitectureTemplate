@@ -1,4 +1,5 @@
-﻿using CommercePortal.Domain.Entities.Common;
+﻿using CommercePortal.Application.RequestParameters;
+using CommercePortal.Domain.Entities.Common;
 using System.Linq.Expressions;
 
 namespace CommercePortal.Application.Repositories;
@@ -19,13 +20,12 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <param name="orderBy">The function to order entities.</param>
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
-    /// <param name="page">The page number.</param>
-    /// <param name="pageSize">The page size.</param>
+    /// <param name="pagination">Optional pagination parameters.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the list of entities.</returns>
     Task<IEnumerable<TEntity>> GetAllPaginatedAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        bool enableTracking = false, bool getDeleted = false, int page = 1, int pageSize = int.MaxValue);
+        bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null);
 
     /// <summary>
     /// Retrieves a single entity asynchronously based on the predicate.

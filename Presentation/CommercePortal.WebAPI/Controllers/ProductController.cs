@@ -1,4 +1,5 @@
 ﻿using CommercePortal.Application.Repositories.Products;
+using CommercePortal.Application.RequestParameters;
 using CommercePortal.Application.ViewModels.Products;
 using CommercePortal.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,13 @@ public class ProductController : ControllerBase
         _productWriteRepository = productWriteRepository;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetProducts([FromQuery] Pagination pagination)
+    {
+        var products = await _productReadRepository.GetAllPaginatedAsync(pagination: pagination);
+        return Ok(products);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateProduct(CreateProductVM product)
     {
@@ -29,6 +37,7 @@ public class ProductController : ControllerBase
             Price = product.Price
         };
         await _productWriteRepository.AddAsync(productEntity);
+        await _productWriteRepository.SaveChangesAsync();
         return Ok();
     }
 }

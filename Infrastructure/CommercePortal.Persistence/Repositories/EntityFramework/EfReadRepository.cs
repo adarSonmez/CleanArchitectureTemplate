@@ -1,4 +1,5 @@
 ﻿using CommercePortal.Application.Repositories;
+using CommercePortal.Application.RequestParameters;
 using CommercePortal.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -25,33 +26,10 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     public DbSet<TEntity> Table { get; set; }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, bool enableTracking = false,
-        bool getDeleted = false)
-    {
-        var table = Table.AsQueryable();
-
-        if (!enableTracking)
-            table = table.AsNoTrackingWithIdentityResolution();
-
-        if (predicate != null) table = table.Where(predicate);
-
-        if (include != null) table = include(table);
-
-        if (orderBy != null) table = orderBy(table);
-
-        if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
-            table = table.Where(e => !(e as BaseEntity)!.IsDeleted);
-
-        return await table.ToListAsync();
-    }
-
-    /// <inheritdoc/>
     public async Task<IEnumerable<TEntity>> GetAllPaginatedAsync(Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        bool enableTracking = false, bool getDeleted = false, int currentPage = 1, int pageSize = int.MaxValue)
+        bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null)
     {
         var table = Table.AsQueryable();
 
@@ -67,7 +45,10 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
             table = table.Where(e => !(e as BaseEntity)!.IsDeleted);
 
-        return await table.Skip((currentPage - 1) * pageSize).Take(pageSize).ToListAsync();
+        if (pagination == null)
+            return await table.ToListAsync();
+
+        return await table.Skip((pagination.Page - 1) * pagination.Size).Take(pagination.Size).ToListAsync();
     }
 
     /// <inheritdoc/>
