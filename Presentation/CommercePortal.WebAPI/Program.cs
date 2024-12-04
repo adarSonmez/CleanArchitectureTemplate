@@ -1,9 +1,18 @@
-using CommercePortal.Persistence;
 using CommercePortal.Application;
+using CommercePortal.Infrastructure.Filters;
+using CommercePortal.Persistence;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers(o => o.Filters.Add<ValidationFilter>())
+    .ConfigureApiBehaviorOptions(o => o.SuppressModelStateInvalidFilter = true);
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining(typeof(CommercePortal.Application.ServiceRegistration));
 
 // Register services from other layers
 builder.Services.AddApplicationServices();

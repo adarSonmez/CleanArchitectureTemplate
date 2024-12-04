@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace CommercePortal.Application;
 
@@ -17,9 +15,9 @@ public static class ServiceRegistration
     {
         # region FluentValidation
 
-        services.AddFluentValidationAutoValidation();
-        services.AddFluentValidationClientsideAdapters();
-        services.AddValidatorsFromAssembly(typeof(ServiceRegistration).Assembly);
+        //services.AddFluentValidationAutoValidation();
+        //services.AddFluentValidationClientsideAdapters();
+        //services.AddValidatorsFromAssembly(typeof(ServiceRegistration).Assembly);
 
         # endregion FluentValidation
     }

@@ -25,7 +25,7 @@ public class ProductController : ControllerBase
         {
             Name = product.Name,
             Description = product.Description,
-            Stock = product.Stock,
+            Stock = product.Stock ?? 0,
             Price = product.Price
         };
         await _productWriteRepository.AddAsync(productEntity);
