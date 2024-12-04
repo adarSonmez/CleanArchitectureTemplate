@@ -25,7 +25,7 @@ public class Product : BaseEntity
     /// <summary>
     /// Gets or sets the price of the product.
     /// </summary>
-    public decimal Price { get; set; }
+    public required decimal Price { get; set; }
 
     /// <summary>
     /// Gets or sets the orders which include the product.

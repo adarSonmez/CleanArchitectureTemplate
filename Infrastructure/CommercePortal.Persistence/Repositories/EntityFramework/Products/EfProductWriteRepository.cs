@@ -1,8 +1,8 @@
-﻿using CommercePortal.Application.Repositories;
+﻿using CommercePortal.Application.Repositories.Products;
 using CommercePortal.Domain.Entities;
 using CommercePortal.Persistence.Contexts;
 
-namespace CommercePortal.Persistence.Repositories.EntityFramework;
+namespace CommercePortal.Persistence.Repositories.EntityFramework.Products;
 
 /// <summary>
 /// Represents EntityFramework implementation of the <see cref="Product"/> write repository.

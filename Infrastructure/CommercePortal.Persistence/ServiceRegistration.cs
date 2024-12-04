@@ -1,6 +1,10 @@
-﻿using CommercePortal.Application.Repositories;
+﻿using CommercePortal.Application.Repositories.Customers;
+using CommercePortal.Application.Repositories.Orders;
+using CommercePortal.Application.Repositories.Products;
 using CommercePortal.Persistence.Contexts;
-using CommercePortal.Persistence.Repositories.EntityFramework;
+using CommercePortal.Persistence.Repositories.EntityFramework.Customers;
+using CommercePortal.Persistence.Repositories.EntityFramework.Orders;
+using CommercePortal.Persistence.Repositories.EntityFramework.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

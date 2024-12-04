@@ -1,4 +1,4 @@
-﻿using CommercePortal.Application.Repositories;
+﻿using CommercePortal.Application.Repositories.Products;
 using CommercePortal.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
