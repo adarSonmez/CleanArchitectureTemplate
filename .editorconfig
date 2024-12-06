@@ -13,5 +13,8 @@ csharp_style_namespace_declarations = file_scoped
 # IDE0161: Convert to file-scoped namespace
 dotnet_diagnostic.IDE0161.severity = suggestion
 
+# IDE0290: Use primary constructor
+csharp_style_prefer_primary_constructors = false
+
 [*.xml]
 indent_size = 2

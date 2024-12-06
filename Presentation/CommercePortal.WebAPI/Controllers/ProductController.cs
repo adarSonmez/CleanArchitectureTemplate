@@ -1,5 +1,6 @@
 ﻿using CommercePortal.Application.Repositories.Products;
 using CommercePortal.Application.RequestParameters;
+using CommercePortal.Application.Services;
 using CommercePortal.Application.ViewModels.Products;
 using CommercePortal.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -12,13 +13,13 @@ public class ProductController : ControllerBase
 {
     private readonly IProductReadRepository _productReadRepository;
     private readonly IProductWriteRepository _productWriteRepository;
-    private readonly IWebHostEnvironment _hostingEnvironment;
+    private readonly IFileService _fileService;
 
-    public ProductController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IWebHostEnvironment hostingEnvironment)
+    public ProductController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IFileService fileService)
     {
         _productReadRepository = productReadRepository;
         _productWriteRepository = productWriteRepository;
-        _hostingEnvironment = hostingEnvironment;
+        _fileService = fileService;
     }
 
     [HttpGet]
@@ -46,21 +47,8 @@ public class ProductController : ControllerBase
     [HttpPost("upload-image")]
     public async Task<IActionResult> UploadImage(IFormFile file)
     {
-        if (file is null)
-        {
-            return BadRequest();
-        }
-        var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-        if (!Directory.Exists(uploadsFolder))
-        {
-            Directory.CreateDirectory(uploadsFolder);
-        }
-        var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-        using (var fileStream = new FileStream(filePath, FileMode.Create))
-        {
-            await file.CopyToAsync(fileStream);
-        }
-        return Ok(new { filePath });
+        var path = "images";
+        var filePath = await _fileService.UploadFileAsync(path, file);
+        return Ok(filePath);
     }
 }

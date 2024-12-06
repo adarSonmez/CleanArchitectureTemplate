@@ -1,4 +1,5 @@
 using CommercePortal.Application;
+using CommercePortal.Infrastructure;
 using CommercePortal.Infrastructure.Filters;
 using CommercePortal.Persistence;
 using FluentValidation;
@@ -11,10 +12,11 @@ builder.Services
     .ConfigureApiBehaviorOptions(o => o.SuppressModelStateInvalidFilter = true);
 
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining(typeof(CommercePortal.Application.ServiceRegistration));
+builder.Services.AddValidatorsFromAssemblyContaining(typeof(CommercePortal.Infrastructure.ServiceRegistration));
 
 // Register services from other layers
 builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices();
 
 builder.Services.AddCors(options =>
