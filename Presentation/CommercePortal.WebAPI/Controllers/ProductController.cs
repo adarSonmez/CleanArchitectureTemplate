@@ -12,11 +12,13 @@ public class ProductController : ControllerBase
 {
     private readonly IProductReadRepository _productReadRepository;
     private readonly IProductWriteRepository _productWriteRepository;
+    private readonly IWebHostEnvironment _hostingEnvironment;
 
-    public ProductController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository)
+    public ProductController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IWebHostEnvironment hostingEnvironment)
     {
         _productReadRepository = productReadRepository;
         _productWriteRepository = productWriteRepository;
+        _hostingEnvironment = hostingEnvironment;
     }
 
     [HttpGet]
@@ -39,5 +41,26 @@ public class ProductController : ControllerBase
         await _productWriteRepository.AddAsync(productEntity);
         await _productWriteRepository.SaveChangesAsync();
         return Ok();
+    }
+
+    [HttpPost("upload-image")]
+    public async Task<IActionResult> UploadImage(IFormFile file)
+    {
+        if (file is null)
+        {
+            return BadRequest();
+        }
+        var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+        if (!Directory.Exists(uploadsFolder))
+        {
+            Directory.CreateDirectory(uploadsFolder);
+        }
+        var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(fileStream);
+        }
+        return Ok(new { filePath });
     }
 }
