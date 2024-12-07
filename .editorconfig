@@ -4,9 +4,6 @@ root = true
 [*]
 indent_style = space
 
-# Xml files
-
-
 # IDE0160: Convert to block scoped namespace
 csharp_style_namespace_declarations = file_scoped
 
@@ -15,6 +12,9 @@ dotnet_diagnostic.IDE0161.severity = suggestion
 
 # IDE0290: Use primary constructor
 csharp_style_prefer_primary_constructors = false
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = silent
 
 [*.xml]
 indent_size = 2
