@@ -6,6 +6,7 @@ using CommercePortal.Persistence.Repositories.EntityFramework.Customers;
 using CommercePortal.Persistence.Repositories.EntityFramework.Orders;
 using CommercePortal.Persistence.Repositories.EntityFramework.Products;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CommercePortal.Persistence;
@@ -19,11 +20,11 @@ public static class ServiceRegistration
     /// Adds the persistence services to the service collection.
     /// </summary>
     /// <param name="services">The service collection to add the services to.</param>
-    public static void AddPersistenceServices(this IServiceCollection services)
+    public static void AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
         #region Database provider
 
-        services.AddDbContext<EfDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=CommercePortal;Username=postgres;Password=****"));
+        services.AddDbContext<EfDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         #endregion Database provider
 

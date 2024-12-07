@@ -1,6 +1,8 @@
 ﻿using CommercePortal.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace CommercePortal.Persistence;
 
@@ -12,8 +14,16 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<EfDbContex
 {
     public EfDbContext CreateDbContext(string[] args)
     {
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddUserSecrets<DesignTimeDbContextFactory>()
+            .Build();
+
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
         var optionsBuilder = new DbContextOptionsBuilder<EfDbContext>();
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=CommercePortal;Username=postgres;Password=****");
+        optionsBuilder.UseNpgsql(connectionString);
 
         return new EfDbContext(optionsBuilder.Options);
     }

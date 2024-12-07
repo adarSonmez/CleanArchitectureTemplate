@@ -17,7 +17,7 @@ builder.Services.AddValidatorsFromAssemblyContaining(typeof(CommercePortal.Infra
 // Register services from other layers
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
-builder.Services.AddPersistenceServices();
+builder.Services.AddPersistenceServices(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {
