@@ -9,13 +9,13 @@ namespace CommercePortal.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProductController : ControllerBase
+public class TestController : ControllerBase
 {
     private readonly IProductReadRepository _productReadRepository;
     private readonly IProductWriteRepository _productWriteRepository;
     private readonly IFileService _fileService;
 
-    public ProductController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IFileService fileService)
+    public TestController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IFileService fileService)
     {
         _productReadRepository = productReadRepository;
         _productWriteRepository = productWriteRepository;
