@@ -27,6 +27,21 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : DbContext(opti
     /// </summary>
     public DbSet<Order> Orders { get; set; } = default!;
 
+    /// <summary>
+    /// Gets or sets the files table.
+    /// </summary>
+    public DbSet<Domain.Entities.File> Files { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the invoice files table.
+    /// </summary>
+    public DbSet<InvoiceFile> InvoiceFiles { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the product images table.
+    /// </summary>
+    public DbSet<ProductImageFile> ProductImages { get; set; } = default!;
+
     #endregion DbSet Properties
 
     #region Interceptors
@@ -54,8 +69,10 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : DbContext(opti
                 continue;
 
             modelBuilder.Entity(entityType.ClrType).Property<DateTime>(CommonShadowProperties.CreatedDate);
-            modelBuilder.Entity(entityType.ClrType).Property<DateTime?>(CommonShadowProperties.ModifiedDate);
             modelBuilder.Entity(entityType.ClrType).Property<DateTime?>(CommonShadowProperties.DeletedDate);
+
+            if (!typeof(Domain.Entities.File).IsAssignableFrom(entityType.ClrType))
+                modelBuilder.Entity(entityType.ClrType).Property<DateTime?>(CommonShadowProperties.ModifiedDate);
         }
 
         # endregion Shadow Properties
