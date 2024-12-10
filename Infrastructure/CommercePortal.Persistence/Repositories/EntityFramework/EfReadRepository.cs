@@ -2,6 +2,7 @@
 using CommercePortal.Application.RequestParameters;
 using CommercePortal.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.Linq.Expressions;
 
 namespace CommercePortal.Persistence.Repositories.EntityFramework;
@@ -15,15 +16,17 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     where TEntity : BaseEntity
 {
     private readonly DbContext _context;
+    private readonly IQueryable<TEntity> _qTable;
 
     public EfReadRepository(DbContext context)
     {
         _context = context;
-        Table = _context.Set<TEntity>();
+        ListSource = _context.Set<TEntity>();
+        _qTable = (ListSource as DbSet<TEntity>)!;
     }
 
     /// <inheritdoc/>
-    public DbSet<TEntity> Table { get; set; }
+    public IListSource ListSource { get; set; }
 
     /// <inheritdoc/>
     public async Task<IEnumerable<TEntity>> GetAllPaginatedAsync(Expression<Func<TEntity, bool>>? predicate = null,
@@ -31,7 +34,7 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null)
     {
-        var table = Table.AsQueryable();
+        var table = _qTable;
 
         if (!enableTracking)
             table = table.AsNoTrackingWithIdentityResolution();
@@ -56,7 +59,7 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, bool enableTracking = false,
         bool getDeleted = false)
     {
-        var table = Table.AsQueryable();
+        var table = _qTable;
 
         if (!enableTracking)
             table = table.AsNoTracking();
@@ -74,7 +77,7 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate,
         bool enableTracking = false)
     {
-        var table = Table.AsQueryable();
+        var table = _qTable;
 
         if (!enableTracking)
             table = table.AsNoTrackingWithIdentityResolution();
@@ -85,7 +88,7 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     /// <inheritdoc/>
     public async Task<long> CountAsync(Expression<Func<TEntity, bool>>? predicate = null)
     {
-        var table = Table.AsQueryable();
+        var table = _qTable;
 
         if (predicate != null)
             table = table.Where(predicate);

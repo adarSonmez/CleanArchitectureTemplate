@@ -1,6 +1,7 @@
 ﻿using CommercePortal.Application.Repositories;
 using CommercePortal.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace CommercePortal.Persistence.Repositories.EntityFramework;
 
@@ -13,15 +14,17 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     where TEntity : BaseEntity
 {
     private readonly DbContext _context;
+    private readonly DbSet<TEntity> _table;
 
     public EfWriteRepository(DbContext context)
     {
         _context = context;
-        Table = _context.Set<TEntity>();
+        ListSource = _context.Set<TEntity>();
+        _table = (ListSource as DbSet<TEntity>)!;
     }
 
     /// <inheritdoc/>
-    public DbSet<TEntity> Table { get; set; }
+    public IListSource ListSource { get; set; }
 
     #region Create Methods
 
@@ -63,7 +66,7 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     /// <inheritdoc/>
     public async Task HardDeleteAsync(string id)
     {
-        var entity = await Table.FindAsync(id);
+        var entity = await _table.FindAsync(id);
         if (entity != null)
             _context.Remove(entity);
     }
@@ -73,7 +76,7 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     {
         foreach (var id in ids)
         {
-            var entity = await Table.FindAsync(id);
+            var entity = await _table.FindAsync(id);
             if (entity != null)
                 _context.Remove(entity);
         }
@@ -105,7 +108,7 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     /// <inheritdoc/>
     public async Task SoftDeleteAsync(string id)
     {
-        var entity = await Table.FindAsync(id);
+        var entity = await _table.FindAsync(id);
         if (entity == null)
             return;
 
@@ -118,7 +121,7 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     {
         foreach (var id in ids)
         {
-            var entity = await Table.FindAsync(id);
+            var entity = await _table.FindAsync(id);
             if (entity == null)
                 continue;
 

@@ -1,7 +1,9 @@
 using CommercePortal.Application;
 using CommercePortal.Infrastructure;
 using CommercePortal.Infrastructure.Filters;
+using CommercePortal.Infrastructure.Services.Storage.Local;
 using CommercePortal.Persistence;
+using CommercePortal.Persistence.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
@@ -18,6 +20,8 @@ builder.Services.AddValidatorsFromAssemblyContaining(typeof(CommercePortal.Infra
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
+
+builder.Services.AddStorage<LocalStorage>();
 
 builder.Services.AddCors(options =>
 {
@@ -38,6 +42,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UpdateDatabase();
 }
 
 app.UseStaticFiles();

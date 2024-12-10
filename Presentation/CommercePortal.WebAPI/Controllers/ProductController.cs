@@ -1,6 +1,6 @@
-﻿using CommercePortal.Application.Repositories.Products;
+﻿using CommercePortal.Application.Abstractions.Storage;
+using CommercePortal.Application.Repositories.Products;
 using CommercePortal.Application.RequestParameters;
-using CommercePortal.Application.Services;
 using CommercePortal.Application.ViewModels.Products;
 using CommercePortal.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +13,13 @@ public class TestController : ControllerBase
 {
     private readonly IProductReadRepository _productReadRepository;
     private readonly IProductWriteRepository _productWriteRepository;
-    private readonly IFileService _fileService;
+    private readonly IStorageService _storageService;
 
-    public TestController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IFileService fileService)
+    public TestController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IStorageService storageService)
     {
         _productReadRepository = productReadRepository;
         _productWriteRepository = productWriteRepository;
-        _fileService = fileService;
+        _storageService = storageService;
     }
 
     [HttpGet]
@@ -48,7 +48,7 @@ public class TestController : ControllerBase
     public async Task<IActionResult> UploadImage(IFormFile file)
     {
         var path = "images";
-        var filePath = await _fileService.UploadFileAsync(path, file);
+        var filePath = await _storageService.UploadFileAsync(path, file);
         return Ok(filePath);
     }
 }

@@ -1,5 +1,5 @@
 ﻿using CommercePortal.Domain.Entities.Common;
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace CommercePortal.Application.Repositories;
 
@@ -10,7 +10,7 @@ namespace CommercePortal.Application.Repositories;
 public interface IRepository<TEntity> where TEntity : BaseEntity
 {
     /// <summary>
-    /// Gets the table of the entity type <typeparamref name="TEntity"/>.
+    /// Gets the list source of the entity type <typeparamref name="TEntity"/>.
     /// </summary>
-    DbSet<TEntity> Table { get; set; }
+    IListSource ListSource { get; set; }
 }

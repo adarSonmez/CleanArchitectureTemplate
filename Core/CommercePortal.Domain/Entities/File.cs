@@ -26,4 +26,9 @@ public class File : BaseEntity
     /// Gets or sets the file path.
     /// </summary>
     public required string Path { get; set; }
+
+    /// <summary>
+    /// Gets or sets the storage name. (e.g. local, azure, etc.)
+    /// </summary>
+    public required string StorageName { get; set; }
 }
