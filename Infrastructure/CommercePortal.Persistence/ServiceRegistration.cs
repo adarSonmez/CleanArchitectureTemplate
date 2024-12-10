@@ -1,8 +1,10 @@
 ﻿using CommercePortal.Application.Repositories.Customers;
+using CommercePortal.Application.Repositories.Files;
 using CommercePortal.Application.Repositories.Orders;
 using CommercePortal.Application.Repositories.Products;
 using CommercePortal.Persistence.Contexts;
 using CommercePortal.Persistence.Repositories.EntityFramework.Customers;
+using CommercePortal.Persistence.Repositories.EntityFramework.Files;
 using CommercePortal.Persistence.Repositories.EntityFramework.Orders;
 using CommercePortal.Persistence.Repositories.EntityFramework.Products;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,12 @@ public static class ServiceRegistration
         services.AddScoped<IOrderWriteRepository, EfOrderWriteRepository>();
         services.AddScoped<ICustomerReadRepository, EfCustomerReadRepository>();
         services.AddScoped<ICustomerWriteRepository, EfCustomerWriteRepository>();
+        services.AddScoped<IFileReadRepository, EfFileReadRepository>();
+        services.AddScoped<IFileWriteRepository, EfFileWriteRepository>();
+        services.AddScoped<IInvoiceFileReadRepository, EfInvoiceFileReadRepository>();
+        services.AddScoped<IInvoiceFileWriteRepository, EfInvoiceFileWriteRepository>();
+        services.AddScoped<IProductImageFileReadRepository, EfProductImageFileReadRepository>();
+        services.AddScoped<IProductImageFileWriteRepository, EfProductImageFileWriteRepository>();
 
         #endregion Repository services
     }

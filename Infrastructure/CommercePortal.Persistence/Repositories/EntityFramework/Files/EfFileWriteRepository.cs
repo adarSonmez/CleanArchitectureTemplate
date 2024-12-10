@@ -1,6 +1,6 @@
 ﻿using CommercePortal.Application.Repositories.Files;
-using E = CommercePortal.Domain.Entities;
 using CommercePortal.Persistence.Contexts;
+using E = CommercePortal.Domain.Entities;
 
 namespace CommercePortal.Persistence.Repositories.EntityFramework.Files;
 
