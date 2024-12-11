@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace CommercePortal.Infrastructure.Services.Storage.Local;
 
-public class LocalStorage : ILocalStorage
+public class LocalStorage : Storage, ILocalStorage
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
 
@@ -14,7 +14,7 @@ public class LocalStorage : ILocalStorage
         _webHostEnvironment = webHostEnvironment;
     }
 
-    #region Public Methods
+    #region ISorage Implementation
 
     /// <inheritdoc/>
     public async Task<string> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
@@ -24,13 +24,14 @@ public class LocalStorage : ILocalStorage
         var uploadsFolder = GetUploadFolderPath(path);
         FileHelper.EnsureDirectoryExists(uploadsFolder);
 
-        var filePath = FileHelper.GenerateLocalUniqueFilePath(uploadsFolder, file, useGuid);
+        var fileName = await GenerateUniqueFileName(uploadsFolder, file, HasFileAsync, useGuid);
+        var filePath = Path.Combine(path, fileName);
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
             await file.CopyToAsync(fileStream);
         }
 
-        return filePath;
+        return fileName;
     }
 
     /// <inheritdoc/>
@@ -49,15 +50,26 @@ public class LocalStorage : ILocalStorage
     }
 
     /// <inheritdoc/>
-    public async Task DeleteFileAsync(string path) => await Task.Run(() => FileHelper.DeleteFileIfExists(path));
+    public async Task DeleteFileAsync(string path, string fileName)
+    {
+        await Task.Run(() =>
+        {
+            var filePath = Path.Combine(path, fileName);
+            FileHelper.DeleteFileIfExists(filePath);
+        });
+    }
 
     /// <inheritdoc/>
-    public async Task<bool> HasFileAsync(string path) => await Task.Run(() => File.Exists(path));
+    public async Task<bool> HasFileAsync(string path, string fileName)
+    {
+        var filePath = Path.Combine(path, fileName);
+        return await Task.Run(() => File.Exists(filePath));
+    }
 
     /// <inheritdoc/>
     public async Task<IEnumerable<string>> GetFilesAsync(string path) => await Task.Run(() => Directory.GetFiles(path).AsEnumerable());
 
-    #endregion Public Methods
+    #endregion ISorage Implementation
 
     #region Private Methods
 

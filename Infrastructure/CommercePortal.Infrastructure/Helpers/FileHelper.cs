@@ -62,41 +62,4 @@ public static class FileHelper
             return true;
         }
     }
-
-    /// <summary>
-    /// Generates a unique file path by appending a counter if a file with the same name already exists.
-    /// </summary>
-    /// <param name="directory">The target directory.</param>
-    /// <param name="file">The file being saved.</param>
-    /// <param name="useGuid">Whether to append a GUID to the file name.</param>
-    /// <returns>A unique file path for the file.</returns>
-    public static string GenerateLocalUniqueFilePath(string directory, IFormFile file, bool useGuid)
-    {
-        var fileName = StringNormalizer.NormalizeFileName(file.FileName);
-        var filePath = Path.Combine(directory, fileName);
-
-        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-        var fileExtension = Path.GetExtension(fileName);
-
-        if (useGuid)
-        {
-            return Path.Combine(directory, $"{fileNameWithoutExtension}_{Guid.NewGuid()}{fileExtension}");
-        }
-
-        if (!File.Exists(filePath))
-        {
-            return filePath;
-        }
-
-        var counter = 1;
-
-        while (File.Exists(filePath))
-        {
-            fileName = $"{fileNameWithoutExtension} ({counter}){fileExtension}";
-            filePath = Path.Combine(directory, StringNormalizer.NormalizeFileName(fileName));
-            counter++;
-        }
-
-        return filePath;
-    }
 }

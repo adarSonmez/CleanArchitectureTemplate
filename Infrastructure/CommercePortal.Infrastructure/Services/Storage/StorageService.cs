@@ -29,13 +29,13 @@ public class StorageService : IStorageService
     public string StorageName => _storage.GetType().Name;
 
     /// <inheritdoc />
-    public async Task DeleteFileAsync(string path) => await _storage.DeleteFileAsync(path);
+    public async Task DeleteFileAsync(string path, string fileName) => await _storage.DeleteFileAsync(path, fileName);
 
     /// <inheritdoc />
     public async Task<IEnumerable<string>> GetFilesAsync(string path) => await _storage.GetFilesAsync(path);
 
     /// <inheritdoc />
-    public async Task<bool> HasFileAsync(string path) => await _storage.HasFileAsync(path);
+    public async Task<bool> HasFileAsync(string path, string fileName) => await _storage.HasFileAsync(path, fileName);
 
     /// <inheritdoc />
     public async Task<string> UploadFileAsync(string path, IFormFile file, bool useGuid = true) => await _storage.UploadFileAsync(path, file, useGuid);

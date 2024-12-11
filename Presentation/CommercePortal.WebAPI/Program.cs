@@ -1,6 +1,7 @@
 using CommercePortal.Application;
 using CommercePortal.Infrastructure;
 using CommercePortal.Infrastructure.Filters;
+using CommercePortal.Infrastructure.Services.Storage.Azure;
 using CommercePortal.Infrastructure.Services.Storage.Local;
 using CommercePortal.Persistence;
 using CommercePortal.Persistence.Extensions;
@@ -21,7 +22,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 
-builder.Services.AddStorage<LocalStorage>();
+builder.Services.AddStorage<AzureStorage>();
 
 builder.Services.AddCors(options =>
 {

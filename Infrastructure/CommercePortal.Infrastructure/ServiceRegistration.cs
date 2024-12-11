@@ -23,7 +23,7 @@ public static class ServiceRegistration
     /// </summary>
     /// <typeparam name="T">The type of storage to add.</typeparam>
     /// <param name="services">The service collection to add the storage to.</param>
-    public static void AddStorage<T>(this IServiceCollection services) where T : class, IStorage
+    public static void AddStorage<T>(this IServiceCollection services) where T : Storage, IStorage
     {
         services.AddScoped<IStorage, T>();
     }

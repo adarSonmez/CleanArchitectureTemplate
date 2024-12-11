@@ -17,8 +17,4 @@
     <ProjectReference Include="..\CommercePortal.Domain\CommercePortal.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Abstractions\Storage\Azure\" />
-  </ItemGroup>
-
 </Project>

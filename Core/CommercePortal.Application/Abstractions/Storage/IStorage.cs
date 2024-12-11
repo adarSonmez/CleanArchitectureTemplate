@@ -11,15 +11,17 @@ public interface IStorage
     /// Deletes a file asynchronously from the specified path.
     /// </summary>
     /// <param name="path">Te path or container where the file will be deleted.</param>
+    /// <param name="fileName">The name of the file to be deleted.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task DeleteFileAsync(string path);
+    Task DeleteFileAsync(string path, string fileName);
 
     /// <summary>
     /// Specifies whether the file exists asynchronously in the specified path.
     /// </summary>
     /// <param name="path">The path or container where the file will be checked.</param>
+    /// <param name="fileName">The name of the file to be checked.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a flag indicating whether the file exists.</returns>
-    Task<bool> HasFileAsync(string path);
+    Task<bool> HasFileAsync(string path, string fileName);
 
     /// <summary>
     /// Gets the file asynchronously from the specified path.
