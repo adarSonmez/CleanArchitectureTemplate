@@ -50,19 +50,18 @@ public class TestController : ControllerBase
     [HttpPost("upload-image")]
     public async Task<IActionResult> UploadImage(IFormFile file)
     {
-        var path = "images";
-        var filePath = await _storageService.UploadFileAsync(path, file);
+        var targetPath = "images";
+        (string folder, string fileName) = await _storageService.UploadFileAsync(targetPath, file);
 
         await _productImageFileWriteRepository.AddAsync(new ProductImageFile
         {
-            Name = file.FileName,
-            Path = filePath,
-            ProductId = new Guid("c7f5b09a-f7fa-49dd-94c4-fc58949b3701"),
+            Name = fileName,
+            Folder = folder,
             StorageName = _storageService.StorageName
         });
 
         await _productImageFileWriteRepository.SaveChangesAsync();
 
-        return Ok(filePath);
+        return Ok(new { Folder = folder, File = fileName });
     }
 }

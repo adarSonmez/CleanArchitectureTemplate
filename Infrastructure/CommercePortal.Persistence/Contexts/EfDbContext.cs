@@ -83,22 +83,16 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : DbContext(opti
     /// </summary>
     protected void OnBeforeSaveChanges()
     {
-    }
-
-    /// <summary>
-    /// Performs actions after saving changes in the DbContext.
-    /// </summary>
-    protected void OnAfterSaveChanges()
-    {
         var entries = ChangeTracker.Entries()
-            .Where(e => e is { Entity: BaseEntity, State: EntityState.Added or EntityState.Modified });
+    .Where(e => e is { Entity: BaseEntity, State: EntityState.Added or EntityState.Modified });
 
         foreach (var entityEntry in entries)
         {
             if (entityEntry.State == EntityState.Added)
                 entityEntry.Property(CommonShadowProperties.CreatedDate).CurrentValue = DateTime.UtcNow;
 
-            entityEntry.Property(CommonShadowProperties.ModifiedDate).CurrentValue = DateTime.UtcNow;
+            if (!typeof(Domain.Entities.File).IsAssignableFrom(entityEntry.Entity.GetType()))
+                entityEntry.Property(CommonShadowProperties.ModifiedDate).CurrentValue = DateTime.UtcNow;
 
             // Soft delete handling
             if (entityEntry.Property("IsDeleted").CurrentValue is not bool isDeleted || !isDeleted)
@@ -106,6 +100,13 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : DbContext(opti
 
             entityEntry.Property(CommonShadowProperties.DeletedDate).CurrentValue = DateTime.UtcNow;
         }
+    }
+
+    /// <summary>
+    /// Performs actions after saving changes in the DbContext.
+    /// </summary>
+    protected void OnAfterSaveChanges()
+    {
     }
 
     #endregion Interceptors

@@ -32,7 +32,7 @@ public abstract class Storage
 
         if (useGuid)
         {
-            return Path.Combine(directory, $"{fileNameWithoutExtension}_{Guid.NewGuid()}{fileExtension}");
+            return $"{fileNameWithoutExtension}_{Guid.NewGuid()}{fileExtension}";
         }
 
         if (!await hasFile(directory, fileName))

@@ -17,7 +17,7 @@ public class LocalStorage : Storage, ILocalStorage
     #region ISorage Implementation
 
     /// <inheritdoc/>
-    public async Task<string> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
+    public async Task<(string Folder, string Name)> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
     {
         ArgumentNullException.ThrowIfNull(file);
 
@@ -25,21 +25,22 @@ public class LocalStorage : Storage, ILocalStorage
         FileHelper.EnsureDirectoryExists(uploadsFolder);
 
         var fileName = await GenerateUniqueFileName(uploadsFolder, file, HasFileAsync, useGuid);
-        var filePath = Path.Combine(path, fileName);
+        var filePath = Path.Combine(uploadsFolder, fileName);
+
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
             await file.CopyToAsync(fileStream);
         }
 
-        return fileName;
+        return (Path: path, Name: fileName);
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<string>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true)
+    public async Task<IEnumerable<(string Folder, string Name)>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true)
     {
         ArgumentNullException.ThrowIfNull(files);
 
-        var filePaths = new List<string>();
+        var filePaths = new List<(string Path, string Name)>();
         foreach (var file in files)
         {
             var uploadedPath = await UploadFileAsync(path, file, useGuid);

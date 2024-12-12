@@ -50,7 +50,7 @@ public class AzureStorage : Storage, IAzureStorage
     }
 
     /// <inheritdoc/>
-    public async Task<string> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
+    public async Task<(string Folder, string Name)> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
     {
         ArgumentNullException.ThrowIfNull(file);
 
@@ -65,15 +65,15 @@ public class AzureStorage : Storage, IAzureStorage
             await blobClient.UploadAsync(stream, overwrite: true);
         }
 
-        return fileName;
+        return (Path: path, Name: fileName);
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<string>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true)
+    public async Task<IEnumerable<(string Folder, string Name)>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true)
     {
         ArgumentNullException.ThrowIfNull(files);
 
-        var filePaths = new List<string>();
+        var filePaths = new List<(string Path, string Name)>();
         foreach (var file in files)
         {
             var uploadedPath = await UploadFileAsync(path, file, useGuid);

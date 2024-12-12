@@ -31,4 +31,9 @@ public class Product : BaseEntity
     /// Gets or sets the orders which include the product.
     /// </summary>
     public ICollection<Order> Orders { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets the product image files.
+    /// </summary>
+    public ICollection<ProductImageFile> ProductImageFiles { get; set; } = [];
 }
