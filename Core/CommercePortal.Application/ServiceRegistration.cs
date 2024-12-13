@@ -20,5 +20,11 @@ public static class ServiceRegistration
         //services.AddValidatorsFromAssembly(typeof(ServiceRegistration).Assembly);
 
         # endregion FluentValidation
+
+        # region MediatR
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceRegistration).Assembly));
+
+        # endregion MediatR
     }
 }

@@ -1,67 +1,67 @@
 ﻿using CommercePortal.Application.Abstractions.Storage;
-using CommercePortal.Application.Repositories.Files;
-using CommercePortal.Application.Repositories.Products;
-using CommercePortal.Application.RequestParameters;
-using CommercePortal.Application.ViewModels.Products;
-using CommercePortal.Domain.Entities;
+using CommercePortal.Application.Features.Commands.ProductImageFiles.UploadProductImage;
+using CommercePortal.Application.Features.Commands.Products.CreateProduct;
+using CommercePortal.Application.Features.Commands.Products.DeleteProduct;
+using CommercePortal.Application.Features.Commands.Products.UpdateProduct;
+using CommercePortal.Application.Features.Queries.Products.GetAllProducts;
+using CommercePortal.Application.Features.Queries.Products.GetProductById;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommercePortal.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class TestController : ControllerBase
+public class ProductController : ControllerBase
 {
-    private readonly IProductReadRepository _productReadRepository;
-    private readonly IProductWriteRepository _productWriteRepository;
-    private readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
-    private readonly IStorageService _storageService;
+    private readonly IMediator _mediator;
 
-    public TestController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IStorageService storageService, IProductImageFileWriteRepository productImageFileWriteRepository)
+    public ProductController(IMediator mediator)
     {
-        _productReadRepository = productReadRepository;
-        _productWriteRepository = productWriteRepository;
-        _storageService = storageService;
-        _productImageFileWriteRepository = productImageFileWriteRepository;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetProducts([FromQuery] Pagination pagination)
+    public async Task<IActionResult> GetAll([FromQuery] GetAllProductsQueryRequest request)
     {
-        var products = await _productReadRepository.GetAllPaginatedAsync(pagination: pagination);
-        return Ok(products);
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var request = new GetProductByIdQueryRequest(id);
+        var response = await _mediator.Send(request);
+        return Ok(response);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProduct(CreateProductVM product)
+    public async Task<IActionResult> Create([FromBody] CreateProductCommandRequest request)
     {
-        var productEntity = new Product
-        {
-            Name = product.Name,
-            Description = product.Description,
-            Stock = product.Stock ?? 0,
-            Price = product.Price
-        };
-        await _productWriteRepository.AddAsync(productEntity);
-        await _productWriteRepository.SaveChangesAsync();
-        return Ok();
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] UpdateProductCommandRequest request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var request = new DeleteProductCommandRequest(id);
+        var response = await _mediator.Send(request);
+        return Ok(response);
     }
 
     [HttpPost("upload-image")]
-    public async Task<IActionResult> UploadImage(IFormFile file)
+    public async Task<IActionResult> UploadImage(UploadProductImageCommandRequest request)
     {
-        var targetPath = "images";
-        (string folder, string fileName) = await _storageService.UploadFileAsync(targetPath, file);
-
-        await _productImageFileWriteRepository.AddAsync(new ProductImageFile
-        {
-            Name = fileName,
-            Folder = folder,
-            StorageName = _storageService.StorageName
-        });
-
-        await _productImageFileWriteRepository.SaveChangesAsync();
-
-        return Ok(new { Folder = folder, File = fileName });
+        var response = await _mediator.Send(request);
+        return Ok(response);
     }
 }

@@ -64,7 +64,7 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     }
 
     /// <inheritdoc/>
-    public async Task HardDeleteAsync(string id)
+    public async Task HardDeleteAsync(Guid id)
     {
         var entity = await _table.FindAsync(id);
         if (entity != null)
@@ -72,7 +72,7 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     }
 
     /// <inheritdoc/>
-    public async Task HardDeleteMatchingAsync(IEnumerable<string> ids)
+    public async Task HardDeleteMatchingAsync(IEnumerable<Guid> ids)
     {
         foreach (var id in ids)
         {
@@ -106,7 +106,7 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     }
 
     /// <inheritdoc/>
-    public async Task SoftDeleteAsync(string id)
+    public async Task SoftDeleteAsync(Guid id)
     {
         var entity = await _table.FindAsync(id);
         if (entity == null)
@@ -117,7 +117,7 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     }
 
     /// <inheritdoc/>
-    public async Task SoftDeleteMatchingAsync(IEnumerable<string> ids)
+    public async Task SoftDeleteMatchingAsync(IEnumerable<Guid> ids)
     {
         foreach (var id in ids)
         {

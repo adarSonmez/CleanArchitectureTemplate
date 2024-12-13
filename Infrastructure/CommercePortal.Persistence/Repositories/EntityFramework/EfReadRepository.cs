@@ -36,6 +36,9 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     {
         var table = _qTable;
 
+        if (_qTable == null)
+            return [];
+
         if (!enableTracking)
             table = table.AsNoTrackingWithIdentityResolution();
 

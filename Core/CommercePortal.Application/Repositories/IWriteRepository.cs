@@ -40,14 +40,14 @@ public interface IWriteRepository<T> : IRepository<T> where T : BaseEntity
     /// </summary>
     /// <param name="id">The ID of the entity to delete.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task HardDeleteAsync(string id);
+    Task HardDeleteAsync(Guid id);
 
     /// <summary>
     /// Performs a hard delete of entities matching the provided IDs asynchronously.
     /// </summary>
     /// <param name="ids">The IDs of the entities to delete.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task HardDeleteMatchingAsync(IEnumerable<string> ids);
+    Task HardDeleteMatchingAsync(IEnumerable<Guid> ids);
 
     /// <summary>
     /// Performs a hard delete of entities matching the provided entities synchronously.
@@ -72,14 +72,14 @@ public interface IWriteRepository<T> : IRepository<T> where T : BaseEntity
     /// </summary>
     /// <param name="id">The ID of the entity to delete.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task SoftDeleteAsync(string id);
+    Task SoftDeleteAsync(Guid id);
 
     /// <summary>
     /// Performs a soft delete of entities matching the provided IDs asynchronously.
     /// </summary>
     /// <param name="ids">The IDs of the entities to delete.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task SoftDeleteMatchingAsync(IEnumerable<string> ids);
+    Task SoftDeleteMatchingAsync(IEnumerable<Guid> ids);
 
     /// <summary>
     /// Performs a soft delete of entities matching the provided entities ssynchronously.
