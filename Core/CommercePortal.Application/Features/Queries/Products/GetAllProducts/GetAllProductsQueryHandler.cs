@@ -1,5 +1,7 @@
 ﻿using CommercePortal.Application.Repositories.Products;
+using CommercePortal.Domain.Entities;
 using MediatR;
+using System.Linq.Expressions;
 
 namespace CommercePortal.Application.Features.Queries.Products.GetAllProducts;
 
@@ -17,12 +19,31 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQueryReq
 
     public async Task<GetAllProductsQueryResponse> Handle(GetAllProductsQueryRequest request, CancellationToken cancellationToken)
     {
-        var products = await _productReadRepository.GetAllPaginatedAsync(pagination: request.Pagination)!;
+        var includes = new List<Expression<Func<Product, object>>>
+        {
+            product => product.ProductImageFiles,
+        };
+
+        var products = await _productReadRepository.GetAllPaginatedAsync(pagination: request.Pagination, include: includes);
 
         return new GetAllProductsQueryResponse
         (
             Count: products?.Count() ?? 0,
-            Products: products ?? []
+            Products: products == null ? new List<Product>() : products.Select(product => new
+            {
+                product.Id,
+                product.Name,
+                product.Description,
+                product.Price,
+                product.Stock,
+                ProductImageFiles = product.ProductImageFiles.Select(productImageFile => new
+                {
+                    productImageFile.Id,
+                    productImageFile.Name,
+                    productImageFile.Folder,
+                    productImageFile.StorageName
+                }).ToList()
+            }).ToList()
         );
     }
 }

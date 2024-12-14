@@ -46,7 +46,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
             product.Price = request.Price.Value;
         }
 
-        _productWriteRepository.Update(product);
+        await _productWriteRepository.UpdateAsync(product);
 
         return new UpdateProductCommandResponse(product.Id);
     }

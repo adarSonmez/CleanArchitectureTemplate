@@ -7,4 +7,4 @@ namespace CommercePortal.Application.Features.Queries.Products.GetAllProducts;
 /// Represents the request for getting all products.
 /// </summary>
 /// <param name="Pagination">The pagination parameters.</param>
-public record GetAllProductsQueryRequest(Pagination Pagination) : IRequest<GetAllProductsQueryResponse>;
+public record GetAllProductsQueryRequest(Pagination? Pagination) : IRequest<GetAllProductsQueryResponse>;

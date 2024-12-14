@@ -29,7 +29,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var request = new GetProductByIdQueryRequest(id);
         var response = await _mediator.Send(request);
@@ -51,7 +51,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var request = new DeleteProductCommandRequest(id);
         var response = await _mediator.Send(request);
@@ -59,7 +59,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("upload-image")]
-    public async Task<IActionResult> UploadImage(UploadProductImageCommandRequest request)
+    public async Task<IActionResult> UploadImage([FromForm] UploadProductImageCommandRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);

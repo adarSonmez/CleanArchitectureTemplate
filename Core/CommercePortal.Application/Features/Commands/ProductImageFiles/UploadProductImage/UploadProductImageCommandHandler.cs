@@ -24,7 +24,7 @@ public class UploadProductImageCommandHandler : IRequestHandler<UploadProductIma
 
     public async Task<UploadProductImageCommandResponse> Handle(UploadProductImageCommandRequest request, CancellationToken cancellationToken)
     {
-        var product = await _productReadRepository.GetAsync(e => e.Id == request.ProductId);
+        var product = await _productReadRepository.GetAsync(e => e.Id == request.ProductId, enableTracking: true);
 
         if (product == null)
         {
@@ -33,16 +33,16 @@ public class UploadProductImageCommandHandler : IRequestHandler<UploadProductIma
 
         (string folder, string fileName) = await _storageService.UploadFileAsync(request.Folder, request.File);
 
-        await _productImageFileWriteRepository.AddAsync(new ProductImageFile
+        var productImage = await _productImageFileWriteRepository.AddAsync(new ProductImageFile
         {
             Name = fileName,
             Folder = folder,
-            StorageName = _storageService.StorageName,
-            Products = [product]
+            StorageName = _storageService.StorageName
         });
 
-        await _productImageFileWriteRepository.SaveChangesAsync();
+        product.ProductImageFiles.Add(productImage);
+        await _productReadRepository.SaveChangesAsync();
 
-        return new UploadProductImageCommandResponse(Id: product.Id, Folder: folder, File: fileName);
+        return new UploadProductImageCommandResponse(Id: productImage.Id, Folder: folder, File: fileName);
     }
 }
