@@ -1,7 +1,6 @@
 using CommercePortal.Application;
 using CommercePortal.Infrastructure;
 using CommercePortal.Infrastructure.Filters;
-using CommercePortal.Infrastructure.Services.Storage.Azure;
 using CommercePortal.Infrastructure.Services.Storage.Local;
 using CommercePortal.Persistence;
 using CommercePortal.Persistence.Extensions;
@@ -15,14 +14,14 @@ builder.Services
     .ConfigureApiBehaviorOptions(o => o.SuppressModelStateInvalidFilter = true);
 
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining(typeof(CommercePortal.Infrastructure.ServiceRegistration));
+builder.Services.AddValidatorsFromAssemblyContaining(typeof(CommercePortal.Application.ServiceRegistration));
 
 // Register services from other layers
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 
-builder.Services.AddStorage<AzureStorage>();
+builder.Services.AddStorage<LocalStorage>();
 
 builder.Services.AddCors(options =>
 {

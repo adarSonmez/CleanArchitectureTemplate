@@ -1,18 +1,20 @@
-﻿using CommercePortal.Application.Features.Commands.Products.CreateProduct;
+﻿using CommercePortal.Application.Features.Commands.Products.UpdateProduct;
 using FluentValidation;
 
 namespace CommercePortal.Application.Validators.Products;
 
 /// <summary>
-/// Validator for the <see cref="CreateProductCommandRequest"/> class.
+/// Validator for the <see cref="UpdateProductCommandRequest"/> class.
 /// </summary>
-public class CreateProductValidator : AbstractValidator<CreateProductCommandRequest>
+public class UpdateProductValidator : AbstractValidator<UpdateProductCommandRequest>
 {
-    public CreateProductValidator()
+    public UpdateProductValidator()
     {
-        RuleFor(x => x.Name)
+        RuleFor(x => x.Id)
             .NotEmpty()
-                .WithMessage("Name is required.")
+                .WithMessage("Id is required.");
+
+        RuleFor(x => x.Name)
             .MaximumLength(100)
             .MinimumLength(3)
                 .WithMessage("Name must be between 3 and 100 characters.");

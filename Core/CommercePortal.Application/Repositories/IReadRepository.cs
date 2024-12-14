@@ -1,4 +1,5 @@
 ﻿using CommercePortal.Application.RequestParameters;
+using CommercePortal.Domain.Entities;
 using CommercePortal.Domain.Entities.Common;
 using System.Linq.Expressions;
 
@@ -16,14 +17,15 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// Retrieves all entities asynchronously with pagination.
     /// </summary>
     /// <param name="predicate">The predicate to filter entities.</param>
-    /// <param name="include">The function to include related entities.</param>
+    /// <param name="include">The list of functions to include related entities.</param>
     /// <param name="orderBy">The function to order entities.</param>
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
     /// <param name="pagination">Optional pagination parameters.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the list of entities.</returns>
-    Task<IEnumerable<TEntity>> GetAllPaginatedAsync(Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null,
+    Task<IEnumerable<TEntity>> GetAllPaginatedAsync(
+        Expression<Func<TEntity, bool>>? predicate = null,
+        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null);
 
@@ -31,13 +33,15 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// Retrieves a single entity asynchronously based on the predicate.
     /// </summary>
     /// <param name="predicate">The predicate to filter the entity.</param>
-    /// <param name="include">The function to include related entities.</param>
+    /// <param name="include">The list of functions to include related entities.</param>
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity.</returns>
-    Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate,
-        Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null,
-        bool enableTracking = false, bool getDeleted = false);
+    Task<TEntity?> GetAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        bool enableTracking = false,
+        bool getDeleted = false);
 
     /// <summary>
     /// Finds entities synchronously based on the predicate.
@@ -54,4 +58,11 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <param name="predicate">The predicate to filter entities.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the count of entities.</returns>
     Task<long> CountAsync(Expression<Func<TEntity, bool>>? predicate = null);
+
+    /// <summary>
+    /// Saves all changes made in the context to the database asynchronously.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the number of state entries written to the database.</returns>
+    /// <remarks>Make sure enable-tracking is set to true before calling this method.</remarks>
+    Task<int> SaveChangesAsync();
 }

@@ -29,16 +29,24 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     #region Create Methods
 
     /// <inheritdoc/>
-    public async Task<TEntity> AddAsync(TEntity entity)
+    public async Task<TEntity> AddAsync(TEntity entity, bool saveChanges = true)
     {
         await _context.AddAsync(entity);
+
+        if (saveChanges)
+            await SaveChangesAsync();
+
         return entity;
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities)
+    public async Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities, bool saveChanges = true)
     {
         await _context.AddRangeAsync(entities);
+
+        if (saveChanges)
+            await SaveChangesAsync();
+
         return entities;
     }
 
@@ -47,9 +55,13 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     #region Update Methods
 
     /// <inheritdoc/>
-    public TEntity Update(TEntity entity)
+    public async Task<TEntity> UpdateAsync(TEntity entity, bool saveChanges = true)
     {
         _context.Update(entity);
+
+        if (saveChanges)
+            await SaveChangesAsync();
+
         return entity;
     }
 
@@ -58,21 +70,28 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     #region Hard Delete Methods
 
     /// <inheritdoc/>
-    public void HardDelete(TEntity entity)
+    public async Task HardDeleteAsync(TEntity entity, bool saveChanges = true)
     {
         _context.Remove(entity);
+
+        if (saveChanges)
+            await SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public async Task HardDeleteAsync(Guid id)
+    public async Task HardDeleteAsync(Guid id, bool saveChanges = true)
     {
         var entity = await _table.FindAsync(id);
+
         if (entity != null)
             _context.Remove(entity);
+
+        if (saveChanges)
+            await SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public async Task HardDeleteMatchingAsync(IEnumerable<Guid> ids)
+    public async Task HardDeleteMatchingAsync(IEnumerable<Guid> ids, bool saveChanges = true)
     {
         foreach (var id in ids)
         {
@@ -80,18 +99,27 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
             if (entity != null)
                 _context.Remove(entity);
         }
+
+        if (saveChanges)
+            await SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public void HardDeleteMatching(params TEntity[] entities)
-    {
-        _context.RemoveRange(entities.ToList());
-    }
-
-    /// <inheritdoc/>
-    public void HardDeleteMatching(IEnumerable<TEntity> entities)
+    public async Task HardDeleteMatchingAsync(bool saveChanges = true, params TEntity[] entities)
     {
         _context.RemoveRange(entities);
+
+        if (saveChanges)
+            await SaveChangesAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task HardDeleteMatchingAsync(IEnumerable<TEntity> entities, bool saveChanges = true)
+    {
+        _context.RemoveRange(entities);
+
+        if (saveChanges)
+            await SaveChangesAsync();
     }
 
     #endregion Hard Delete Methods
@@ -99,14 +127,17 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
     #region Soft Delete Methods
 
     /// <inheritdoc/>
-    public void SoftDelete(TEntity entity)
+    public async Task SoftDeleteAsync(TEntity entity, bool saveChanges = true)
     {
         (entity as BaseEntity)!.IsDeleted = true;
         _context.Update(entity);
+
+        if (saveChanges)
+            await SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public async Task SoftDeleteAsync(Guid id)
+    public async Task SoftDeleteAsync(Guid id, bool saveChanges = true)
     {
         var entity = await _table.FindAsync(id);
         if (entity == null)
@@ -114,10 +145,13 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
 
         (entity as BaseEntity)!.IsDeleted = true;
         _context.Update(entity);
+
+        if (saveChanges)
+            await SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public async Task SoftDeleteMatchingAsync(IEnumerable<Guid> ids)
+    public async Task SoftDeleteMatchingAsync(IEnumerable<Guid> ids, bool saveChanges = true)
     {
         foreach (var id in ids)
         {
@@ -127,24 +161,33 @@ public class EfWriteRepository<TEntity> : IWriteRepository<TEntity>
 
             (entity as BaseEntity)!.IsDeleted = true;
             _context.Update(entity);
+
+            if (saveChanges)
+                await SaveChangesAsync();
         }
     }
 
     /// <inheritdoc/>
-    public void SoftDeleteMatching(params TEntity[] entities)
+    public async Task SoftDeleteMatchingAsync(bool saveChanges = true, params TEntity[] entities)
     {
         foreach (var entity in entities)
             (entity as BaseEntity)!.IsDeleted = true;
         _context.UpdateRange(entities.ToList());
+
+        if (saveChanges)
+            await SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public void SoftDeleteMatching(IEnumerable<TEntity> entities)
+    public async Task SoftDeleteMatchingAsync(IEnumerable<TEntity> entities, bool saveChanges = true)
     {
         var enumerable = entities as TEntity[] ?? entities.ToArray();
         foreach (var entity in enumerable)
             (entity as BaseEntity)!.IsDeleted = true;
         _context.UpdateRange(enumerable.ToList());
+
+        if (saveChanges)
+            await SaveChangesAsync();
     }
 
     #endregion Soft Delete Methods

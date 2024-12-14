@@ -29,8 +29,9 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     public IListSource ListSource { get; set; }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<TEntity>> GetAllPaginatedAsync(Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null,
+    public async Task<IEnumerable<TEntity>> GetAllPaginatedAsync(
+        Expression<Func<TEntity, bool>>? predicate = null,
+        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null)
     {
@@ -44,7 +45,9 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
 
         if (predicate != null) table = table.Where(predicate);
 
-        if (include != null) table = include(table);
+        if (include != null)
+            foreach (var inEntity in include)
+                table = table.Include(inEntity);
 
         if (orderBy != null) table = orderBy(table);
 
@@ -58,8 +61,10 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     }
 
     /// <inheritdoc/>
-    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate,
-        Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, bool enableTracking = false,
+    public async Task<TEntity?> GetAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        bool enableTracking = false,
         bool getDeleted = false)
     {
         var table = _qTable;
@@ -97,5 +102,11 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
             table = table.Where(predicate);
 
         return await table.LongCountAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
     }
 }
