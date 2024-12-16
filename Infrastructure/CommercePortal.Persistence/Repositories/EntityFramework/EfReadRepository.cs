@@ -73,7 +73,8 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
             table = table.AsNoTracking();
 
         if (include != null)
-            table = include(table);
+            foreach (var inEntity in include)
+                table = table.Include(inEntity);
 
         if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
             table = table.Where(e => !(e as BaseEntity)!.IsDeleted);

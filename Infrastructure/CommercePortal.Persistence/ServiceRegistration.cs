@@ -2,6 +2,7 @@
 using CommercePortal.Application.Repositories.Files;
 using CommercePortal.Application.Repositories.Orders;
 using CommercePortal.Application.Repositories.Products;
+using CommercePortal.Domain.Identity;
 using CommercePortal.Persistence.Contexts;
 using CommercePortal.Persistence.Repositories.EntityFramework.Customers;
 using CommercePortal.Persistence.Repositories.EntityFramework.Files;
@@ -29,6 +30,14 @@ public static class ServiceRegistration
         services.AddDbContext<EfDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         #endregion Database provider
+
+        #region Identity services
+
+        services.AddIdentity<AppUser, AppRole>()
+            .AddEntityFrameworkStores<EfDbContext>();
+        //.AddDefaultTokenProviders();
+
+        #endregion Identity services
 
         #region Repository services
 
