@@ -14,7 +14,7 @@ namespace CommercePortal.Persistence.Contexts;
 /// Using the <see cref="IdentityDbContext{TUser, TRole, TKey}"/> allows us to use
 /// the built-in tables and classes for identity management.
 /// </remarks>
-public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbContext<AppUser, AppRole, string>(options)
+public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbContext<AppUser, AppRole, Guid>(options)
 {
     #region DbSet Properties
 
