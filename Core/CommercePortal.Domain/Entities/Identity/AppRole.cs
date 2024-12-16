@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace CommercePortal.Domain.Identity;
+namespace CommercePortal.Domain.Entities.Identity;
 
 /// <summary>
 /// Represents a role in the identity system

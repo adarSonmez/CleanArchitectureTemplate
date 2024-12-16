@@ -2,7 +2,7 @@
 using CommercePortal.Application.Repositories.Files;
 using CommercePortal.Application.Repositories.Orders;
 using CommercePortal.Application.Repositories.Products;
-using CommercePortal.Domain.Identity;
+using CommercePortal.Domain.Entities.Identity;
 using CommercePortal.Persistence.Contexts;
 using CommercePortal.Persistence.Repositories.EntityFramework.Customers;
 using CommercePortal.Persistence.Repositories.EntityFramework.Files;
