@@ -12,7 +12,10 @@ public class CreateAppUserValidator : AbstractValidator<CreateAppUserCommandRequ
     {
         RuleFor(x => x.FullName)
             .NotEmpty()
-                .WithMessage("Full name is required.");
+                .WithMessage("Full name is required.")
+                .MaximumLength(100)
+                .MinimumLength(3)
+                .WithMessage("Full name must be between 5 and 100 characters.");
 
         RuleFor(x => x.Email)
             .NotEmpty()
@@ -36,6 +39,8 @@ public class CreateAppUserValidator : AbstractValidator<CreateAppUserCommandRequ
 
         RuleFor(x => x.PhoneNumber)
             .NotEmpty()
-                .WithMessage("Phone number is required.");
+                .WithMessage("Phone number is required.")
+                .Matches(@"^\d{10}$")
+                .WithMessage("Phone number is not valid.");
     }
 }

@@ -33,6 +33,14 @@ public class CreateAppUserCommandHandler : IRequestHandler<CreateAppUserCommandR
             return new CreateAppUserCommandResponse(user.Id);
         }
 
-        throw new Exception("Failed to create the user");
+        if (result.Errors.Any())
+        {
+            var errors = result.Errors.Select(e => e.Description);
+            throw new Exception($"Failed to create user: {string.Join(", ", errors)}");
+        }
+        else
+        {
+            throw new Exception("Failed to create user");
+        }
     }
 }

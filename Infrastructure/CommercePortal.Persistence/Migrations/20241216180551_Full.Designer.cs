@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommercePortal.Persistence.Migrations
 {
     [DbContext(typeof(EfDbContext))]
-    [Migration("20241216174226_ChangeIdentityIdToGuid")]
-    partial class ChangeIdentityIdToGuid
+    [Migration("20241216180551_Full")]
+    partial class Full
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
