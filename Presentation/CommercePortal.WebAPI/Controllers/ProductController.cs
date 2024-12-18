@@ -1,17 +1,18 @@
-﻿using CommercePortal.Application.Abstractions.Storage;
-using CommercePortal.Application.Features.Commands.ProductImageFiles.UploadProductImage;
+﻿using CommercePortal.Application.Features.Commands.ProductImageFiles.UploadProductImage;
 using CommercePortal.Application.Features.Commands.Products.CreateProduct;
 using CommercePortal.Application.Features.Commands.Products.DeleteProduct;
 using CommercePortal.Application.Features.Commands.Products.UpdateProduct;
 using CommercePortal.Application.Features.Queries.Products.GetAllProducts;
 using CommercePortal.Application.Features.Queries.Products.GetProductById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommercePortal.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProductController : ControllerBase
 {
     private readonly IMediator _mediator;
