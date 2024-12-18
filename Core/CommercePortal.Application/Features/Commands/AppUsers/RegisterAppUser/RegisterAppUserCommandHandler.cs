@@ -2,21 +2,21 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace CommercePortal.Application.Features.Commands.AppUsers.CreateUser;
+namespace CommercePortal.Application.Features.Commands.AppUsers.RegisterAppUser;
 
 /// <summary>
-/// Represents a handler for the <see cref="CreateAppUserCommandRequest"/>
+/// Represents a handler for the <see cref="RegisterAppUserCommandRequest"/>
 /// </summary>
-public class CreateAppUserCommandHandler : IRequestHandler<CreateAppUserCommandRequest, CreateAppUserCommandResponse>
+public class RegisterAppUserCommandHandler : IRequestHandler<RegisterAppUserCommandRequest, RegisterAppUserCommandResponse>
 {
     public readonly UserManager<AppUser> _userManager;
 
-    public CreateAppUserCommandHandler(UserManager<AppUser> userManager)
+    public RegisterAppUserCommandHandler(UserManager<AppUser> userManager)
     {
         _userManager = userManager;
     }
 
-    public async Task<CreateAppUserCommandResponse> Handle(CreateAppUserCommandRequest request, CancellationToken cancellationToken)
+    public async Task<RegisterAppUserCommandResponse> Handle(RegisterAppUserCommandRequest request, CancellationToken cancellationToken)
     {
         var user = new AppUser
         {
@@ -30,7 +30,7 @@ public class CreateAppUserCommandHandler : IRequestHandler<CreateAppUserCommandR
 
         if (result.Succeeded)
         {
-            return new CreateAppUserCommandResponse(user.Id);
+            return new RegisterAppUserCommandResponse(user.Id);
         }
 
         if (result.Errors.Any())

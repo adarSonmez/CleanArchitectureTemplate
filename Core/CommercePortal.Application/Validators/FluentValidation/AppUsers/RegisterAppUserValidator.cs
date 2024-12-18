@@ -1,14 +1,14 @@
-﻿using CommercePortal.Application.Features.Commands.AppUsers.CreateUser;
+﻿using CommercePortal.Application.Features.Commands.AppUsers.RegisterAppUser;
 using FluentValidation;
 
-namespace CommercePortal.Application.Validators.AppUsers;
+namespace CommercePortal.Application.Validators.FluentValidation.AppUsers;
 
 /// <summary>
-/// Validator for the <see cref="CreateAppUserCommandRequest"/> class.
+/// Validator for the <see cref="RegisterAppUserCommandRequest"/> class.
 /// </summary>
-public class CreateAppUserValidator : AbstractValidator<CreateAppUserCommandRequest>
+public class RegisterAppUserValidator : AbstractValidator<RegisterAppUserCommandRequest>
 {
-    public CreateAppUserValidator()
+    public RegisterAppUserValidator()
     {
         RuleFor(x => x.FullName)
             .NotEmpty()
@@ -38,9 +38,7 @@ public class CreateAppUserValidator : AbstractValidator<CreateAppUserCommandRequ
                 .WithMessage("Password confirmation does not match the password.");
 
         RuleFor(x => x.PhoneNumber)
-            .NotEmpty()
-                .WithMessage("Phone number is required.")
-                .Matches(@"^\d{10}$")
-                .WithMessage("Phone number is not valid.");
+            .Matches(@"^\d{10}$")
+            .WithMessage("Phone number is not valid.");
     }
 }

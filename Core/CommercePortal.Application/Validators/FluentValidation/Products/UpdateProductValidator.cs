@@ -1,7 +1,7 @@
 ﻿using CommercePortal.Application.Features.Commands.Products.UpdateProduct;
 using FluentValidation;
 
-namespace CommercePortal.Application.Validators.Products;
+namespace CommercePortal.Application.Validators.FluentValidation.Products;
 
 /// <summary>
 /// Validator for the <see cref="UpdateProductCommandRequest"/> class.

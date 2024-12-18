@@ -1,7 +1,7 @@
 ﻿using CommercePortal.Application.Features.Commands.ProductImageFiles.UploadProductImage;
 using FluentValidation;
 
-namespace CommercePortal.Application.Validators.ProductImageFiles;
+namespace CommercePortal.Application.Validators.FluentValidation.ProductImageFiles;
 
 /// <summary>
 /// Validator for the <see cref="UploadProductImageCommandRequest"/> class.

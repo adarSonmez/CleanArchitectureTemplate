@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace CommercePortal.Application.Features.Commands.AppUsers.CreateUser;
+namespace CommercePortal.Application.Features.Commands.AppUsers.RegisterAppUser;
 
 /// <summary>
 /// Represents a request to create a new user
@@ -11,13 +11,13 @@ namespace CommercePortal.Application.Features.Commands.AppUsers.CreateUser;
 /// <param name="Password">The password of the user</param>
 /// <param name="PasswordConfirmation">The password confirmation of the user</param>
 /// <param name="PhoneNumber">The phone number of the user</param>
-public record CreateAppUserCommandRequest
+public record RegisterAppUserCommandRequest
 (
     string FullName,
     string Email,
     string UserName,
     string Password,
     string PasswordConfirmation,
-    string PhoneNumber
+    string? PhoneNumber
 
-) : IRequest<CreateAppUserCommandResponse>;
+) : IRequest<RegisterAppUserCommandResponse>;
