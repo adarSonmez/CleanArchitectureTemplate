@@ -1,4 +1,6 @@
-﻿using CommercePortal.Application.Features.Commands.AppUsers.CreateUser;
+﻿using CommercePortal.Application.Features.Commands.AppUsers.GoogleLoginAppUser;
+using CommercePortal.Application.Features.Commands.AppUsers.LoginAppUser;
+using CommercePortal.Application.Features.Commands.AppUsers.RegisterAppUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,8 +17,22 @@ public class UserController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateAppUserCommandRequest request)
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Register([FromBody] RegisterAppUserCommandRequest request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Login([FromBody] LoginAppUserCommandRequest request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginAppUserCommandRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
