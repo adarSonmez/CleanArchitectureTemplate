@@ -6,4 +6,4 @@ namespace CommercePortal.Application.Features.Commands.AppUsers.GoogleLoginAppUs
 /// Represents the response of the <see cref="GoogleLoginAppUserCommandRequest"/>.
 /// </summary>
 /// <param name="Token">The token generated for the user.</param>
-public record GoogleLoginAppUserCommandResponse(Token Token);
+public record GoogleLoginAppUserCommandResponse(TokenDTO Token);

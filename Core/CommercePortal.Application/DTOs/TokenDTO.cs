@@ -1,9 +1,9 @@
 ﻿namespace CommercePortal.Application.DTOs;
 
 /// <summary>
-/// Represents a token used for session management.
+/// Represents the token data transfer object.
 /// </summary>
-public class Token
+public class TokenDTO
 {
     /// <summary>
     /// Gets or sets the access token.

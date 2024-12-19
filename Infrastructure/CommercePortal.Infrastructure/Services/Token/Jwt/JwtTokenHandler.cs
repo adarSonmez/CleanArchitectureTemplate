@@ -22,9 +22,9 @@ public class JwtTokenHandler : ITokenHandler
     }
 
     /// </inheritdoc>
-    public DTO::Token GenerateToken(Guid userId, bool? infiniteExpiration = false)
+    public DTO::TokenDTO GenerateToken(Guid userId, bool? infiniteExpiration = false)
     {
-        DTO::Token? token = new();
+        DTO::TokenDTO? token = new();
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 

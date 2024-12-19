@@ -15,10 +15,7 @@ public static class ServiceRegistration
     /// <param name="services">The service collection to add the services to.</param>
     public static void AddApplicationServices(this IServiceCollection services)
     {
-        # region MediatR
-
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceRegistration).Assembly));
-
-        # endregion MediatR
+        services.AddHttpClient();
     }
 }

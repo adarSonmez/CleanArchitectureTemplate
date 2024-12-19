@@ -37,4 +37,11 @@ public class UserController : ControllerBase
         var response = await _mediator.Send(request);
         return Ok(response);
     }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> FacobookLogin([FromBody] FacebookLoginAppUserCommandRequest request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
 }

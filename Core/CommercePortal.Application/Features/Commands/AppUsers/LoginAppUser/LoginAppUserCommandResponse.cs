@@ -6,4 +6,4 @@ namespace CommercePortal.Application.Features.Commands.AppUsers.LoginAppUser;
 /// Represents the response of the <see cref="LoginAppUserCommandRequest"/>.
 /// </summary>
 /// <param name="Token">The token generated for the user.</param>
-public record LoginAppUserCommandResponse(Token Token);
+public record LoginAppUserCommandResponse(TokenDTO Token);
