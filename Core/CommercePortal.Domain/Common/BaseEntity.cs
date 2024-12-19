@@ -1,4 +1,4 @@
-﻿namespace CommercePortal.Domain.Entities.Common;
+﻿namespace CommercePortal.Domain.Common;
 
 /// <summary>
 /// Represents a base entity which has common properties for all entities.

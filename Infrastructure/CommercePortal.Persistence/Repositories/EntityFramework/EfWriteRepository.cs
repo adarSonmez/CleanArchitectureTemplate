@@ -1,5 +1,5 @@
 ﻿using CommercePortal.Application.Repositories;
-using CommercePortal.Domain.Entities.Common;
+using CommercePortal.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 

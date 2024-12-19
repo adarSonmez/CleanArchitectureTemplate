@@ -1,4 +1,4 @@
-﻿using CommercePortal.Domain.Entities.Common;
+﻿using CommercePortal.Domain.Common;
 using System.ComponentModel;
 
 namespace CommercePortal.Application.Repositories;

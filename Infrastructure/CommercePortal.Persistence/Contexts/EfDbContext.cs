@@ -1,5 +1,5 @@
-﻿using CommercePortal.Domain.Entities;
-using CommercePortal.Domain.Entities.Common;
+﻿using CommercePortal.Domain.Common;
+using CommercePortal.Domain.Entities;
 using CommercePortal.Domain.Entities.Identity;
 using CommercePortal.Persistence.Constants;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

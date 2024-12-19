@@ -1,6 +1,6 @@
 ﻿using CommercePortal.Application.RequestParameters;
+using CommercePortal.Domain.Common;
 using CommercePortal.Domain.Entities;
-using CommercePortal.Domain.Entities.Common;
 using System.Linq.Expressions;
 
 namespace CommercePortal.Application.Repositories;
