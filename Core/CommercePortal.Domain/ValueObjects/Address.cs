@@ -1,12 +1,14 @@
-﻿namespace CommercePortal.Domain.ValueObjects;
+﻿using CommercePortal.Domain.Constants.SmartEnums.Localization;
+
+namespace CommercePortal.Domain.ValueObjects;
 
 /// <summary>
 /// Represents a physical address.
 /// </summary>
 /// <param name="PostalCode">The postal code.</param>
 /// <param name="City">The city.</param>
-/// <param name="Country">The country.</param>
-public record Address(string PostalCode, string City, string Country)
+/// <param name="Country">The Country.</param>
+public record Address(string PostalCode, string City, Country Country)
 {
     /// <summary>
     /// Formats the address as a single-line string.
