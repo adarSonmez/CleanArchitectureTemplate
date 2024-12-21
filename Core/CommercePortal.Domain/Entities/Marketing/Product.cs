@@ -1,6 +1,9 @@
 ﻿using CommercePortal.Domain.Common;
+using CommercePortal.Domain.Entities.Files;
+using CommercePortal.Domain.Entities.Ordering;
+using CommercePortal.Domain.ValueObjects;
 
-namespace CommercePortal.Domain.Entities;
+namespace CommercePortal.Domain.Entities.Marketing;
 
 /// <summary>
 /// Represents a product entity.
@@ -23,9 +26,19 @@ public class Product : BaseEntity
     public int Stock { get; set; }
 
     /// <summary>
-    /// Gets or sets the price of the product.
+    /// Gets or sets the standard price (non-discounted) of the product.
     /// </summary>
-    public required decimal Price { get; set; }
+    public Money StandardPrice { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the discount rate of the product.
+    /// </summary>
+    public decimal DiscountRate { get; set; }
+
+    /// <summary>
+    /// Gets the discounted price of the product.
+    /// </summary>
+    public Money DiscountedPrice => new(StandardPrice.Amount * (1 - DiscountRate), StandardPrice.Currency);
 
     /// <summary>
     /// Gets or sets the orders which include the product.
@@ -36,4 +49,9 @@ public class Product : BaseEntity
     /// Gets or sets the product image files.
     /// </summary>
     public ICollection<ProductImageFile> ProductImageFiles { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets the categories of the product.
+    /// </summary>
+    public IList<Category> Categories { get; set; } = [];
 }
