@@ -85,4 +85,18 @@ public sealed class Currency : Enumeration
     #endregion Other Currencies (401-499)
 
     #endregion Predefined Currencies
+
+    #region Static Methods
+
+    /// <summary>
+    /// Gets the currency instance with the specified ISO code.
+    /// </summary>
+    public static Currency FromIsoCode(string isoCode)
+    {
+        var matchingItem = GetAll<Currency>().FirstOrDefault(e => string.Equals(e.IsoCode, isoCode, StringComparison.OrdinalIgnoreCase));
+
+        return matchingItem ?? throw new ArgumentException($"No currency with ISO code {isoCode} found.", nameof(isoCode));
+    }
+
+    #endregion Static Methods
 }

@@ -13,7 +13,7 @@ public class Customer : BaseEntity
     /// <summary>
     /// Gets or sets the first name of the customer.
     /// </summary>
-    public DomainUser DomainUser { get; set; } = default!;
+    //public DomainUser DomainUser { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the orders of the customer.

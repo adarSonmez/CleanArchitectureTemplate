@@ -39,7 +39,7 @@ public class DomainUser
     /// Gets or sets the unique identifier for the user.
     /// If not explicitly set, a new GUID is generated.
     /// </summary>
-    public required Guid Id
+    public Guid Id
     {
         get => _id ??= Guid.NewGuid();
         set => _id = value;
@@ -68,7 +68,7 @@ public class DomainUser
     /// <summary>
     /// Gets or sets the hashed password for this user.
     /// </summary>
-    public required string PasswordHash { get; set; }
+    public string PasswordHash { get; set; }
 
     /// <summary>
     /// Gets or sets the phone number associated with this user.

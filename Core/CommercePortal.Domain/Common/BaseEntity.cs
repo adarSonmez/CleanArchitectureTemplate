@@ -14,7 +14,7 @@ public abstract class BaseEntity
     /// <summary>
     /// Gets or sets the unique identifier for the entity.
     /// </summary>
-    public Guid Id => Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
     /// Gets or sets the deletation status of the entity.

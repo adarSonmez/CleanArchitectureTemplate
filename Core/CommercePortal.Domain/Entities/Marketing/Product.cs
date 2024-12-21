@@ -26,14 +26,14 @@ public class Product : BaseEntity
     public int Stock { get; set; }
 
     /// <summary>
-    /// Gets or sets the standard price (non-discounted) of the product.
-    /// </summary>
-    public Money StandardPrice { get; set; } = default!;
-
-    /// <summary>
     /// Gets or sets the discount rate of the product.
     /// </summary>
     public decimal DiscountRate { get; set; }
+
+    /// <summary>
+    /// Gets or sets the standard price (non-discounted) of the product.
+    /// </summary>
+    public Money StandardPrice { get; set; } = default!;
 
     /// <summary>
     /// Gets the discounted price of the product.

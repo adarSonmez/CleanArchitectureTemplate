@@ -1,5 +1,6 @@
 ﻿using CommercePortal.Domain.Common;
 using CommercePortal.Domain.Constants.Enums;
+using CommercePortal.Domain.Entities.Files;
 using CommercePortal.Domain.ValueObjects;
 
 namespace CommercePortal.Domain.Entities.Ordering;
@@ -10,14 +11,14 @@ namespace CommercePortal.Domain.Entities.Ordering;
 public class Invoice : BaseEntity
 {
     /// <summary>
-    /// The associated order for the invoice.
-    /// </summary>
-    public Order Order { get; set; } = default!;
-
-    /// <summary>
     /// The billing address for the invoice.
     /// </summary>
     public Address BillingAddress { get; set; } = default!;
+
+    /// <summary>
+    /// The invoice file which contains the invoice details.
+    /// </summary>
+    public InvoiceFile InvoiceFile { get; set; } = default!;
 
     /// <summary>
     /// The issue date of the invoice.
@@ -28,11 +29,6 @@ public class Invoice : BaseEntity
     /// The due date of the invoice.
     /// </summary>
     public DateTime DueDate { get; set; }
-
-    /// <summary>
-    /// The total amount for the invoice.
-    /// </summary>
-    public Money? TotalAmount => CalculateTotalAmount();
 
     /// <summary>
     /// The status of the invoice (e.g., Pending, Paid, Overdue).
@@ -87,22 +83,4 @@ public class Invoice : BaseEntity
     }
 
     #endregion Public Methods
-
-    #region Private Methods
-
-    /// <summary>
-    /// Computes the total amount of the invoice based on the order. Apllies any discounts or taxes.
-    /// </summary>
-    private Money? CalculateTotalAmount()
-    {
-        if (Order == null || Order.OrderItems.Count == 0)
-        {
-            return null;
-        }
-
-        var total = Order.OrderItems.Sum(item => item.TotalPrice.Amount);
-        return new Money(total, Order.OrderItems.First().TotalPrice.Currency);
-    }
-
-    #endregion Private Methods
 }

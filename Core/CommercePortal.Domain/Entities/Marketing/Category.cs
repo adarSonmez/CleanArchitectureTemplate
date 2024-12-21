@@ -26,7 +26,7 @@ public class Category : BaseEntity
     /// <summary>
     /// Gets or sets the image of the category.
     /// </summary>
-    public CategoryImageFile CategoryImage { get; set; } = default!;
+    public CategoryImageFile CategoryImageFile { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the products in the category.
