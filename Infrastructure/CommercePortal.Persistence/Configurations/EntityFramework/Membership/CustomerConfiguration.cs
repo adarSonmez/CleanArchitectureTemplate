@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CommercePortal.Persistence.Configurations.EntityFramework.Membership;
 
+/// <summary>
+/// EF Core configuration for the <see cref="Customer"/> entity.
+/// </summary>
 public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
 {
     public void Configure(EntityTypeBuilder<Customer> builder)
