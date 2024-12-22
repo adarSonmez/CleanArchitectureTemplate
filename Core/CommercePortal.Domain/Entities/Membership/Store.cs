@@ -12,7 +12,12 @@ public class Store : BaseEntity
     /// <summary>
     /// Gets or sets the first name of the customer.
     /// </summary>
-    //public DomainUser DomainUser { get; set; } = default!;
+    public DomainUser DomainUser { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the user id of the store.
+    /// </summary>
+    public Guid UserId { get; set; }
 
     /// <summary>
     /// Gets or sets the products of the store.

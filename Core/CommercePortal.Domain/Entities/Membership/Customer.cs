@@ -11,9 +11,14 @@ namespace CommercePortal.Domain.Entities.Membership;
 public class Customer : BaseEntity
 {
     /// <summary>
-    /// Gets or sets the first name of the customer.
+    /// Gets or sets the domain user associated with the customer.
     /// </summary>
-    //public DomainUser DomainUser { get; set; } = default!;
+    public DomainUser DomainUser { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the user id of the customer.
+    /// </summary>
+    public Guid UserId { get; set; }
 
     /// <summary>
     /// Gets or sets the orders of the customer.

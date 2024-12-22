@@ -1,32 +1,19 @@
-﻿namespace CommercePortal.Domain.Entities.Identity;
-
-/**
- * About Domain Entities:
+﻿/**
+ * Domain Entities Overview:
  *
- * Domain entities are core building blocks of the domain layer, representing key objects and their behaviors within the business logic.
- * They are designed to be independent of any external systems or infrastructure, ensuring that the domain layer remains isolated and adheres
- * to clean architecture principles.
+ * Domain entities are core components representing business logic and behavior, isolated from external systems and infrastructure.
  *
- * Key Characteristics of Domain Entities:
- *
- * - **Independence from External Systems:** Domain entities are decoupled from specific implementations, such as identity systems, to
- *   enhance testability and reduce dependencies.
- * - **Behavior Over Data:** Domain entities encapsulate business rules and behaviors, ensuring that they remain consistent and valid.
- * - **Non-Inheritance of EntityBase:** Unlike other entities, domain entities like `DomainUser` are not inherited from a base entity
- *   (e.g., `EntityBase`). This is intentional to keep the domain layer independent of shared infrastructure.
+ * Key Features:
+ * - **Independence:** Decoupled from identity systems to enhance testability and reduce dependencies.
+ * - **Behavior-Focused:** Encapsulate business rules to ensure consistency and validity.
+ * - **No Base Inheritance:** Entities like `DomainUser` avoid inheritance from shared infrastructure classes.
  *
  * About `DomainUser`:
- *
- * The `DomainUser` entity represents a user in the domain layer and is independent of any specific identity system. It acts as an abstraction
- * that isolates business logic from external identity providers or frameworks (e.g., ASP.NET Core Identity). This allows the domain layer to
- * remain agnostic to changes in the underlying identity system while still supporting core functionalities like user management.
- *
- * Dependent Entities:
- *
- * - Entities like `DomainUser` may have corresponding representations in other layers, such as persistence entities or DTOs.
- * - These dependent entities are mapped to the domain entities (e.g., using an AutoMapper profile) and reside in the Persistence project
- *   or Application layer as appropriate.
+ * - Represents a user in the domain layer, independent of specific identity systems.
+ * - Abstracts business logic from external identity frameworks, enabling adaptability and isolation.
  */
+
+namespace CommercePortal.Domain.Entities.Identity;
 
 /// <summary>
 /// Represents a user within the domain layer, independent of any external identity systems.
@@ -68,7 +55,7 @@ public class DomainUser
     /// <summary>
     /// Gets or sets the hashed password for this user.
     /// </summary>
-    public string PasswordHash { get; set; }
+    public string? PasswordHash { get; set; }
 
     /// <summary>
     /// Gets or sets the phone number associated with this user.
