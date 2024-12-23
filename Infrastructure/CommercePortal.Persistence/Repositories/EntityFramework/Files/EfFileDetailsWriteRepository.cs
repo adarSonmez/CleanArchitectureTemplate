@@ -5,8 +5,8 @@ using CommercePortal.Persistence.Contexts;
 namespace CommercePortal.Persistence.Repositories.EntityFramework.Files;
 
 /// <summary>
-/// Represents EntityFramework implementation of the <see cref="IProductImageFileWriteRepository"/>.
+/// Represents EntityFramework implementation of the <see cref="IFileDetailsWriteRepository"/>.
 /// </summary>
-public class EfProductImageFileWriteRepository(EfDbContext context) : EfWriteRepository<ProductImageFile>(context), IProductImageFileWriteRepository
+public class EfFileDetailsWriteRepository(EfDbContext context) : EfWriteRepository<FileDetails>(context), IFileDetailsWriteRepository
 {
 }

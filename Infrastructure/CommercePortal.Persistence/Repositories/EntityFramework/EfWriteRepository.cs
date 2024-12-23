@@ -1,4 +1,4 @@
-﻿using CommercePortal.Application.Repositories;
+﻿using CommercePortal.Application.Abstractions.Repositories;
 using CommercePortal.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;

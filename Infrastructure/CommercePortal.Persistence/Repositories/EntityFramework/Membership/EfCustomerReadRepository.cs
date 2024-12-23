@@ -1,8 +1,8 @@
-﻿using CommercePortal.Application.Repositories.Customers;
-using CommercePortal.Domain.Entities;
+﻿using CommercePortal.Application.Abstractions.Repositories.Membership;
+using CommercePortal.Domain.Entities.Membership;
 using CommercePortal.Persistence.Contexts;
 
-namespace CommercePortal.Persistence.Repositories.EntityFramework.Customers;
+namespace CommercePortal.Persistence.Repositories.EntityFramework.Membership;
 
 /// <summary>
 /// Represents EntityFramework implementation of the <see cref="Customer"/> read repository.
