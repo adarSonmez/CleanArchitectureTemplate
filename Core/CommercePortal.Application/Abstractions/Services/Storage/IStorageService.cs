@@ -1,4 +1,4 @@
-﻿namespace CommercePortal.Application.Abstractions.Storage;
+﻿namespace CommercePortal.Application.Abstractions.Services.Storage;
 
 /// <summary>
 /// Represents the storage service interface.

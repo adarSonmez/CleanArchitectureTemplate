@@ -1,11 +1,11 @@
 ﻿using DTO = CommercePortal.Application.DTOs;
 
-namespace CommercePortal.Application.Abstractions.Token;
+namespace CommercePortal.Application.Abstractions.Services.Token;
 
 /// <summary>
 /// Represents an interface for handling tokens.
 /// </summary>
-public interface ITokenHandler
+public interface ITokenService
 {
     /// <summary>
     /// Generates a token for the specified user.

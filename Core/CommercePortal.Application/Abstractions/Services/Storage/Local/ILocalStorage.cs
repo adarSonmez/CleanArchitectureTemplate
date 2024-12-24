@@ -1,4 +1,4 @@
-﻿namespace CommercePortal.Application.Abstractions.Storage.Local;
+﻿namespace CommercePortal.Application.Abstractions.Services.Storage.Local;
 
 /// <summary>
 /// Represents the local storage interface.

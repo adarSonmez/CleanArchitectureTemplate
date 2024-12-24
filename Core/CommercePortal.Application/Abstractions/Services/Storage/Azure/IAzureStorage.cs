@@ -1,4 +1,4 @@
-﻿namespace CommercePortal.Application.Abstractions.Storage.Azure;
+﻿namespace CommercePortal.Application.Abstractions.Services.Storage.Azure;
 
 /// <summary>
 /// Represents the Azure storage interface.

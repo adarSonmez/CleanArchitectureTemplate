@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace CommercePortal.Application.Abstractions.Storage;
+namespace CommercePortal.Application.Abstractions.Services.Storage;
 
 /// <summary>
 /// Represents the storage interface for all storage types. (local, cloud, etc.)
