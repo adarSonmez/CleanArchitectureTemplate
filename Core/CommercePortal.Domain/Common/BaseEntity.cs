@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CommercePortal.Domain.MarkerInterfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace CommercePortal.Domain.Common;
 
@@ -9,7 +10,7 @@ namespace CommercePortal.Domain.Common;
 /// Other audit properties like CreatedBy, UpdatedBy and DeletedBy are added as Shadow Properties.<br/>
 /// So they are not added to this class.
 /// </remarks>
-public abstract class BaseEntity
+public abstract class BaseEntity : IEntity
 {
     /// <summary>
     /// Gets or sets the unique identifier for the entity.
