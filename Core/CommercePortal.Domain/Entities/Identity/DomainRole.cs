@@ -1,4 +1,6 @@
-﻿/**
+﻿using CommercePortal.Domain.MarkerInterfaces;
+
+/**
  * Domain Entities Overview:
  *
  * Domain entities encapsulate core business rules and logic, independent of infrastructure or external systems, adhering to clean architecture principles.
@@ -18,7 +20,7 @@ namespace CommercePortal.Domain.Entities.Identity;
 /// <summary>
 /// Represents a role within the domain layer, independent of any external identity systems.
 /// </summary>
-public class DomainRole
+public class DomainRole : IEntity
 {
     private Guid? _id;
 
