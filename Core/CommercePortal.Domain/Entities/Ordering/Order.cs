@@ -1,5 +1,6 @@
 ﻿using CommercePortal.Domain.Common;
 using CommercePortal.Domain.Constants.Enums;
+using CommercePortal.Domain.Entities.Membership;
 using CommercePortal.Domain.ValueObjects;
 
 namespace CommercePortal.Domain.Entities.Ordering;
@@ -27,7 +28,7 @@ public class Order : BaseEntity
     /// <summary>
     /// Gets or sets the navigation property to the customer who placed the order.
     /// </summary>
-    //public Customer Customer { get; set; } = default!;
+    public Customer Customer { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the navigation property to the invoice associated with the order.

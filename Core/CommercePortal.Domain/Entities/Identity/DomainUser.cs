@@ -37,7 +37,7 @@ public class DomainUser : IEntity
     /// <summary>
     /// Gets or sets the full name of the user.
     /// </summary>
-    public string? FullName { get; set; }
+    public string FullName { get; set; }
 
     /// <summary>
     /// Gets or sets the username for this user.
