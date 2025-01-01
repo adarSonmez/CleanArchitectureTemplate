@@ -14,11 +14,11 @@ public static class BusinessRules
     /// Runs the specified business rules checks and throws a ValidationException if any check fails.
     /// </summary>
     /// <param name="checkResults">The results of the business rules checks.</param>
-    public static void Run(params (string? errCode, string msg)[] checkResults)
+    public static void Run(params (string errCode, string? msg)[] checkResults)
     {
         foreach (var (errCode, msg) in checkResults)
         {
-            if (errCode is not null)
+            if (msg is not null)
                 throw new BusinessRuleViolationException(msg, errCode);
         }
     }

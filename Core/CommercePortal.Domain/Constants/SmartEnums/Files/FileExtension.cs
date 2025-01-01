@@ -24,6 +24,23 @@ public sealed class FileExtension : Enumeration
 
     #endregion Constructor
 
+    #region Static Converters
+
+    /// <summary>
+    /// Gets the enumeration instance with the specified extension.
+    /// </summary>
+    /// <param name="extension">The extension to search for.</param>"
+    /// <returns>The matching enumeration instance.</returns>
+    public static FileExtension FromExtension(string extension)
+    {
+        extension = extension.ToLowerInvariant();
+        var matchingItem = GetAll<FileExtension>().FirstOrDefault(e => string.Equals(e.Extension, extension, StringComparison.OrdinalIgnoreCase));
+
+        return matchingItem ?? throw new ArgumentException($"No {nameof(FileExtension)} with Extension {extension} found.");
+    }
+
+    #endregion Static Converters
+
     #region Predefined Extensions
 
     #region Images
