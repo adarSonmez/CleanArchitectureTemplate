@@ -11,11 +11,13 @@ public class MoneyValidator : AbstractValidator<Money>
     public MoneyValidator()
     {
         RuleFor(x => x.Amount)
+            .NotNull()
+                .WithMessage("Amount is required.")
             .GreaterThanOrEqualTo(0)
                 .WithMessage("Amount must be greater than or equal to 0.");
 
-        RuleFor(x => x.Currency)
-            .NotNull()
-                .WithMessage("Currency is required.");
+        RuleFor(x => x!.Currency)
+            .NotNull().WithMessage("Currency is required.")
+            .SetValidator(new CurrencyValidator());
     }
 }

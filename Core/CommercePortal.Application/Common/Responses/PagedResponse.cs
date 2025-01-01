@@ -35,14 +35,14 @@ public class PagedResponse<T> : ResponseResult
     /// <summary>
     /// Sets the data.
     /// </summary>
-    public void SetData(IEnumerable<T> data, int page, int pageSize, int totalCount, string? successMessage)
+    public void SetData(IEnumerable<T> data, int? page, int? pageSize, string? successMessage = null)
     {
         Data = data ?? [];
-        CurrentPage = page;
-        PageSize = pageSize;
-        TotalCount = totalCount;
+        TotalCount = Data.Count();
+        CurrentPage = page ?? 1;
+        PageSize = pageSize ?? TotalCount;
 
-        if (!Data.Any())
+        if (TotalCount == 0)
         {
             AddWarning(ResponseConstants.NoItemsFoundMessage);
         }
