@@ -29,6 +29,24 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
         bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null);
 
     /// <summary>
+    /// Retrieves all entities asynchronously with provided IDs.
+    /// </summary>
+    /// <param name="ids">The list of entity IDs to retrieve.</param>
+    /// <param name="include">The list of functions to include related entities.</param>
+    /// <param name="orderBy">The function to order entities.</param>
+    /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
+    /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
+    /// <param name="pagination">Optional pagination parameters.</param>
+    /// <param name="throwIfNotFound">Indicates whether to throw an exception if an entity is not found.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the list of entities.</returns>
+    Task<IEnumerable<TEntity>> GetByIdRangeAsync(
+        IEnumerable<Guid> ids,
+        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null,
+        bool throwIfNotFound = true);
+
+    /// <summary>
     /// Retrieves a single entity asynchronously based on the predicate.
     /// </summary>
     /// <param name="predicate">The predicate to filter the entity.</param>
