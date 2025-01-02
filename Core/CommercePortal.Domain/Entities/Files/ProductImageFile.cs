@@ -14,7 +14,7 @@ public class ProductImageFile : BaseEntity
     /// <remarks>
     /// Only one image can be the main image for a product.
     /// </remarks>
-    public bool IsMainImage { get; set; }
+    public bool IsPrimary { get; set; }
 
     /// <summary>
     /// Gets or sets the product that the image belongs to.
