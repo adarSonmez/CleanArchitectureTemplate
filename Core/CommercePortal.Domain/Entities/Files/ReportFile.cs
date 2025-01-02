@@ -14,6 +14,11 @@ public class ReportFile : BaseEntity
     public ReportType ReportType { get; set; }
 
     /// <summary>
+    /// Gets or sets the foreign key for the FileDetails.
+    /// </summary>
+    public Guid FileDetailsId { get; set; }
+
+    /// <summary>
     /// Gets or sets the file details.
     /// </summary>
     public FileDetails FileDetails { get; set; } = default!;

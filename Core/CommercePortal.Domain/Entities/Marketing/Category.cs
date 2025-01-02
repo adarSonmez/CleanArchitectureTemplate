@@ -19,9 +19,19 @@ public class Category : BaseEntity
     public string? Description { get; set; }
 
     /// <summary>
+    /// Gets or sets foreign key for the parent category.
+    /// </summary>
+    public Guid? ParentCategoryId { get; set; }
+
+    /// <summary>
     /// Gets or sets the parent category.
     /// </summary>
     public Category? ParentCategory { get; set; }
+
+    /// <summary>
+    /// Gets or sets foreign key for the image of the category.
+    /// </summary>
+    public Guid CategoryImageFileId { get; set; }
 
     /// <summary>
     /// Gets or sets the image of the category.

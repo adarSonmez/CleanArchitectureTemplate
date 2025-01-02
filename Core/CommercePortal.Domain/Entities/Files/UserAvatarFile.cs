@@ -14,9 +14,14 @@ public class UserAvatarFile : BaseEntity
     public DomainUser DomainUser { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the id of the user associated with the avatar file.
+    /// Gets or sets the foreign key for the user.
     /// </summary>
     public Guid UserId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the foreign key for the FileDetails.
+    /// </summary>
+    public Guid FileDetailsId { get; set; }
 
     /// <summary>
     /// Gets or sets the file details.

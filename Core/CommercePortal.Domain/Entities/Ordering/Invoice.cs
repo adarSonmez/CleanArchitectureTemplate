@@ -16,6 +16,11 @@ public class Invoice : BaseEntity
     public Address BillingAddress { get; set; } = default!;
 
     /// <summary>
+    /// The foreign key for the invoice file.
+    /// </summary>
+    public Guid InvoiceFileId { get; set; }
+
+    /// <summary>
     /// The invoice file which contains the invoice details.
     /// </summary>
     public InvoiceFile InvoiceFile { get; set; } = default!;

@@ -15,7 +15,7 @@ public class Store : BaseEntity
     public DomainUser DomainUser { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the user id of the store.
+    /// Gets or sets foreign key for the user.
     /// </summary>
     public Guid UserId { get; set; }
 

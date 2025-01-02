@@ -10,9 +10,19 @@ namespace CommercePortal.Domain.Entities.Ordering;
 public class OrderItem : BaseEntity
 {
     /// <summary>
+    /// Gets or sets foreign key for the product.
+    /// </summary>
+    public Guid OrderId { get; set; }
+
+    /// <summary>
     /// Gets or sets the order this item belongs to.
     /// </summary>
     public Order Order { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the foreign key for the product.
+    /// </summary>
+    public Guid ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets the product for this item.

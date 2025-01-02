@@ -17,8 +17,18 @@ public class ProductImageFile : BaseEntity
     public bool IsPrimary { get; set; }
 
     /// <summary>
+    /// Gets or sets the foreign key for the product.
+    /// </summary>
+    public Guid ProductId { get; set; }
+
+    /// <summary>
     /// Gets or sets the product that the image belongs to.
     public Product Product { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the foreign key for the FileDetails.
+    /// </summary>
+    public Guid FileDetailsId { get; set; }
 
     /// Gets or sets the file details.
     /// </summary>

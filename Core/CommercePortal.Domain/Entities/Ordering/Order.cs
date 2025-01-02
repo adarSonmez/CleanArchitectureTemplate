@@ -26,9 +26,19 @@ public class Order : BaseEntity
     public Address ShippingAddress { get; set; } = default!;
 
     /// <summary>
+    /// Gets or sets the foreign key for the invoice associated with the order.
+    /// </summary>
+    public Guid CustomerId { get; set; }
+
+    /// <summary>
     /// Gets or sets the navigation property to the customer who placed the order.
     /// </summary>
     public Customer Customer { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the foreign key for the invoice associated with the order.
+    /// </summary>
+    public Guid InvoiceId { get; set; }
 
     /// <summary>
     /// Gets or sets the navigation property to the invoice associated with the order.
