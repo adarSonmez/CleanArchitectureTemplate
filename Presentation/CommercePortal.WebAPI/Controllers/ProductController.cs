@@ -1,9 +1,8 @@
-﻿using CommercePortal.Application.Features.Commands.ProductImageFiles.UploadProductImage;
-using CommercePortal.Application.Features.Commands.Products.CreateProduct;
-using CommercePortal.Application.Features.Commands.Products.DeleteProduct;
-using CommercePortal.Application.Features.Commands.Products.UpdateProduct;
-using CommercePortal.Application.Features.Queries.Products.GetAllProducts;
-using CommercePortal.Application.Features.Queries.Products.GetProductById;
+﻿using CommercePortal.Application.Features.Products.Commands.CreateProduct;
+using CommercePortal.Application.Features.Products.Commands.DeleteProduct;
+using CommercePortal.Application.Features.Products.Commands.UpdateProduct;
+using CommercePortal.Application.Features.Products.Queries.GetAllProducts;
+using CommercePortal.Application.Features.Products.Queries.GetProductById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,9 +29,9 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetById([FromRoute] Guid id, [FromQuery] bool includeCategories, [FromQuery] bool includeOrders, [FromQuery] bool includeProductImageFiles)
     {
-        var request = new GetProductByIdQueryRequest(id);
+        var request = new GetProductByIdQueryRequest(id, includeCategories, includeOrders, includeProductImageFiles);
         var response = await _mediator.Send(request);
         return Ok(response);
     }
@@ -55,13 +54,6 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var request = new DeleteProductCommandRequest(id);
-        var response = await _mediator.Send(request);
-        return Ok(response);
-    }
-
-    [HttpPost("upload-image")]
-    public async Task<IActionResult> UploadImage([FromForm] UploadProductImageCommandRequest request)
-    {
         var response = await _mediator.Send(request);
         return Ok(response);
     }
