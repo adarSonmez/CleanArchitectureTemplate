@@ -31,12 +31,12 @@ public class Category : BaseEntity
     /// <summary>
     /// Gets or sets foreign key for the image of the category.
     /// </summary>
-    public Guid CategoryImageFileId { get; set; }
+    public Guid? CategoryImageFileId { get; set; }
 
     /// <summary>
     /// Gets or sets the image of the category.
     /// </summary>
-    public CategoryImageFile CategoryImageFile { get; set; } = default!;
+    public CategoryImageFile? CategoryImageFile { get; set; }
 
     /// <summary>
     /// Gets or sets the products in the category.

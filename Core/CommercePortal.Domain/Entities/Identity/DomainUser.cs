@@ -1,4 +1,5 @@
-﻿using CommercePortal.Domain.MarkerInterfaces;
+﻿using CommercePortal.Domain.Entities.Files;
+using CommercePortal.Domain.MarkerInterfaces;
 
 /**
  * Domain Entities Overview:
@@ -22,22 +23,25 @@ namespace CommercePortal.Domain.Entities.Identity;
 /// </summary>
 public class DomainUser : IEntity
 {
-    private Guid? _id;
-
     /// <summary>
     /// Gets or sets the unique identifier for the user.
-    /// If not explicitly set, a new GUID is generated.
     /// </summary>
-    public Guid Id
-    {
-        get => _id ??= Guid.NewGuid();
-        set => _id = value;
-    }
+    public Guid Id { get; set; } = Guid.NewGuid();
+
+    /// <summary>
+    /// Gets or sets the foreign key for the user avatar file.
+    /// </summary>
+    public Guid? UserAvatarFileId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the user avatar file.
+    /// </summary>
+    public UserAvatarFile? UserAvatarFile { get; set; }
 
     /// <summary>
     /// Gets or sets the full name of the user.
     /// </summary>
-    public string FullName { get; set; }
+    public required string FullName { get; set; }
 
     /// <summary>
     /// Gets or sets the username for this user.

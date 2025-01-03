@@ -33,7 +33,7 @@ public class Product : BaseEntity
     /// <summary>
     /// Gets or sets the standard price (non-discounted) of the product.
     /// </summary>
-    public Money StandardPrice { get; set; } = default!;
+    public required Money StandardPrice { get; set; }
 
     /// <summary>
     /// Gets the discounted price of the product.

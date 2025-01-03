@@ -28,7 +28,7 @@ public class Customer : BaseEntity
     /// <summary>
     /// Gets or sets the age of the customer.
     /// </summary>
-    public short? Age { get; set; }
+    public required short Age { get; set; }
 
     /// <summary>
     /// Gets or sets the gender of the customer.

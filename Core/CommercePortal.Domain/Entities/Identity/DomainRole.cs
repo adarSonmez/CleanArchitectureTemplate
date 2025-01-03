@@ -22,17 +22,10 @@ namespace CommercePortal.Domain.Entities.Identity;
 /// </summary>
 public class DomainRole : IEntity
 {
-    private Guid? _id;
-
     /// <summary>
     /// Gets or sets the unique identifier for the role.
-    /// If not explicitly set, a new GUID is generated.
     /// </summary>
-    public required Guid Id
-    {
-        get => _id ??= Guid.NewGuid();
-        set => _id = value;
-    }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
     /// Gets or sets the name of the role.
