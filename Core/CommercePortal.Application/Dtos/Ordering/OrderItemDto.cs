@@ -1,20 +1,20 @@
-﻿namespace CommercePortal.Application.Dtos.Ordering;
-
-using CommercePortal.Application.Dtos.Marketing;
+﻿using CommercePortal.Domain.Entities.Ordering;
 using CommercePortal.Domain.MarkerInterfaces;
 using CommercePortal.Domain.ValueObjects;
 
+namespace CommercePortal.Application.Dtos.Ordering;
+
 /// <summary>
-/// Represents the order item data transfer object.
+/// Represents data transfer object for <see cref="OrderItem"/>
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
-/// <param name="Product">The product data transfer object.</param>
+/// <param name="ProductId">The identifier of the product.</param>
 /// <param name="Quantity">The quantity of the product.</param>
 /// <param name="TotalPrice">The total price of the order item.</param>
 public record OrderItemDto
 (
     Guid Id,
-    ProductDto? Product,
+    Guid ProductId,
     int Quantity,
     Money TotalPrice
 ) : IDto;

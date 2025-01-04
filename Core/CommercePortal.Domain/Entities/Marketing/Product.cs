@@ -1,5 +1,6 @@
 ﻿using CommercePortal.Domain.Common;
 using CommercePortal.Domain.Entities.Files;
+using CommercePortal.Domain.Entities.Membership;
 using CommercePortal.Domain.Entities.Ordering;
 using CommercePortal.Domain.ValueObjects;
 
@@ -39,6 +40,16 @@ public class Product : BaseEntity
     /// Gets the discounted price of the product.
     /// </summary>
     public Money DiscountedPrice => new(StandardPrice.Amount * (1 - DiscountRate), StandardPrice.Currency);
+
+    /// <summary>
+    /// Gets or sets the store that the product belongs to.
+    /// </summary>
+    public Guid StoreId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the store that the product belongs to.
+    /// </summary>
+    public Store Store { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the orders which include the product.

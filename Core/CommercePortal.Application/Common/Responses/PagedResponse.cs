@@ -35,7 +35,7 @@ public class PagedResponse<T> : ResponseResult
     /// <summary>
     /// Sets the data.
     /// </summary>
-    public void SetData(IEnumerable<T> data, int? page, int? pageSize, string? successMessage = null)
+    public void SetData(IEnumerable<T> data, int? page = null, int? pageSize = null, string? successMessage = null)
     {
         Data = data ?? [];
         TotalCount = Data.Count();

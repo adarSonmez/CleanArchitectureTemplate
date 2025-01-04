@@ -1,10 +1,11 @@
 ﻿namespace CommercePortal.Application.Dtos.Files;
 
 using CommercePortal.Domain.Constants.Enums;
+using CommercePortal.Domain.Entities.Files;
 using CommercePortal.Domain.MarkerInterfaces;
 
 /// <summary>
-/// Represents the category image file data transfer object.
+/// Represents data transfer object for <see cref="FileDetails"/>
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
 /// <param name="Name">The name of the file.</param>

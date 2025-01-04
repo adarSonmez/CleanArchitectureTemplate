@@ -1,10 +1,11 @@
-﻿namespace CommercePortal.Application.Dtos.Files;
-
-using CommercePortal.Domain.Constants.Enums;
+﻿using CommercePortal.Domain.Constants.Enums;
+using CommercePortal.Domain.Entities.Files;
 using CommercePortal.Domain.MarkerInterfaces;
 
+namespace CommercePortal.Application.Dtos.Files;
+
 /// <summary>
-/// Represents the report file data transfer object.
+/// Represents data transfer object for <see cref="ReportFile"/>
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
 /// <param name="ReportType">The type of the report.</param>

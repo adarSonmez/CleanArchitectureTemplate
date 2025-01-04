@@ -1,12 +1,13 @@
 ﻿using CommercePortal.Application.Dtos.Files;
 using CommercePortal.Application.Dtos.Ordering;
+using CommercePortal.Domain.Entities.Marketing;
 using CommercePortal.Domain.MarkerInterfaces;
 using CommercePortal.Domain.ValueObjects;
 
 namespace CommercePortal.Application.Dtos.Marketing;
 
 /// <summary>
-/// Represents the product data transfer object.
+/// Represents data transfer object for <see cref="Product"/>
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
 /// <param name="Name">The name of the product.</param>
@@ -14,8 +15,9 @@ namespace CommercePortal.Application.Dtos.Marketing;
 /// <param name="Stock">The stock of the product.</param>
 /// <param name="DiscountRate">The discount rate of the product.</param>
 /// <param name="StandardPrice">The standard price (non-discounted) of the product.</param>
+/// <param name="StoreId">The store that the product belongs to.</param>
 /// <param name="DiscountedPrice">The discounted price of the product.</param>
-/// <param name="ProductImageFile">The product image file data transfer object.</param>
+/// <param name="ProductImageFiles">The product images of the product.</param>
 /// <param name="Orders">The orders which include the product.</param>
 /// <param name="Categories">The categories of the product.</param>
 public record ProductDto
@@ -27,7 +29,8 @@ public record ProductDto
     decimal DiscountRate,
     Money StandardPrice,
     Money DiscountedPrice,
-    ProductImageFileDto? ProductImageFile,
+    Guid StoreId,
+    ICollection<ProductImageFileDto>? ProductImageFiles,
     ICollection<OrderDto>? Orders,
     ICollection<CategoryDto>? Categories
 ) : IDto;

@@ -1,9 +1,10 @@
-﻿using CommercePortal.Domain.MarkerInterfaces;
+﻿using CommercePortal.Domain.Entities.Files;
+using CommercePortal.Domain.MarkerInterfaces;
 
 namespace CommercePortal.Application.Dtos.Files;
 
 /// <summary>
-/// Represents the category image file data transfer object.
+/// Represents data transfer object for <see cref="CategoryImageFile"/>
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
 /// <param name="FileDetails">The file details data transfer object.</param>

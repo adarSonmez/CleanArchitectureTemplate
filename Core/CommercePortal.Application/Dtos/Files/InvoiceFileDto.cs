@@ -1,9 +1,10 @@
-﻿using CommercePortal.Domain.MarkerInterfaces;
+﻿using CommercePortal.Domain.Entities.Files;
+using CommercePortal.Domain.MarkerInterfaces;
 
 namespace CommercePortal.Application.Dtos.Files;
 
 /// <summary>
-/// Represents an invoice file DTO.
+/// Represents data transfer object for <see cref="InvoiceFile"/>
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
 /// <param name="FileDetails">The file details data transfer object.</param>

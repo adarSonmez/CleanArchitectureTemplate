@@ -1,9 +1,10 @@
-﻿namespace CommercePortal.Application.Dtos.Files;
-
+﻿using CommercePortal.Domain.Entities.Files;
 using CommercePortal.Domain.MarkerInterfaces;
 
+namespace CommercePortal.Application.Dtos.Files;
+
 /// <summary>
-/// Represents the user avatar file data transfer object.
+/// Represents data transfer object for <see cref="UserAvatarFile"/>
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
 /// <param name="FileDetails">The file details data transfer object.</param>
@@ -11,6 +12,5 @@ using CommercePortal.Domain.MarkerInterfaces;
 public record UserAvatarFileDto
 (
     Guid Id,
-    FileDetailsDto? FileDetails,
-    Guid UserId
+    FileDetailsDto? FileDetails
 ) : IDto;

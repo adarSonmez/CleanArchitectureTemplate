@@ -1,10 +1,11 @@
-﻿namespace CommercePortal.Application.Dtos.Membership;
-
-using CommercePortal.Application.Dtos.Marketing;
+﻿using CommercePortal.Application.Dtos.Marketing;
+using CommercePortal.Domain.Entities.Membership;
 using CommercePortal.Domain.MarkerInterfaces;
 
+namespace CommercePortal.Application.Dtos.Membership;
+
 /// <summary>
-/// Represents the store data transfer object.
+/// Represents data transfer object for <see cref="Store"/>
 /// </summary>
 /// <param name="UserId">The user id of the store.</param>
 /// <param name="Website">The website of the store.</param>

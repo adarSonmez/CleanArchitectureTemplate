@@ -29,6 +29,36 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
         bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null);
 
     /// <summary>
+    /// Retrieves a single entity asynchronously based on the predicate.
+    /// </summary>
+    /// <param name="predicate">The predicate to filter the entity.</param>
+    /// <param name="include">The list of functions to include related entities.</param>
+    /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
+    /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the entity.</returns>
+    Task<TEntity?> GetAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        bool enableTracking = false,
+        bool getDeleted = false);
+
+    /// <summary>
+    /// Retrieves a single entity asynchronously based on the ID.
+    /// </summary>
+    /// <param name="id">The unique identifier of the entity to retrieve.</param>
+    /// <param name="include">The list of functions to include related entities.</param>
+    /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
+    /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the entity.</returns>
+    /// <remarks>Use this method to retrieve a single entity by its unique identifier.</remarks>
+    /// <exception cref="KeyNotFoundException">Thrown when the entity with the specified ID is not found.</exception>
+    Task<TEntity?> GetByIdAsync(
+    Guid id,
+    IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+    bool enableTracking = false,
+    bool getDeleted = false);
+
+    /// <summary>
     /// Retrieves all entities asynchronously with provided IDs.
     /// </summary>
     /// <param name="ids">The list of entity IDs to retrieve.</param>
@@ -45,20 +75,6 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null,
         bool throwIfNotFound = true);
-
-    /// <summary>
-    /// Retrieves a single entity asynchronously based on the predicate.
-    /// </summary>
-    /// <param name="predicate">The predicate to filter the entity.</param>
-    /// <param name="include">The list of functions to include related entities.</param>
-    /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
-    /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the entity.</returns>
-    Task<TEntity?> GetAsync(
-        Expression<Func<TEntity, bool>> predicate,
-        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
-        bool enableTracking = false,
-        bool getDeleted = false);
 
     /// <summary>
     /// Finds entities synchronously based on the predicate.

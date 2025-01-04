@@ -1,9 +1,10 @@
-﻿namespace CommercePortal.Application.Dtos.Identity;
-
+﻿using CommercePortal.Domain.Entities.Identity;
 using CommercePortal.Domain.MarkerInterfaces;
 
+namespace CommercePortal.Application.Dtos.Identity;
+
 /// <summary>
-/// Represents the user data transfer object.
+/// Represents data transfer object for <see cref="DomainUser"/>
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
 /// <param name="FullName">The full name of the user.</param>
