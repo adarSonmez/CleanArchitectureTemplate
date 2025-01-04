@@ -7,9 +7,7 @@ namespace CommercePortal.Domain.Entities.Files;
 /// <summary>
 /// Represents the file details entity.
 /// </summary>
-/// <remarks>
-/// All file entities have composition relationship with this entity.
-/// </remarks>
+/// <remarks>All file entities have composition relationship with this entity.</remarks>
 public class FileDetails : BaseEntity
 {
     #region Properties
@@ -43,9 +41,7 @@ public class FileDetails : BaseEntity
     /// <summary>
     /// Gets or sets the folder path of the file.
     /// </summary>
-    /// <remarks>
-    /// Empty string means the root folder.
-    /// </remarks>
+    /// <remarks>Empty string means the root folder.</remarks>
     public string Folder { get; set; } = string.Empty;
 
     /// <summary>

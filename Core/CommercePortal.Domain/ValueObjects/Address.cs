@@ -1,4 +1,4 @@
-﻿using CommercePortal.Domain.Constants.SmartEnums.Localization;
+﻿using CommercePortal.Domain.Constants.SmartEnums.Localizations;
 
 namespace CommercePortal.Domain.ValueObjects;
 

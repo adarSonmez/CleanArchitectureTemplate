@@ -1,6 +1,6 @@
 ﻿using CommercePortal.Domain.Common;
 
-namespace CommercePortal.Domain.Constants.SmartEnums.Localization;
+namespace CommercePortal.Domain.Constants.SmartEnums.Localizations;
 
 /// <summary>
 /// Represents a language with its ISO codes and name.
