@@ -9,29 +9,27 @@ using CommercePortal.Domain.Constants.SmartEnums.Files;
 using CommercePortal.Domain.Entities.Files;
 using MediatR;
 
-namespace CommercePortal.Application.Features.ProductImageFiles.Commands.UploadProductImages;
+namespace CommercePortal.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;
 
 /// <summary>
-/// Handles the <see cref="UploadProductImagesCommandRequest"/>
+/// Handles the <see cref="UploadSecondaryProductImagesCommandRequest"/>
 /// </summary>
-public class UploadProductImagesCommandHandler : IRequestHandler<UploadProductImagesCommandRequest, PagedResponse<ProductImageFileDto>>
+public class UploadSecondaryProductImagesCommandHandler : IRequestHandler<UploadSecondaryProductImagesCommandRequest, PagedResponse<ProductImageFileDto>>
 {
     private readonly IMapper _mapper;
-    private readonly IFileDetailsReadRepository _fileDetailsReadRepository;
     private readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
     private readonly IProductReadRepository _productReadRepository;
     private readonly IStorageService _storageService;
 
-    public UploadProductImagesCommandHandler(IMapper mapper, IFileDetailsReadRepository fileDetailsReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IProductReadRepository productReadRepository, IStorageService storageService)
+    public UploadSecondaryProductImagesCommandHandler(IMapper mapper, IProductImageFileWriteRepository productImageFileWriteRepository, IProductReadRepository productReadRepository, IStorageService storageService)
     {
         _mapper = mapper;
-        _fileDetailsReadRepository = fileDetailsReadRepository;
         _productImageFileWriteRepository = productImageFileWriteRepository;
         _productReadRepository = productReadRepository;
         _storageService = storageService;
     }
 
-    public async Task<PagedResponse<ProductImageFileDto>> Handle(UploadProductImagesCommandRequest request, CancellationToken cancellationToken)
+    public async Task<PagedResponse<ProductImageFileDto>> Handle(UploadSecondaryProductImagesCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new PagedResponse<ProductImageFileDto>();
 
@@ -42,8 +40,6 @@ public class UploadProductImagesCommandHandler : IRequestHandler<UploadProductIm
 
             var productImageFiles = new List<ProductImageFile>();
             var uploadResult = await _storageService.UploadFilesAsync(request.Folder, request.Files);
-
-            bool isFirstImage = true;
 
             foreach ((string folder, string name, long size) in uploadResult)
             {
@@ -60,11 +56,10 @@ public class UploadProductImagesCommandHandler : IRequestHandler<UploadProductIm
                 var productImageFile = new ProductImageFile
                 {
                     FileDetails = fileDetails,
-                    IsPrimary = isFirstImage,
+                    IsPrimary = false,
                     Product = product!
                 };
 
-                isFirstImage = false;
                 productImageFiles.Add(productImageFile);
             }
 

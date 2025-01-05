@@ -36,7 +36,7 @@ public class DeleteProductImagesByProductIdHandler : IRequestHandler<DeleteProdu
 
             foreach (var productImageFile in productImageFiles)
             {
-                await _productImageFileWriteRepository.HardDeleteAsync(productImageFile.Id);
+                await _productImageFileWriteRepository.HardDeleteAsync(productImageFile.Id, saveChanges: false);
                 await _storageService.DeleteFileAsync(productImageFile.FileDetails.Folder, productImageFile.FileDetails.Name);
             }
 

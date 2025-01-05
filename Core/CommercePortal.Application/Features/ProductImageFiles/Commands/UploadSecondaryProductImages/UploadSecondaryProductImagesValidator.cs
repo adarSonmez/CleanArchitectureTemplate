@@ -1,14 +1,13 @@
-﻿using CommercePortal.Application.Features.ProductImageFiles.Commands.UploadProductImages;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace CommercePortal.Application.Validators.FluentValidation.ProductImageFiles;
+namespace CommercePortal.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;
 
 /// <summary>
-/// Validator for the <see cref="UploadProductImagesCommandRequest"/> class.
+/// Validator for the <see cref="UploadSecondaryProductImagesCommandRequest"/> class.
 /// </summary>
-public class UploadProductImagesValidator : AbstractValidator<UploadProductImagesCommandRequest>
+public class UploadSecondaryProductImagesValidator : AbstractValidator<UploadSecondaryProductImagesCommandRequest>
 {
-    public UploadProductImagesValidator()
+    public UploadSecondaryProductImagesValidator()
     {
         RuleFor(x => x.Folder)
             .NotEmpty()
