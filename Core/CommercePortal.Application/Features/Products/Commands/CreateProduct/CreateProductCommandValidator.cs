@@ -11,7 +11,6 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
     public CreateProductCommandValidator()
     {
         RuleFor(x => x.Name)
-            .NotNull()
             .NotEmpty()
                 .WithMessage("Name is required.")
             .MaximumLength(100)

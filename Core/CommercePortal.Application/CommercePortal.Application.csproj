@@ -18,4 +18,8 @@
     <ProjectReference Include="..\CommercePortal.Domain\CommercePortal.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\FluentValidation\ProductImageFiles\" />
+  </ItemGroup>
+
 </Project>

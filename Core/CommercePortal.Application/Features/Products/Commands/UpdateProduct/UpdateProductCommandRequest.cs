@@ -2,6 +2,8 @@
 using CommercePortal.Application.Dtos.Marketing;
 using CommercePortal.Domain.ValueObjects;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CommercePortal.Application.Features.Products.Commands.UpdateProduct;
 
@@ -14,8 +16,11 @@ namespace CommercePortal.Application.Features.Products.Commands.UpdateProduct;
 /// <param name="Stock">The stock of the product.</param>
 /// <param name="DiscountRate">The discount rate of the product.</param>
 /// <param name="StandardPrice">The standard price (non-discounted) of the product.</param>
+/// <param name="PrimaryProductImage">The primary product image file.</param>
+/// <param name="DeleteExistingSecondaryImages">A flag indicating whether to delete existing secondary images.</param>
+/// <param name="SecondaryProductImages">The secondary product image files.</param>
 /// <param name="CategoryIds">The identifiers of the categories of the product.</param>
-/// <param name="ImageFileIds">The identifier of the image file of the product.</param>
+
 public record UpdateProductCommandRequest
 (
     Guid Id,
@@ -24,6 +29,8 @@ public record UpdateProductCommandRequest
     int? Stock,
     decimal? DiscountRate,
     Money? StandardPrice,
-    IList<Guid>? CategoryIds,
-    IList<Guid>? ImageFileIds
+    [FromForm] IFormFile PrimaryProductImage,
+    bool DeleteExistingSecondaryImages,
+    [FromForm] IFormFileCollection? SecondaryProductImages,
+    IList<Guid>? CategoryIds
 ) : IRequest<SingleResponse<ProductDto>>;

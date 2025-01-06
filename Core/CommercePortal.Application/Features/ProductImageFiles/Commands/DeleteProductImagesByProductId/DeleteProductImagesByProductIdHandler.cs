@@ -40,6 +40,7 @@ public class DeleteProductImagesByProductIdHandler : IRequestHandler<DeleteProdu
                 await _storageService.DeleteFileAsync(productImageFile.FileDetails.Folder, productImageFile.FileDetails.Name);
             }
 
+            await _productImageFileWriteRepository.SaveChangesAsync();
             response.SetData(true);
         }
         catch (Exception ex)

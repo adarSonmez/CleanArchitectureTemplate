@@ -1,5 +1,10 @@
-﻿using CommercePortal.Application.Abstractions.Repositories.Marketing;
+﻿using AutoMapper;
+using CommercePortal.Application.Abstractions.Repositories.Files;
+using CommercePortal.Application.Abstractions.Repositories.Marketing;
 using CommercePortal.Application.Common.Responses;
+using CommercePortal.Application.Dtos.Marketing;
+using CommercePortal.Application.Features.ProductImageFiles.Commands.DeleteProductImagesByProductId;
+using CommercePortal.Domain.Common;
 using MediatR;
 
 namespace CommercePortal.Application.Features.Products.Commands.DeleteProduct;
@@ -7,22 +12,34 @@ namespace CommercePortal.Application.Features.Products.Commands.DeleteProduct;
 /// <summary>
 /// Handles the <see cref="DeleteProductCommandRequest"/>.
 /// </summary>
-public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandRequest, SingleResponse<Guid>>
+public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandRequest, SingleResponse<ProductDto>>
 {
+    private readonly IMapper _mapper;
+    private readonly IMediator _mediator;
+    private readonly IProductReadRepository _productReadRepository;
     private readonly IProductWriteRepository _productWriteRepository;
 
-    public DeleteProductCommandHandler(IProductWriteRepository productWriteRepository)
+    public DeleteProductCommandHandler(IMapper mapper, IMediator mediator, IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, IProductImageFileWriteRepository productImageFileWriteRepository)
     {
+        _mapper = mapper;
+        _mediator = mediator;
+        _productReadRepository = productReadRepository;
         _productWriteRepository = productWriteRepository;
     }
 
-    public async Task<SingleResponse<Guid>> Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<ProductDto>> Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<Guid>();
+        var response = new SingleResponse<ProductDto>();
         try
         {
-            await _productWriteRepository.SoftDeleteAsync(request.Id);
-            response.SetData(request.Id);
+            var product = await _productReadRepository.GetByIdAsync(request.Id);
+            BusinessRules.Run(("PRD770975", BusinessRules.CheckEntityNull(product)));
+
+            var deleteProductImagesCommand = new DeleteProductImagesByProductIdRequest(product!.Id);
+            await _mediator.Send(deleteProductImagesCommand, cancellationToken);
+            await _productWriteRepository.SoftDeleteAsync(product!);
+
+            response.SetData(_mapper.Map<ProductDto>(product));
         }
         catch (Exception ex)
         {

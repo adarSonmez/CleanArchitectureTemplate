@@ -33,7 +33,7 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
             .When(x => x.StandardPrice != null);
 
         RuleFor(x => x.CategoryIds)
-            .Must(x => x.Count > 0)
+            .NotEmpty()
                 .WithMessage("At least one category is required.");
     }
 }

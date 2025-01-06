@@ -3,7 +3,9 @@ using CommercePortal.Application.Abstractions.Repositories.Marketing;
 using CommercePortal.Application.Common.Responses;
 using CommercePortal.Application.Dtos.Marketing;
 using CommercePortal.Domain.Common;
+using CommercePortal.Domain.Entities.Marketing;
 using MediatR;
+using System.Linq.Expressions;
 
 namespace CommercePortal.Application.Features.Products.Queries.GetProductById;
 
@@ -26,7 +28,22 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryReq
         var response = new SingleResponse<ProductDto>();
         try
         {
-            var product = await _productReadRepository.GetAsync(p => p.Id == request.Id);
+            var includes = new List<Expression<Func<Product, object>>>();
+
+            if (request.IncludeCategories)
+            {
+                includes.Add(p => p.Categories);
+            }
+            if (request.IncludeOrders)
+            {
+                includes.Add(p => p.Orders);
+            }
+            if (request.IncludeProductImageFiles)
+            {
+                includes.Add(p => p.ProductImageFiles);
+            }
+
+            var product = await _productReadRepository.GetByIdAsync(request.Id, include: includes);
             BusinessRules.Run(("PRD599445", BusinessRules.CheckEntityNull(product)));
 
             response.SetData(_mapper.Map<ProductDto>(product));

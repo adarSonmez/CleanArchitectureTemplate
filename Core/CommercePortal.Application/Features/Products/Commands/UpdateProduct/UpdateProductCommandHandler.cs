@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
-using CommercePortal.Application.Abstractions.Repositories.Files;
 using CommercePortal.Application.Abstractions.Repositories.Marketing;
 using CommercePortal.Application.Common.Responses;
 using CommercePortal.Application.Dtos.Marketing;
+using CommercePortal.Application.Features.ProductImageFiles.Commands.DeleteProductImagesByProductId;
+using CommercePortal.Application.Features.ProductImageFiles.Commands.UploadPrimaryProductImage;
+using CommercePortal.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;
 using CommercePortal.Domain.Common;
+using CommercePortal.Domain.Constants.StringContants;
 using MediatR;
 
 namespace CommercePortal.Application.Features.Products.Commands.UpdateProduct;
@@ -13,18 +16,18 @@ namespace CommercePortal.Application.Features.Products.Commands.UpdateProduct;
 /// </summary>
 public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, SingleResponse<ProductDto>>
 {
+    private readonly IMediator _mediator;
     private readonly IMapper _mapper;
-    private readonly IProductWriteRepository _productWriteRepository;
     private readonly IProductReadRepository _productReadRepository;
-    private readonly IProductImageFileReadRepository _productImageFileReadRepository;
+    private readonly IProductWriteRepository _productWriteRepository;
     private readonly ICategoryReadRepository _categoryReadRepository;
 
-    public UpdateProductCommandHandler(IMapper mapper, IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IProductImageFileReadRepository productImageFileReadRepository, ICategoryReadRepository categoryReadRepository)
+    public UpdateProductCommandHandler(IMediator mediator, IMapper mapper, IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, ICategoryReadRepository categoryReadRepository)
     {
+        _mediator = mediator;
         _mapper = mapper;
-        _productWriteRepository = productWriteRepository;
         _productReadRepository = productReadRepository;
-        _productImageFileReadRepository = productImageFileReadRepository;
+        _productWriteRepository = productWriteRepository;
         _categoryReadRepository = categoryReadRepository;
     }
 
@@ -33,28 +36,56 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
         var response = new SingleResponse<ProductDto>();
         try
         {
-            var product = await _productReadRepository.GetAsync(p => p.Id == request.Id);
-            BusinessRules.Run(("PRD128204", BusinessRules.CheckEntityNull(product)));
+            var product = await _productReadRepository.GetByIdAsync(request.Id);
+            BusinessRules.Run(("PRD233224", BusinessRules.CheckEntityNull(product)));
 
-            _mapper.Map(request, product);
-            if (request.CategoryIds != null)
+            if (request.CategoryIds?.Count > 0)
             {
                 var categories = await _categoryReadRepository.GetByIdRangeAsync(request.CategoryIds);
                 product!.Categories = categories.ToList();
             }
-            if (request.ImageFileIds != null)
+
+            if (request.PrimaryProductImage != null)
             {
-                var imageFiles = await _productImageFileReadRepository.GetByIdRangeAsync(request.ImageFileIds);
-                product!.ProductImageFiles = imageFiles.ToList();
+                var uploadFileCommand = new UploadPrimaryProductImageCommandRequest(PathConstants.DefaultProductImagesPath, product.Id, request.PrimaryProductImage);
+                var uploadFileResponse = await _mediator.Send(uploadFileCommand, cancellationToken);
+                if (!uploadFileResponse.IsSuccessful)
+                {
+                    response.AddError("PRD309234", uploadFileResponse.Messages.FirstOrDefault()?.Message ?? "Error while uploading primary image.");
+                    return response;
+                }
             }
 
-            var updatedProduct = await _productWriteRepository.UpdateAsync(product!);
-            response.SetData(_mapper.Map<ProductDto>(updatedProduct));
+            if (request.SecondaryProductImages != null)
+            {
+                if (request.DeleteExistingSecondaryImages || request.SecondaryProductImages.Count == 0)
+                {
+                    var deleteProductImagesCommand = new DeleteProductImagesByProductIdRequest(product.Id);
+                    await _mediator.Send(deleteProductImagesCommand, cancellationToken);
+                }
+
+                if (request.SecondaryProductImages.Count > 0)
+                {
+                    var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(PathConstants.DefaultProductImagesPath, product!.Id, request.SecondaryProductImages);
+                    var uploadFilesResponse = await _mediator.Send(uploadFilesCommand, cancellationToken);
+                    if (!uploadFilesResponse.IsSuccessful)
+                    {
+                        response.AddError("PRD427158", uploadFilesResponse.Messages.FirstOrDefault()?.Message ?? "Error while uploading secondary images.");
+                        return response;
+                    }
+                }
+            }
+
+            var uodatedProduct = await _productWriteRepository.UpdateAsync(product!);
+            var detailedProduct = await _productReadRepository.GetByIdAsync(uodatedProduct.Id, include: [product => product.Categories, product => product.ProductImageFiles]);
+
+            response.SetData(_mapper.Map<ProductDto>(detailedProduct));
         }
         catch (Exception ex)
         {
-            response.AddError("PRD913560", ex.Message);
+            response.AddError("PRD329495", ex.Message);
         }
+
         return response;
     }
 }
