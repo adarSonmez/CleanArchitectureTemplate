@@ -1,4 +1,5 @@
 ﻿using CommercePortal.Domain.Common;
+using CommercePortal.Domain.Entities.Identity;
 
 namespace CommercePortal.Domain.Entities.Files;
 
@@ -16,4 +17,14 @@ public class UserAvatarFile : BaseEntity
     /// Gets or sets the file details.
     /// </summary>
     public FileDetails FileDetails { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the foreign key for the user.
+    /// </summary>
+    public Guid UserId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the user that the file belongs to.
+    /// </summary>
+    public DomainUser User { get; set; } = default!;
 }

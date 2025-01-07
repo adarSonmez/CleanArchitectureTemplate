@@ -29,16 +29,6 @@ public class DomainUser : IEntity
     public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
-    /// Gets or sets the foreign key for the user avatar file.
-    /// </summary>
-    public Guid? UserAvatarFileId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the user avatar file.
-    /// </summary>
-    public UserAvatarFile? UserAvatarFile { get; set; }
-
-    /// <summary>
     /// Gets or sets the full name of the user.
     /// </summary>
     public required string FullName { get; set; }

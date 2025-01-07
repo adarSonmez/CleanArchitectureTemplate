@@ -10,7 +10,6 @@ namespace CommercePortal.Application.Dtos.Marketing;
 /// <param name="Name">The name of the category.</param>
 /// <param name="Description">The description of the category.</param>
 /// <param name="ParentCategoryId">The identifier of the parent category.</param>
-/// <param name="CategoryImageFileId">The identifier of the category image file.</param>
 /// <param name="Products">The products that belong to the category.</param>
 public record CategoryDto
 (
@@ -18,6 +17,5 @@ public record CategoryDto
     string Name,
     string? Description,
     Guid? ParentCategoryId,
-    Guid? CategoryImageFileId,
     IEnumerable<ProductDto>? Products
 ) : IDto;

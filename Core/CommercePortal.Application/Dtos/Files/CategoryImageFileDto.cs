@@ -8,8 +8,10 @@ namespace CommercePortal.Application.Dtos.Files;
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
 /// <param name="FileDetails">The file details data transfer object.</param>
+/// <param name="CategoryId">The category identifier.</param>
 public record CategoryImageFileDto
 (
     Guid Id,
-    FileDetailsDto? FileDetails
+    FileDetailsDto? FileDetails,
+    Guid CategoryId
 ) : IDto;

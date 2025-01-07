@@ -9,7 +9,7 @@ namespace CommercePortal.Application.Dtos.Ordering;
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
 /// <param name="BillingAddress">The billing address of the invoice.</param>
-/// <param name="InvoiceFileId">The identifier of the invoice file.</param>
+/// <param name="OrderId">The identifier of the order associated with the invoice.</param>s
 /// <param name="IssuedAt">The date and time when the invoice was issued.</param>
 /// <param name="DueDate">The due date of the invoice.</param>
 /// <param name="Status">The status of the invoice.</param>
@@ -21,7 +21,7 @@ public record InvoiceDto
 (
     Guid Id,
     Address BillingAddress,
-    Guid InvoiceFileId,
+    Guid OrderId,
     DateTime IssuedAt,
     DateTime DueDate,
     InvoiceStatus Status,

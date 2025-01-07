@@ -13,7 +13,6 @@ namespace CommercePortal.Application.Dtos.Ordering;
 /// <param name="TotalAmount">The total amount of the order.</param>
 /// <param name="ShippingAddress">The shipping address of the order.</param>
 /// <param name="CustomerId">The Id of the customer who placed the order.</param>
-/// <param name="InvoiceId">The Id of the invoice of the order.</param>
 /// <param name="OrderItems">The order items of the order.</param>
 public record OrderDto
 (
@@ -22,6 +21,5 @@ public record OrderDto
     Money? TotalAmount,
     Address ShippingAddress,
     Guid CustomerId,
-    Guid? InvoiceId,
     ICollection<OrderItemDto>? OrderItems
 ) : IDto;

@@ -29,16 +29,6 @@ public class Category : BaseEntity
     public Category? ParentCategory { get; set; }
 
     /// <summary>
-    /// Gets or sets foreign key for the image of the category.
-    /// </summary>
-    public Guid? CategoryImageFileId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the image of the category.
-    /// </summary>
-    public CategoryImageFile? CategoryImageFile { get; set; }
-
-    /// <summary>
     /// Gets or sets the products in the category.
     /// </summary>
     public ICollection<Product> Products { get; set; } = [];

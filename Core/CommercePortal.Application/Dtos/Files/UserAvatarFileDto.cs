@@ -12,5 +12,6 @@ namespace CommercePortal.Application.Dtos.Files;
 public record UserAvatarFileDto
 (
     Guid Id,
+    Guid UserId,
     FileDetailsDto? FileDetails
 ) : IDto;

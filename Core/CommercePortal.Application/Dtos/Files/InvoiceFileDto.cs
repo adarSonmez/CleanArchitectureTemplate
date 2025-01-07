@@ -8,8 +8,10 @@ namespace CommercePortal.Application.Dtos.Files;
 /// </summary>
 /// <param name="Id">The unique identifier.</param>
 /// <param name="FileDetails">The file details data transfer object.</param>
+/// <param name="InvoiceId">The invoice identifier.</param>
 public record InvoiceFileDto
 (
     Guid Id,
-    FileDetailsDto? FileDetails
+    FileDetailsDto? FileDetails,
+    Guid InvoiceId
 ) : IDto;

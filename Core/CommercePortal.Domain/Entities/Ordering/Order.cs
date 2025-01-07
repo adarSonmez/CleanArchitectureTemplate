@@ -36,16 +36,6 @@ public class Order : BaseEntity
     public Customer Customer { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the foreign key for the invoice associated with the order.
-    /// </summary>
-    public Guid InvoiceId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the navigation property to the invoice associated with the order.
-    /// </summary>
-    public Invoice Invoice { get; set; } = default!;
-
-    /// <summary>
     /// Gets or sets the order items associated with the order.
     /// </summary>
     public ICollection<OrderItem> OrderItems { get; set; } = [];

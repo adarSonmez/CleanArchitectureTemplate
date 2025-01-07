@@ -1,4 +1,5 @@
 ﻿using CommercePortal.Domain.Common;
+using CommercePortal.Domain.Entities.Ordering;
 
 namespace CommercePortal.Domain.Entities.Files;
 
@@ -16,4 +17,14 @@ public class InvoiceFile : BaseEntity
     /// Gets or sets the file details.
     /// </summary>
     public FileDetails FileDetails { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the foreign key for the invoice.
+    /// </summary>
+    public Guid InvoiceId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the invoice that the file belongs to.
+    /// </summary>
+    public Invoice Invoice { get; set; } = default!;
 }
