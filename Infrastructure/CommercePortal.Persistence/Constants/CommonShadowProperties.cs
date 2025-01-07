@@ -5,7 +5,7 @@
 /// </summary>
 internal class CommonShadowProperties
 {
-    public const string CreatedDate = nameof(CreatedDate);
-    public const string ModifiedDate = nameof(ModifiedDate);
-    public const string DeletedDate = nameof(DeletedDate);
+    public const string CreatedBy = nameof(CreatedBy);
+    public const string UpdatedBy = nameof(UpdatedBy);
+    public const string DeletedBy = nameof(DeletedBy);
 }

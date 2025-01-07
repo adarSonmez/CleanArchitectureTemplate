@@ -1,9 +1,13 @@
 ﻿using CommercePortal.Domain.Common;
-using CommercePortal.Domain.Entities;
-using CommercePortal.Domain.Entities.Identity;
+using CommercePortal.Domain.Entities.Files;
+using CommercePortal.Domain.Entities.Marketing;
+using CommercePortal.Domain.Entities.Membership;
+using CommercePortal.Domain.Entities.Ordering;
 using CommercePortal.Persistence.Constants;
+using CommercePortal.Persistence.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace CommercePortal.Persistence.Contexts;
 
@@ -19,6 +23,11 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     #region DbSet Properties
 
     /// <summary>
+    /// Gets or sets the categories table.
+    /// </summary>
+    public DbSet<Category> Categories { get; set; } = default!;
+
+    /// <summary>
     /// Gets or sets the products table.
     /// </summary>
     public DbSet<Product> Products { get; set; } = default!;
@@ -29,14 +38,34 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     public DbSet<Customer> Customers { get; set; } = default!;
 
     /// <summary>
+    /// Gets or sets the stores table.
+    /// </summary>
+    public DbSet<Store> Stores { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the invoices table.
+    /// </summary>
+    public DbSet<Invoice> Invoices { get; set; } = default!;
+
+    /// <summary>
     /// Gets or sets the orders table.
     /// </summary>
     public DbSet<Order> Orders { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the files table.
+    /// Gets or sets the order items table.
     /// </summary>
-    public DbSet<Domain.Entities.File> Files { get; set; } = default!;
+    public DbSet<OrderItem> OrderItems { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the file details table.
+    /// </summary>
+    public DbSet<FileDetails> FileDetails { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the category image files table.
+    /// </summary>
+    public DbSet<CategoryImageFile> CategoryImageFiles { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the invoice files table.
@@ -46,7 +75,17 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     /// <summary>
     /// Gets or sets the product images table.
     /// </summary>
-    public DbSet<ProductImageFile> ProductImages { get; set; } = default!;
+    public DbSet<ProductImageFile> ProductImageFiles { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the report files table.
+    /// </summary>
+    public DbSet<ReportFile> ReportFiles { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the user avatar files table.
+    /// </summary>
+    public DbSet<UserAvatarFile> UserAvatarFiles { get; set; } = default!;
 
     #endregion DbSet Properties
 
@@ -67,21 +106,8 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     {
         base.OnModelCreating(modelBuilder);
 
-        # region Shadow Properties
-
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        {
-            if (!typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
-                continue;
-
-            modelBuilder.Entity(entityType.ClrType).Property<DateTime>(CommonShadowProperties.CreatedDate);
-            modelBuilder.Entity(entityType.ClrType).Property<DateTime?>(CommonShadowProperties.DeletedDate);
-
-            if (!typeof(Domain.Entities.File).IsAssignableFrom(entityType.ClrType))
-                modelBuilder.Entity(entityType.ClrType).Property<DateTime?>(CommonShadowProperties.ModifiedDate);
-        }
-
-        # endregion Shadow Properties
+        // Automatically apply all configurations in the assembly
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
     /// <summary>
@@ -90,21 +116,22 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     protected void OnBeforeSaveChanges()
     {
         var entries = ChangeTracker.Entries()
-    .Where(e => e is { Entity: BaseEntity, State: EntityState.Added or EntityState.Modified });
+        .Where(e => e is { Entity: BaseEntity, State: EntityState.Added or EntityState.Modified });
 
         foreach (var entityEntry in entries)
         {
-            if (entityEntry.State == EntityState.Added)
-                entityEntry.Property(CommonShadowProperties.CreatedDate).CurrentValue = DateTime.UtcNow;
+            // TODO: Add shadow properties
+            //if (entityEntry.State == EntityState.Added)
+            //    entityEntry.Property(CommonShadowProperties.CreatedBy).CurrentValue = DateTime.UtcNow;
 
-            if (!typeof(Domain.Entities.File).IsAssignableFrom(entityEntry.Entity.GetType()))
-                entityEntry.Property(CommonShadowProperties.ModifiedDate).CurrentValue = DateTime.UtcNow;
+            //if (!typeof(FileDetails).IsAssignableFrom(entityEntry.Entity.GetType()))
+            //    entityEntry.Property(CommonShadowProperties.UpdatedBy).CurrentValue = DateTime.UtcNow;
 
-            // Soft delete handling
-            if (entityEntry.Property("IsDeleted").CurrentValue is not bool isDeleted || !isDeleted)
-                continue;
+            //// Soft delete handling
+            //if (entityEntry.Property("IsDeleted").CurrentValue is not bool isDeleted || !isDeleted)
+            //    continue;
 
-            entityEntry.Property(CommonShadowProperties.DeletedDate).CurrentValue = DateTime.UtcNow;
+            //entityEntry.Property(CommonShadowProperties.DeletedBy).CurrentValue = DateTime.UtcNow;
         }
     }
 
