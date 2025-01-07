@@ -26,6 +26,7 @@ public class FileDetailsConfiguration : IEntityTypeConfiguration<FileDetails>
                .IsRequired();
 
         builder.Property(f => f.Folder)
+               .IsRequired()
                .HasMaxLength(500)
                .HasDefaultValue(string.Empty);
 

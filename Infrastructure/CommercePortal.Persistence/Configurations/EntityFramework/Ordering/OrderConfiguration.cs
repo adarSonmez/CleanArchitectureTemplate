@@ -1,5 +1,4 @@
-﻿using CommercePortal.Domain.Constants.SmartEnums.Localization;
-using CommercePortal.Domain.Entities.Ordering;
+﻿using CommercePortal.Domain.Entities.Ordering;
 using CommercePortal.Persistence.ValueConverters.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

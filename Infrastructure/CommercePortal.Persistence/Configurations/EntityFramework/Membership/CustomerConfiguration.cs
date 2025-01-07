@@ -17,7 +17,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
 
         // Property Configurations
         builder.Property(c => c.Age)
-            .HasDefaultValue(null)
+            .IsRequired()
             .HasColumnType("smallint");
 
         builder.Ignore(c => c.DomainUser);
