@@ -26,5 +26,5 @@ public class UserAvatarFile : BaseEntity
     /// <summary>
     /// Gets or sets the user that the file belongs to.
     /// </summary>
-    public DomainUser User { get; set; } = default!;
+    public DomainUser DomainUser { get; set; } = default!;
 }

@@ -8,7 +8,12 @@ namespace CommercePortal.Persistence.Identity;
 public class AppUser : IdentityUser<Guid>
 {
     /// <summary>
+    /// Gets or sets the Id of the user.
+    /// </summary>
+    public override Guid Id { get; set; } = Guid.NewGuid();
+
+    /// <summary>
     /// Gets or sets the full name of the user.
     /// </summary>
-    public string? FullName { get; set; }
+    public required string FullName { get; set; }
 }
