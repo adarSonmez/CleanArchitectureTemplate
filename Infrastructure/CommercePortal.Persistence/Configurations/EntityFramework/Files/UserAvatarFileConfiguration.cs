@@ -1,5 +1,4 @@
 ﻿using CommercePortal.Domain.Entities.Files;
-using CommercePortal.Domain.Entities.Membership;
 using CommercePortal.Persistence.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -22,7 +21,7 @@ public class UserAvatarFileConfiguration : IEntityTypeConfiguration<UserAvatarFi
         // Relationships
         builder.HasOne<AppUser>()
                .WithOne()
-               .HasForeignKey<Customer>(c => c.UserId)
+               .HasForeignKey<UserAvatarFile>(c => c.UserId)
                .IsRequired();
     }
 }
