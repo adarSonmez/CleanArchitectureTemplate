@@ -9,7 +9,7 @@ using CommercePortal.Persistence.Repositories.EntityFramework.Files;
 using CommercePortal.Persistence.Repositories.EntityFramework.Marketing;
 using CommercePortal.Persistence.Repositories.EntityFramework.Membership;
 using CommercePortal.Persistence.Repositories.EntityFramework.Ordering;
-using CommercePortal.Persistence.Services;
+using CommercePortal.Persistence.Services.Data.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

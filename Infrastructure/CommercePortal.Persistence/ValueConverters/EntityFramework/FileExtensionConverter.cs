@@ -1,18 +1,18 @@
 ﻿using CommercePortal.Domain.Common;
-using CommercePortal.Domain.Constants.SmartEnums.Localization;
+using CommercePortal.Domain.Constants.SmartEnums.Files;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CommercePortal.Persistence.ValueConverters.EntityFramework;
 
 /// <summary>
-/// Represents a value converter for <see cref="Country"/> values.
+/// Represents a value converter for <see cref="FileExtension"/> values.
 /// </summary>
-public class CountryConverter : ValueConverter<Country, string>
+public class FileExtensionConverter : ValueConverter<FileExtension, string>
 {
-    public CountryConverter()
+    public FileExtensionConverter()
         : base(
             fileExt => fileExt.Name,
-            extStr => Enumeration.FromName<Country>(extStr)
+            extStr => Enumeration.FromName<FileExtension>(extStr)
         )
     {
     }

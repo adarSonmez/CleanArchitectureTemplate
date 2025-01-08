@@ -83,6 +83,77 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     }
 
     /// <inheritdoc/>
+    public async Task<TEntity?> GetByIdAsync(
+        Guid id,
+        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        bool enableTracking = false,
+        bool getDeleted = false)
+    {
+        var table = _qTable;
+
+        if (!enableTracking)
+            table = table.AsNoTrackingWithIdentityResolution();
+
+        if (include != null)
+            foreach (var inEntity in include)
+                table = table.Include(inEntity);
+
+        if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
+            table = table.Where(e => !(e as BaseEntity)!.IsDeleted);
+
+        return await table.FirstOrDefaultAsync(e => e.Id == id)
+            ?? throw new KeyNotFoundException($"The entity of type {typeof(TEntity).Name} with ID {id} was not found.");
+    }
+
+    /// <inheritdoc/>
+    public async Task<IEnumerable<TEntity>> GetByIdRangeAsync(
+        IEnumerable<Guid> ids,
+        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        bool enableTracking = false,
+        bool getDeleted = false,
+        Pagination? pagination = null,
+        bool throwIfNotFound = true)
+    {
+        if (ids == null || !ids.Any())
+        {
+            if (throwIfNotFound)
+                throw new ArgumentException($"The collection of IDs is null or empty for {typeof(TEntity).Name}");
+
+            return [];
+        }
+
+        var table = _qTable;
+
+        if (!enableTracking)
+            table = table.AsNoTrackingWithIdentityResolution();
+
+        if (include != null)
+            foreach (var inEntity in include)
+                table = table.Include(inEntity);
+
+        if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
+            table = table.Where(e => !(e as BaseEntity)!.IsDeleted);
+
+        table = table.Where(e => ids.Contains(e.Id));
+        if (orderBy != null)
+            table = orderBy(table);
+
+        if (pagination != null)
+            table = table.Skip((pagination.Page - 1) * pagination.Size).Take(pagination.Size);
+
+        var result = await table.ToListAsync();
+
+        if (throwIfNotFound && result.Count != ids.Count())
+        {
+            var missingIds = ids.Except(result.Select(e => e.Id)).ToList();
+            throw new KeyNotFoundException($"The following IDs were not found in {typeof(TEntity).Name}: {string.Join(", ", missingIds)}");
+        }
+
+        return result;
+    }
+
+    /// <inheritdoc/>
     public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate,
         bool enableTracking = false)
     {
