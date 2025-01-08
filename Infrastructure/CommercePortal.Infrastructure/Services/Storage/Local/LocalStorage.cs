@@ -1,4 +1,4 @@
-﻿using CommercePortal.Application.Abstractions.Storage.Local;
+﻿using CommercePortal.Application.Abstractions.Services.Storage.Local;
 using CommercePortal.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +17,7 @@ public class LocalStorage : Storage, ILocalStorage
     #region ISorage Implementation
 
     /// <inheritdoc/>
-    public async Task<(string Folder, string Name)> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
+    public async Task<(string Folder, string Name, long Size)> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
     {
         ArgumentNullException.ThrowIfNull(file);
 
@@ -32,15 +32,15 @@ public class LocalStorage : Storage, ILocalStorage
             await file.CopyToAsync(fileStream);
         }
 
-        return (Path: path, Name: fileName);
+        return (Folder: path, Name: fileName, Size: file.Length);
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<(string Folder, string Name)>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true)
+    public async Task<IEnumerable<(string Folder, string Name, long Size)>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true)
     {
         ArgumentNullException.ThrowIfNull(files);
 
-        var filePaths = new List<(string Path, string Name)>();
+        var filePaths = new List<(string Path, string Name, long Size)>();
         foreach (var file in files)
         {
             var uploadedPath = await UploadFileAsync(path, file, useGuid);

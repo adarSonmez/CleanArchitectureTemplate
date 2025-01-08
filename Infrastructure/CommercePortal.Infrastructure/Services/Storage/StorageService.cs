@@ -1,4 +1,4 @@
-﻿using CommercePortal.Application.Abstractions.Storage;
+﻿using CommercePortal.Application.Abstractions.Services.Storage;
 using Microsoft.AspNetCore.Http;
 
 namespace CommercePortal.Infrastructure.Services.Storage;
@@ -38,10 +38,10 @@ public class StorageService : IStorageService
     public async Task<bool> HasFileAsync(string path, string fileName) => await _storage.HasFileAsync(path, fileName);
 
     /// <inheritdoc />
-    public async Task<(string Folder, string Name)> UploadFileAsync(string path, IFormFile file, bool useGuid = true) => await _storage.UploadFileAsync(path, file, useGuid);
+    public async Task<(string Folder, string Name, long Size)> UploadFileAsync(string path, IFormFile file, bool useGuid = true) => await _storage.UploadFileAsync(path, file, useGuid);
 
     /// <inheritdoc />
-    public async Task<IEnumerable<(string Folder, string Name)>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true) => await _storage.UploadFilesAsync(path, files, useGuid);
+    public async Task<IEnumerable<(string Folder, string Name, long Size)>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true) => await _storage.UploadFilesAsync(path, files, useGuid);
 
     #endregion IStorageService Implementation
 }

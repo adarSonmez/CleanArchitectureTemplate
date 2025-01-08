@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace CommercePortal.Infrastructure.Helpers;
+﻿namespace CommercePortal.Infrastructure.Helpers;
 
 /// <summary>
 /// Utility class for file-related operations.

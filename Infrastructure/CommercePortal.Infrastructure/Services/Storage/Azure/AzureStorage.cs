@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using CommercePortal.Application.Abstractions.Storage.Azure;
+using CommercePortal.Application.Abstractions.Services.Storage.Azure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -50,7 +50,7 @@ public class AzureStorage : Storage, IAzureStorage
     }
 
     /// <inheritdoc/>
-    public async Task<(string Folder, string Name)> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
+    public async Task<(string Folder, string Name, long Size)> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
     {
         ArgumentNullException.ThrowIfNull(file);
 
@@ -65,15 +65,15 @@ public class AzureStorage : Storage, IAzureStorage
             await blobClient.UploadAsync(stream, overwrite: true);
         }
 
-        return (Path: path, Name: fileName);
+        return (Folder: path, Name: fileName, Size: file.Length);
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<(string Folder, string Name)>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true)
+    public async Task<IEnumerable<(string Folder, string Name, long Size)>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true)
     {
         ArgumentNullException.ThrowIfNull(files);
 
-        var filePaths = new List<(string Path, string Name)>();
+        var filePaths = new List<(string Path, string Name, long Size)>();
         foreach (var file in files)
         {
             var uploadedPath = await UploadFileAsync(path, file, useGuid);

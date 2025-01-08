@@ -1,5 +1,5 @@
-﻿using CommercePortal.Application.Abstractions.Storage;
-using CommercePortal.Application.Abstractions.Token;
+﻿using CommercePortal.Application.Abstractions.Services.Storage;
+using CommercePortal.Application.Abstractions.Services.Token;
 using CommercePortal.Infrastructure.Services.Storage;
 using CommercePortal.Infrastructure.Services.Token.Jwt;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +18,7 @@ public static class ServiceRegistration
     public static void AddInfrastructureServices(this IServiceCollection services)
     {
         services.AddScoped<IStorageService, StorageService>();
-        services.AddScoped<ITokenHandler, JwtTokenHandler>();
+        services.AddScoped<ITokenService, JwtTokenService>();
     }
 
     /// <summary>

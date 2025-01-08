@@ -1,22 +1,20 @@
-﻿using DTO = CommercePortal.Application.DTOs;
-using CommercePortal.Application.Abstractions.Token;
+﻿using CommercePortal.Application.Abstractions.Services.Token;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
+using DTO = CommercePortal.Application.DTOs;
 
 namespace CommercePortal.Infrastructure.Services.Token.Jwt;
 
 /// <summary>
 /// Represents a handler for generating and validating JWT tokens.
 /// </summary>
-public class JwtTokenHandler : ITokenHandler
+public class JwtTokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
 
-    public JwtTokenHandler(IConfiguration configuration)
+    public JwtTokenService(IConfiguration configuration)
     {
         _configuration = configuration;
     }
@@ -24,27 +22,26 @@ public class JwtTokenHandler : ITokenHandler
     /// </inheritdoc>
     public DTO::TokenDTO GenerateToken(Guid userId, bool? infiniteExpiration = false)
     {
-        DTO::TokenDTO? token = new();
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
-        token.ExpirationTime = infiniteExpiration == true
+        var expirationDate = infiniteExpiration == true
             ? DateTime.MaxValue
             : DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:AccessExpiration"]));
 
         var jwtSecurityToken = new JwtSecurityToken(
             _configuration["Jwt:Issuer"],
             _configuration["Jwt:Audience"],
-            expires: token.ExpirationTime,
+            expires: expirationDate,
             notBefore: DateTime.Now,
             signingCredentials: signingCredentials
         // claims: SetClaims(userId.ToString(), username, email, role)
         );
 
         var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-        token.AccessToken = jwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
+        var accessToken = jwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
         // token.RefreshToken = CreateRefreshToken();
 
-        return token;
+        return new DTO::TokenDTO(accessToken, expirationDate, "");
     }
 }
