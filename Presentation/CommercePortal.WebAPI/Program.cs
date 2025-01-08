@@ -1,9 +1,9 @@
 using CommercePortal.Application;
+using CommercePortal.Application.Extensions;
 using CommercePortal.Infrastructure;
 using CommercePortal.Infrastructure.Filters;
 using CommercePortal.Infrastructure.Services.Storage.Local;
 using CommercePortal.Persistence;
-using CommercePortal.Persistence.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -57,11 +57,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
+app.UseMigrator();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UpdateDatabase();
+    app.UseSeeder();
 }
 
 app.UseStaticFiles();

@@ -1,4 +1,5 @@
-﻿using CommercePortal.Application.Features.Commands.AppUsers.GoogleLoginAppUser;
+﻿using CommercePortal.Application.Features.Commands.AppUsers.FacebookLoginAppUser;
+using CommercePortal.Application.Features.Commands.AppUsers.GoogleLoginAppUser;
 using CommercePortal.Application.Features.Commands.AppUsers.LoginAppUser;
 using CommercePortal.Application.Features.Commands.AppUsers.RegisterAppUser;
 using MediatR;
