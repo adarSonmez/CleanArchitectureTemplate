@@ -5,19 +5,19 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2F172C08-95AE-4D2C-8F12-BB87983B3EA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Domain", "Core\Domain\CleanArchitectureTemplate.Domain.csproj", "{83840876-7E76-49D2-A762-AB1EA8A01E48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Domain", "Core\CleanArchitectureTemplate.Domain\CleanArchitectureTemplate.Domain.csproj", "{83840876-7E76-49D2-A762-AB1EA8A01E48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Application", "Core\Application\CleanArchitectureTemplate.Application.csproj", "{FBAA3662-03CE-476C-A4CF-480FE52E4DAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Application", "Core\CleanArchitectureTemplate.Application\CleanArchitectureTemplate.Application.csproj", "{FBAA3662-03CE-476C-A4CF-480FE52E4DAC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{9025C7E9-44D6-4F09-8CEB-C2DE31B7A6B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Infrastructure", "Infrastructure\Infrastructure\CleanArchitectureTemplate.Infrastructure.csproj", "{5874F4C3-45F8-484C-8552-897F46D0A5F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Infrastructure", "Infrastructure\CleanArchitectureTemplate.Infrastructure\CleanArchitectureTemplate.Infrastructure.csproj", "{5874F4C3-45F8-484C-8552-897F46D0A5F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Persistence", "Infrastructure\Persistence\CleanArchitectureTemplate.Persistence.csproj", "{6182E46B-5BFE-454B-9777-4803355D5420}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Persistence", "Infrastructure\CleanArchitectureTemplate.Persistence\CleanArchitectureTemplate.Persistence.csproj", "{6182E46B-5BFE-454B-9777-4803355D5420}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{EFF039F9-70AF-495A-9D08-9E44744FD5A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.WebAPI", "Presentation\WebAPI\CleanArchitectureTemplate.WebAPI.csproj", "{4BD81836-531B-4844-BCD2-63DAFA5B7649}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.WebAPI", "Presentation\CleanArchitectureTemplate.WebAPI\CleanArchitectureTemplate.WebAPI.csproj", "{4BD81836-531B-4844-BCD2-63DAFA5B7649}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{88CE0234-51F8-4704-B393-F4887CC5B7CE}"
 	ProjectSection(SolutionItems) = preProject
