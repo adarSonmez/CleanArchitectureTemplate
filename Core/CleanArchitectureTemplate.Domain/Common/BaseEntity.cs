@@ -41,6 +41,7 @@ public abstract class BaseEntity : IEntity
     /// <summary>
     /// Gets or sets the concurrency token for the entity.
     /// </summary>
-    [Timestamp]
-    public byte[] RowVersion { get; set; } = default!;
+    //[Timestamp]
+    //[ConcurrencyCheck]
+    //public byte[] RowVersion { get; set; } = default!;
 }

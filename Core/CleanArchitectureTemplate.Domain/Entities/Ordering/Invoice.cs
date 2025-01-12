@@ -1,6 +1,5 @@
 ﻿using CleanArchitectureTemplate.Domain.Common;
 using CleanArchitectureTemplate.Domain.Constants.Enums;
-using CleanArchitectureTemplate.Domain.Entities.Files;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Ordering;

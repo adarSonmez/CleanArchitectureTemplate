@@ -22,11 +22,6 @@ public sealed class Currency : Enumeration
         ArgumentException.ThrowIfNullOrWhiteSpace(isoCode, nameof(isoCode));
         ArgumentException.ThrowIfNullOrWhiteSpace(symbol, nameof(symbol));
 
-        if (isoCode.Length != 3)
-        {
-            throw new ArgumentException("ISO code must be 3 characters long.", nameof(isoCode));
-        }
-
         IsoCode = isoCode;
         Symbol = symbol;
     }

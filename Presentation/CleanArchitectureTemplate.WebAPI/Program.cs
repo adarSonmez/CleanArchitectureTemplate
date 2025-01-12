@@ -63,7 +63,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseSeeder();
+    await app.UseSeeder();
 }
 
 app.UseStaticFiles();

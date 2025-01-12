@@ -10,6 +10,7 @@ using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Marketi
 using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Membership;
 using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Ordering;
 using CleanArchitectureTemplate.Persistence.Services.Data.EntityFramework;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,8 +50,8 @@ public static class ServiceRegistration
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
             })
-            .AddEntityFrameworkStores<EfDbContext>();
-        //.AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<EfDbContext>()
+            .AddDefaultTokenProviders();
 
         #endregion Identity services
 

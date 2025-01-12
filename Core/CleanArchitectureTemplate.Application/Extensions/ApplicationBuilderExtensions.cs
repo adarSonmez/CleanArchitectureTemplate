@@ -23,11 +23,11 @@ public static class ApplicationBuilderExtensions
     /// <summary>
     /// Seeds the database with initial data.
     /// </summary>
-    public static void UseSeeder(this IApplicationBuilder builder)
+    public static async Task UseSeeder(this IApplicationBuilder builder)
     {
         using var scope = builder.ApplicationServices.CreateScope();
         var services = scope.ServiceProvider;
         var seeder = services.GetRequiredService<IDataService>();
-        seeder.Seed();
+        await seeder.Seed();
     }
 }
