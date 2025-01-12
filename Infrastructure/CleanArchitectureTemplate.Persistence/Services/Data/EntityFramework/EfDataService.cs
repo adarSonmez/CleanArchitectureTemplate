@@ -28,7 +28,7 @@ public class EfDataService : IDataService
     }
 
     /// <inheritdoc/>
-    public async Task Seed()
+    public async Task SeedAsync()
     {
         if (_context.Roles.Any())
             return;

@@ -8,7 +8,7 @@ public interface IDataService
     /// <summary>
     /// Seeds the database with initial data.
     /// </summary>
-    Task Seed();
+    Task SeedAsync();
 
     /// <summary>
     /// Migrates the database to the latest version.
