@@ -52,9 +52,9 @@ public class Product : BaseEntity
     public Store Store { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the orders which include the product.
+    /// Gets or sets the order items where the product is included.
     /// </summary>
-    public ICollection<Order> Orders { get; set; } = [];
+    public ICollection<OrderItem> OrderItems { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the product image files.

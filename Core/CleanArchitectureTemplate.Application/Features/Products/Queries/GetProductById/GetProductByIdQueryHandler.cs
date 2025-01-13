@@ -34,9 +34,9 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryReq
             {
                 includes.Add(p => p.Categories);
             }
-            if (request.IncludeOrders)
+            if (request.IncludeOrderItems)
             {
-                includes.Add(p => p.Orders);
+                includes.Add(p => p.OrderItems);
             }
             if (request.IncludeProductImageFiles)
             {
