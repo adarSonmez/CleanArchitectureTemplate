@@ -2,6 +2,7 @@
 using CleanArchitectureTemplate.Domain.Constants.Enums;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Domain.Entities.Membership;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 using CleanArchitectureTemplate.Persistence.Contexts;
@@ -50,7 +51,7 @@ public class EfDataService : IDataService
 
         #region Seed Users
 
-        var adminUser = new AppUser
+        var adminAppUser = new AppUser
         {
             FullName = "Admin User",
             UserName = "admin",
@@ -58,10 +59,10 @@ public class EfDataService : IDataService
             EmailConfirmed = true
         };
 
-        await _userManager.CreateAsync(adminUser, "Admin@123");
-        await _userManager.AddToRoleAsync(adminUser, "Admin");
+        await _userManager.CreateAsync(adminAppUser, "Admin@123");
+        await _userManager.AddToRoleAsync(adminAppUser, "Admin");
 
-        var store = new AppUser
+        var storeAppUser = new AppUser
         {
             FullName = "Store User",
             UserName = "store",
@@ -69,10 +70,10 @@ public class EfDataService : IDataService
             EmailConfirmed = true
         };
 
-        await _userManager.CreateAsync(store, "Store@123");
-        await _userManager.AddToRoleAsync(store, "Store");
+        await _userManager.CreateAsync(storeAppUser, "Store@123");
+        await _userManager.AddToRoleAsync(storeAppUser, "Store");
 
-        var customerUser = new AppUser
+        var customerAppUser = new AppUser
         {
             FullName = "Customer User",
             UserName = "customer",
@@ -80,10 +81,35 @@ public class EfDataService : IDataService
             EmailConfirmed = false
         };
 
-        await _userManager.CreateAsync(customerUser, "Customer@123");
-        await _userManager.AddToRoleAsync(customerUser, "Customer");
+        await _userManager.CreateAsync(customerAppUser, "Customer@123");
+        await _userManager.AddToRoleAsync(customerAppUser, "Customer");
 
         #endregion Seed Users
+
+        #region Seed Customers
+
+        var customerMember = new Customer
+        {
+            UserId = customerAppUser.Id,
+            Age = 25,
+            Gender = Gender.Male,
+        };
+
+        _context.Customers.Add(customerMember);
+
+        #endregion Seed Customers
+
+        #region Seed Stores
+
+        var storeMember = new Store
+        {
+            UserId = storeAppUser.Id,
+            Website = "www.store.com",
+            Description = "Store Description",
+        };
+        _context.Stores.Add(storeMember);
+
+        #endregion Seed Stores
 
         #region Seed Categories
 
@@ -105,7 +131,7 @@ public class EfDataService : IDataService
             Stock = 100,
             StandardPrice = new Money(1000, Currency.Usd),
             DiscountRate = 0.1m,
-            StoreId = store.Id,
+            StoreId = storeMember.Id,
         };
 
         var phoneProduct = new Product
@@ -116,7 +142,7 @@ public class EfDataService : IDataService
             Stock = 200,
             StandardPrice = new Money(0.01m, Currency.Btc),
             DiscountRate = 0.2m,
-            StoreId = store.Id,
+            StoreId = storeMember.Id,
         };
 
         var shirtProduct = new Product
@@ -127,7 +153,7 @@ public class EfDataService : IDataService
             Stock = 1000,
             StandardPrice = new Money(50, Currency.Try),
             DiscountRate = 0.1m,
-            StoreId = store.Id,
+            StoreId = storeMember.Id,
         };
 
         var bookProduct = new Product
@@ -138,7 +164,7 @@ public class EfDataService : IDataService
             Stock = 2000,
             StandardPrice = new Money(20, Currency.Eur),
             DiscountRate = 0.5m,
-            StoreId = store.Id,
+            StoreId = storeMember.Id,
         };
 
         _context.Products.AddRange(laptopProduct, phoneProduct, shirtProduct, bookProduct);
@@ -149,21 +175,21 @@ public class EfDataService : IDataService
 
         var shippedOrder = new Order
         {
-            CustomerId = customerUser.Id,
+            CustomerId = customerMember.Id,
             ShippingAddress = new Address("12345", "Istanbul", Country.Turkey),
             Status = OrderStatus.Shipped,
         };
 
         var deliveredOrder = new Order
         {
-            CustomerId = customerUser.Id,
+            CustomerId = customerMember.Id,
             ShippingAddress = new Address("54321", "Izmir", Country.Turkey),
             Status = OrderStatus.Delivered,
         };
 
         var pendingOrder = new Order
         {
-            CustomerId = customerUser.Id,
+            CustomerId = customerMember.Id,
             ShippingAddress = new Address("67890", "Ankara", Country.Turkey),
             Status = OrderStatus.Pending,
         };
