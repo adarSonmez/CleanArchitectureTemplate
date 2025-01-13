@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitectureTemplate.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Full : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,8 +72,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    RowVersion = table.Column<byte[]>(type: "bytea", rowVersion: true, nullable: false)
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -292,6 +291,33 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                schema: "Ordering",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_BaseEntity_Id",
+                        column: x => x.Id,
+                        principalTable: "BaseEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalSchema: "Membership",
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CategoryImageFiles",
                 schema: "Files",
                 columns: table => new
@@ -417,102 +443,6 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoryProduct",
-                schema: "Marketing",
-                columns: table => new
-                {
-                    CategoriesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductsId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CategoryProduct", x => new { x.CategoriesId, x.ProductsId });
-                    table.ForeignKey(
-                        name: "FK_CategoryProduct_Categories_CategoriesId",
-                        column: x => x.CategoriesId,
-                        principalSchema: "Marketing",
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CategoryProduct_Products_ProductsId",
-                        column: x => x.ProductsId,
-                        principalSchema: "Marketing",
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                schema: "Ordering",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false),
-                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_BaseEntity_Id",
-                        column: x => x.Id,
-                        principalTable: "BaseEntity",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Orders_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalSchema: "Membership",
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Orders_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalSchema: "Marketing",
-                        principalTable: "Products",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductImageFiles",
-                schema: "Files",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsPrimary = table.Column<bool>(type: "boolean", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FileDetailsId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductImageFiles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductImageFiles_BaseEntity_Id",
-                        column: x => x.Id,
-                        principalTable: "BaseEntity",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductImageFiles_FileDetails_FileDetailsId",
-                        column: x => x.FileDetailsId,
-                        principalSchema: "Files",
-                        principalTable: "FileDetails",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductImageFiles_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalSchema: "Marketing",
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Invoices",
                 schema: "Ordering",
                 columns: table => new
@@ -541,6 +471,55 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         column: x => x.OrderId,
                         principalSchema: "Ordering",
                         principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShippingAddresses",
+                schema: "Ordering",
+                columns: table => new
+                {
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PostalCode = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    City = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Country = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShippingAddresses", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_ShippingAddresses_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalSchema: "Ordering",
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategoryProduct",
+                schema: "Marketing",
+                columns: table => new
+                {
+                    CategoriesId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductsId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryProduct", x => new { x.CategoriesId, x.ProductsId });
+                    table.ForeignKey(
+                        name: "FK_CategoryProduct_Categories_CategoriesId",
+                        column: x => x.CategoriesId,
+                        principalSchema: "Marketing",
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategoryProduct_Products_ProductsId",
+                        column: x => x.ProductsId,
+                        principalSchema: "Marketing",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -581,23 +560,36 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShippingAddresses",
-                schema: "Ordering",
+                name: "ProductImageFiles",
+                schema: "Files",
                 columns: table => new
                 {
-                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PostalCode = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    City = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Country = table.Column<string>(type: "text", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsPrimary = table.Column<bool>(type: "boolean", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FileDetailsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShippingAddresses", x => x.OrderId);
+                    table.PrimaryKey("PK_ProductImageFiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShippingAddresses_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalSchema: "Ordering",
-                        principalTable: "Orders",
+                        name: "FK_ProductImageFiles_BaseEntity_Id",
+                        column: x => x.Id,
+                        principalTable: "BaseEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductImageFiles_FileDetails_FileDetailsId",
+                        column: x => x.FileDetailsId,
+                        principalSchema: "Files",
+                        principalTable: "FileDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductImageFiles_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalSchema: "Marketing",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -775,12 +767,6 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_ProductId",
-                schema: "Ordering",
-                table: "Orders",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductImageFiles_FileDetailsId",
                 schema: "Files",
                 table: "ProductImageFiles",
@@ -897,6 +883,10 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 schema: "Ordering");
 
             migrationBuilder.DropTable(
+                name: "Products",
+                schema: "Marketing");
+
+            migrationBuilder.DropTable(
                 name: "FileDetails",
                 schema: "Files");
 
@@ -905,15 +895,11 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 schema: "Ordering");
 
             migrationBuilder.DropTable(
-                name: "Customers",
+                name: "Stores",
                 schema: "Membership");
 
             migrationBuilder.DropTable(
-                name: "Products",
-                schema: "Marketing");
-
-            migrationBuilder.DropTable(
-                name: "Stores",
+                name: "Customers",
                 schema: "Membership");
 
             migrationBuilder.DropTable(

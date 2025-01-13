@@ -529,16 +529,11 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Orders", "Ordering");
                 });
@@ -879,10 +874,6 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("ProductId");
-
                     b.OwnsOne("CleanArchitectureTemplate.Domain.ValueObjects.Address", "ShippingAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderId")
@@ -931,7 +922,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -943,7 +934,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderItems");
 
                     b.Navigation("ProductImageFiles");
                 });

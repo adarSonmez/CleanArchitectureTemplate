@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitectureTemplate.Persistence.Migrations
 {
     [DbContext(typeof(EfDbContext))]
-    [Migration("20250107151726_Initial")]
-    partial class Initial
+    [Migration("20250113161816_Full")]
+    partial class Full
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,12 +54,6 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -538,16 +532,11 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Orders", "Ordering");
                 });
@@ -888,10 +877,6 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("ProductId");
-
                     b.OwnsOne("CleanArchitectureTemplate.Domain.ValueObjects.Address", "ShippingAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderId")
@@ -940,7 +925,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -952,7 +937,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderItems");
 
                     b.Navigation("ProductImageFiles");
                 });
