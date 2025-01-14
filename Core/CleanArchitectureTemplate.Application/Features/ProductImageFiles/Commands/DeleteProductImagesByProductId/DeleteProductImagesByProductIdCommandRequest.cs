@@ -7,4 +7,4 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Comma
 /// <summary>
 /// Represents the request for deleting a <see cref="ProductImageFile"/> by its ProductId.
 /// </summary>
-public record class DeleteProductImagesByProductIdRequest(Guid ProductId) : IRequest<SingleResponse<bool>>;
+public record class DeleteProductImagesByProductIdCommandRequest(Guid ProductId) : IRequest<SingleResponse<bool>>;

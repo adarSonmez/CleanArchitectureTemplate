@@ -5,9 +5,9 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Comma
 /// <summary>
 /// Validator for the <see cref="UploadSecondaryProductImagesCommandRequest"/> class.
 /// </summary>
-public class UploadSecondaryProductImagesValidator : AbstractValidator<UploadSecondaryProductImagesCommandRequest>
+public class UploadSecondaryProductImagesCommandValidator : AbstractValidator<UploadSecondaryProductImagesCommandRequest>
 {
-    public UploadSecondaryProductImagesValidator()
+    public UploadSecondaryProductImagesCommandValidator()
     {
         RuleFor(x => x.Folder)
             .NotEmpty()

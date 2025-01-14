@@ -7,22 +7,22 @@ using MediatR;
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.DeleteProductImageById;
 
 /// <summary>
-/// Handles the <see cref="DeleteProductImageByIdRequest"/>
+/// Handles the <see cref="DeleteProductImageByIdCommandRequest"/>
 /// </summary>
-public class DeleteProductImageByIdHandler : IRequestHandler<DeleteProductImageByIdRequest, SingleResponse<bool>>
+public class DeleteProductImageByIdCommandHandler : IRequestHandler<DeleteProductImageByIdCommandRequest, SingleResponse<bool>>
 {
     private readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
     private readonly IProductImageFileReadRepository _productImageFileReadRepository;
     private readonly IStorageService _storageService;
 
-    public DeleteProductImageByIdHandler(IProductImageFileWriteRepository productImageFileWriteRepository, IProductImageFileReadRepository productImageFileReadRepository, IStorageService storageService)
+    public DeleteProductImageByIdCommandHandler(IProductImageFileWriteRepository productImageFileWriteRepository, IProductImageFileReadRepository productImageFileReadRepository, IStorageService storageService)
     {
         _productImageFileWriteRepository = productImageFileWriteRepository;
         _productImageFileReadRepository = productImageFileReadRepository;
         _storageService = storageService;
     }
 
-    public async Task<SingleResponse<bool>> Handle(DeleteProductImageByIdRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<bool>> Handle(DeleteProductImageByIdCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<bool>();
         try

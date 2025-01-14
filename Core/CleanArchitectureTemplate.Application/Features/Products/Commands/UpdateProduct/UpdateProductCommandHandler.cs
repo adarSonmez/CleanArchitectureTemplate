@@ -60,7 +60,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
             {
                 if (request.DeleteExistingSecondaryImages || request.SecondaryProductImages.Count == 0)
                 {
-                    var deleteProductImagesCommand = new DeleteProductImagesByProductIdRequest(product.Id);
+                    var deleteProductImagesCommand = new DeleteProductImagesByProductIdCommandRequest(product.Id);
                     await _mediator.Send(deleteProductImagesCommand, cancellationToken);
                 }
 

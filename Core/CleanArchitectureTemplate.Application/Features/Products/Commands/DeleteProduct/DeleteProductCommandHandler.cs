@@ -35,7 +35,7 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandR
             var product = await _productReadRepository.GetByIdAsync(request.Id);
             BusinessRules.Run(("PRD770975", BusinessRules.CheckEntityNull(product)));
 
-            var deleteProductImagesCommand = new DeleteProductImagesByProductIdRequest(product!.Id);
+            var deleteProductImagesCommand = new DeleteProductImagesByProductIdCommandRequest(product!.Id);
             await _mediator.Send(deleteProductImagesCommand, cancellationToken);
             await _productWriteRepository.SoftDeleteAsync(product!);
 

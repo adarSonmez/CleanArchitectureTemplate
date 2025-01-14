@@ -6,22 +6,22 @@ using MediatR;
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.DeleteProductImagesByProductId;
 
 /// <summary>
-/// Handles the <see cref="DeleteProductImagesByProductIdRequest"/>
+/// Handles the <see cref="DeleteProductImagesByProductIdCommandRequest"/>
 /// </summary>
-public class DeleteProductImagesByProductIdHandler : IRequestHandler<DeleteProductImagesByProductIdRequest, SingleResponse<bool>>
+public class DeleteProductImagesByProductIdCommandHandler : IRequestHandler<DeleteProductImagesByProductIdCommandRequest, SingleResponse<bool>>
 {
     private readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
     private readonly IProductImageFileReadRepository _productImageFileReadRepository;
     private readonly IStorageService _storageService;
 
-    public DeleteProductImagesByProductIdHandler(IProductImageFileWriteRepository productImageFileWriteRepository, IProductImageFileReadRepository productImageFileReadRepository, IStorageService storageService)
+    public DeleteProductImagesByProductIdCommandHandler(IProductImageFileWriteRepository productImageFileWriteRepository, IProductImageFileReadRepository productImageFileReadRepository, IStorageService storageService)
     {
         _productImageFileWriteRepository = productImageFileWriteRepository;
         _productImageFileReadRepository = productImageFileReadRepository;
         _storageService = storageService;
     }
 
-    public async Task<SingleResponse<bool>> Handle(DeleteProductImagesByProductIdRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<bool>> Handle(DeleteProductImagesByProductIdCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<bool>();
         try
