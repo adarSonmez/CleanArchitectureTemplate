@@ -1,7 +1,6 @@
-﻿using CleanArchitectureTemplate.Application.Features.Commands.AppUsers.FacebookLoginAppUser;
+﻿using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.LoginAppUser;
+using CleanArchitectureTemplate.Application.Features.Commands.AppUsers.FacebookLoginAppUser;
 using CleanArchitectureTemplate.Application.Features.Commands.AppUsers.GoogleLoginAppUser;
-using CleanArchitectureTemplate.Application.Features.Commands.AppUsers.LoginAppUser;
-using CleanArchitectureTemplate.Application.Features.Commands.AppUsers.RegisterAppUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,20 +8,13 @@ namespace CleanArchitectureTemplate.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController : ControllerBase
+public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public UserController(IMediator mediator)
+    public AuthController(IMediator mediator)
     {
         _mediator = mediator;
-    }
-
-    [HttpPost("[action]")]
-    public async Task<IActionResult> Register([FromBody] RegisterAppUserCommandRequest request)
-    {
-        var response = await _mediator.Send(request);
-        return Ok(response);
     }
 
     [HttpPost("[action]")]
