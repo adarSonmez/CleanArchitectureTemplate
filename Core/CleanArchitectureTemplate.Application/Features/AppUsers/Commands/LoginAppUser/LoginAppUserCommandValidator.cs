@@ -1,15 +1,14 @@
-﻿using CleanArchitectureTemplate.Application.Features.Commands.AppUsers.LoginAppUser;
-using CleanArchitectureTemplate.Application.Features.Commands.AppUsers.RegisterAppUser;
+﻿using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.RegisterAppUser;
 using FluentValidation;
 
-namespace CleanArchitectureTemplate.Application.Validators.FluentValidation.AppUsers;
+namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.LoginAppUser;
 
 /// <summary>
 /// Validator for the <see cref="RegisterAppUserCommandRequest"/> class.
 /// </summary>
-public class LoginAppUserValidator : AbstractValidator<LoginAppUserCommandRequest>
+public class LoginAppUserCommandValidator : AbstractValidator<LoginAppUserCommandRequest>
 {
-    public LoginAppUserValidator()
+    public LoginAppUserCommandValidator()
     {
         RuleFor(x => x.UserName)
             .NotEmpty()

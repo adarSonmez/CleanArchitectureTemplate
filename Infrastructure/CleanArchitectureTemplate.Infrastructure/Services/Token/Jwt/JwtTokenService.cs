@@ -1,4 +1,4 @@
-﻿using CleanArchitectureTemplate.Application.Abstractions.Services.Token;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

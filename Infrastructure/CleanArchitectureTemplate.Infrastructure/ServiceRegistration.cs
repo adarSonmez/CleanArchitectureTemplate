@@ -1,5 +1,5 @@
-﻿using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
-using CleanArchitectureTemplate.Application.Abstractions.Services.Token;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
+using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
 using CleanArchitectureTemplate.Infrastructure.Services.Storage;
 using CleanArchitectureTemplate.Infrastructure.Services.Token.Jwt;
 using Microsoft.Extensions.DependencyInjection;
