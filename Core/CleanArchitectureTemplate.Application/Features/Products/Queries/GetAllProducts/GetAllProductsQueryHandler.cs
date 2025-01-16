@@ -11,7 +11,7 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Queries.GetAll
 /// <summary>
 /// Handles the <see cref="GetAllProductsQueryRequest"/>.
 /// </summary>
-public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQueryRequest, PagedResponse<ProductDto>>
+public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQueryRequest, PagedResponse<ProductDto?>>
 {
     private readonly IMapper _mapper;
     private readonly IProductReadRepository _productReadRepository;
@@ -22,9 +22,9 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQueryReq
         _productReadRepository = productReadRepository;
     }
 
-    public async Task<PagedResponse<ProductDto>> Handle(GetAllProductsQueryRequest request, CancellationToken cancellationToken)
+    public async Task<PagedResponse<ProductDto?>> Handle(GetAllProductsQueryRequest request, CancellationToken cancellationToken)
     {
-        var response = new PagedResponse<ProductDto>();
+        var response = new PagedResponse<ProductDto?>();
         try
         {
             var includes = new List<Expression<Func<Product, object>>>();

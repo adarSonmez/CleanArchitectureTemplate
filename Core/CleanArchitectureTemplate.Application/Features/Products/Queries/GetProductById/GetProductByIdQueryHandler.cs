@@ -12,7 +12,7 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Queries.GetPro
 /// <summary>
 /// Handles the <see cref="GetProductByIdQueryRequest"/>.
 /// </summary>
-public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryRequest, SingleResponse<ProductDto>>
+public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryRequest, SingleResponse<ProductDto?>>
 {
     private readonly IMapper _mapper;
     private readonly IProductReadRepository _productReadRepository;
@@ -23,9 +23,9 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryReq
         _productReadRepository = productReadRepository;
     }
 
-    public async Task<SingleResponse<ProductDto>> Handle(GetProductByIdQueryRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<ProductDto?>> Handle(GetProductByIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<ProductDto>();
+        var response = new SingleResponse<ProductDto?>();
         try
         {
             var includes = new List<Expression<Func<Product, object>>>();

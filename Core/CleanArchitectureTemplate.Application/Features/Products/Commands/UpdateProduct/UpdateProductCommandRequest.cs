@@ -33,4 +33,4 @@ public record UpdateProductCommandRequest
     bool DeleteExistingSecondaryImages,
     [FromForm] IFormFileCollection? SecondaryProductImages,
     IList<Guid>? CategoryIds
-) : IRequest<SingleResponse<ProductDto>>;
+) : IRequest<SingleResponse<ProductDto?>>;

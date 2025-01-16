@@ -18,4 +18,4 @@ public record class UploadSecondaryProductImagesCommandRequest
     string Folder,
     Guid ProductId,
     [FromForm] IFormFileCollection Files
-) : IRequest<PagedResponse<ProductImageFileDto>>;
+) : IRequest<PagedResponse<ProductImageFileDto?>>;

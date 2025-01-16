@@ -14,7 +14,7 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Commands.Updat
 /// <summary>
 /// Handles the <see cref="UpdateProductCommandRequest"/>.
 /// </summary>
-public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, SingleResponse<ProductDto>>
+public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, SingleResponse<ProductDto?>>
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
@@ -31,9 +31,9 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
         _categoryReadRepository = categoryReadRepository;
     }
 
-    public async Task<SingleResponse<ProductDto>> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<ProductDto?>> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<ProductDto>();
+        var response = new SingleResponse<ProductDto?>();
         try
         {
             var product = await _productReadRepository.GetByIdAsync(request.Id);

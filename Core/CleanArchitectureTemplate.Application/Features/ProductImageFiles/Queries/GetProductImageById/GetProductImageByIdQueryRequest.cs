@@ -9,4 +9,4 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queri
 /// Represents the request for getting a <see cref="ProductImageFile"/> by its ID.
 /// </summary>
 /// <param name="Id">The unique identifier of the product image.</param>
-public record GetProductImageByIdQueryRequest(Guid Id) : IRequest<SingleResponse<ProductImageFileDto>>;
+public record GetProductImageByIdQueryRequest(Guid Id) : IRequest<SingleResponse<ProductImageFileDto?>>;

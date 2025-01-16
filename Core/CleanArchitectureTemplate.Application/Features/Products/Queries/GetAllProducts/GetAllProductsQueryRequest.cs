@@ -18,4 +18,4 @@ public record GetAllProductsQueryRequest
     bool IncludeCategories,
     bool IncludeOrderItems,
     bool IncludeProductImageFiles
-) : IRequest<PagedResponse<ProductDto>>;
+) : IRequest<PagedResponse<ProductDto?>>;

@@ -9,7 +9,7 @@ public class SingleResponse<T> : ResponseResult
 {
     public T? Data { get; private set; }
 
-    public void SetData(T data, string? successMessage = null)
+    public void SetData(T? data, string? successMessage = null)
     {
         if (data is null)
         {

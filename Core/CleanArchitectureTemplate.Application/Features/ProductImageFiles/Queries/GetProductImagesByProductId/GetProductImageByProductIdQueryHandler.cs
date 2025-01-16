@@ -9,7 +9,7 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queri
 /// <summary>
 /// Handles the <see cref="GetProductImageByProductIdQueryRequest"/>.
 /// </summary>
-public class GetProductImageByProductIdQueryHandler : IRequestHandler<GetProductImageByProductIdQueryRequest, PagedResponse<ProductImageFileDto>>
+public class GetProductImageByProductIdQueryHandler : IRequestHandler<GetProductImageByProductIdQueryRequest, PagedResponse<ProductImageFileDto?>>
 {
     private readonly IMapper _mapper;
     private readonly IProductImageFileReadRepository _productImageFileReadRepository;
@@ -20,9 +20,9 @@ public class GetProductImageByProductIdQueryHandler : IRequestHandler<GetProduct
         _productImageFileReadRepository = productImageFileReadRepository;
     }
 
-    public async Task<PagedResponse<ProductImageFileDto>> Handle(GetProductImageByProductIdQueryRequest request, CancellationToken cancellationToken)
+    public async Task<PagedResponse<ProductImageFileDto?>> Handle(GetProductImageByProductIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var response = new PagedResponse<ProductImageFileDto>();
+        var response = new PagedResponse<ProductImageFileDto?>();
         try
         {
             var products = await _productImageFileReadRepository.GetAllPaginatedAsync(pi => pi.ProductId == request.ProductId);

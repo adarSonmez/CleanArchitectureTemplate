@@ -17,4 +17,4 @@ public record GetProductByIdQueryRequest
     bool IncludeCategories,
     bool IncludeOrderItems,
     bool IncludeProductImageFiles
-) : IRequest<SingleResponse<ProductDto>>;
+) : IRequest<SingleResponse<ProductDto?>>;

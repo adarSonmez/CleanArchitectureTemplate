@@ -29,4 +29,4 @@ public record CreateProductCommandRequest
     [FromForm] IFormFile PrimaryProductImage,
     [FromForm] IFormFileCollection? SecondaryProductImages,
     IList<Guid> CategoryIds
-) : IRequest<SingleResponse<ProductDto>>;
+) : IRequest<SingleResponse<ProductDto?>>;

@@ -14,7 +14,7 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Comma
 /// <summary>
 /// Handles the <see cref="UploadSecondaryProductImagesCommandRequest"/>
 /// </summary>
-public class UploadSecondaryProductImagesCommandHandler : IRequestHandler<UploadSecondaryProductImagesCommandRequest, PagedResponse<ProductImageFileDto>>
+public class UploadSecondaryProductImagesCommandHandler : IRequestHandler<UploadSecondaryProductImagesCommandRequest, PagedResponse<ProductImageFileDto?>>
 {
     private readonly IMapper _mapper;
     private readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
@@ -29,9 +29,9 @@ public class UploadSecondaryProductImagesCommandHandler : IRequestHandler<Upload
         _storageService = storageService;
     }
 
-    public async Task<PagedResponse<ProductImageFileDto>> Handle(UploadSecondaryProductImagesCommandRequest request, CancellationToken cancellationToken)
+    public async Task<PagedResponse<ProductImageFileDto?>> Handle(UploadSecondaryProductImagesCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new PagedResponse<ProductImageFileDto>();
+        var response = new PagedResponse<ProductImageFileDto?>();
 
         try
         {

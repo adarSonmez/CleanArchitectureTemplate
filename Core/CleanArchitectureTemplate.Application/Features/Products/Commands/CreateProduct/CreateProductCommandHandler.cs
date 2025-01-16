@@ -13,7 +13,7 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Commands.Creat
 /// <summary>
 /// Handles the <see cref="CreateProductCommandRequest"/>.
 /// </summary>
-public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandRequest, SingleResponse<ProductDto>>
+public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandRequest, SingleResponse<ProductDto?>>
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
@@ -30,9 +30,9 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
         _categoryReadRepository = categoryReadRepository;
     }
 
-    public async Task<SingleResponse<ProductDto>> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<ProductDto?>> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<ProductDto>();
+        var response = new SingleResponse<ProductDto?>();
 
         try
         {

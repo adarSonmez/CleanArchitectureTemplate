@@ -9,4 +9,4 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Commands.Delet
 /// Represents the request for updating a <see cref="Product"/>.
 /// </summary>
 /// <param name="Id">The identifier of the product.</param>
-public record DeleteProductCommandRequest(Guid Id) : IRequest<SingleResponse<ProductDto>>;
+public record DeleteProductCommandRequest(Guid Id) : IRequest<SingleResponse<ProductDto?>>;

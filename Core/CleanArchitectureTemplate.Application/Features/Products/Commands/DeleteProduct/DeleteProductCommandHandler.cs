@@ -12,7 +12,7 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Commands.Delet
 /// <summary>
 /// Handles the <see cref="DeleteProductCommandRequest"/>.
 /// </summary>
-public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandRequest, SingleResponse<ProductDto>>
+public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandRequest, SingleResponse<ProductDto?>>
 {
     private readonly IMapper _mapper;
     private readonly IMediator _mediator;
@@ -27,9 +27,9 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandR
         _productWriteRepository = productWriteRepository;
     }
 
-    public async Task<SingleResponse<ProductDto>> Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<ProductDto?>> Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<ProductDto>();
+        var response = new SingleResponse<ProductDto?>();
         try
         {
             var product = await _productReadRepository.GetByIdAsync(request.Id);

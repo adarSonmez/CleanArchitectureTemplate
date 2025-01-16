@@ -10,7 +10,7 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queri
 /// <summary>
 /// Handles the <see cref="GetProductImageByIdQueryRequest"/>.
 /// </summary>
-public class GetProductImageByIdQueryHandler : IRequestHandler<GetProductImageByIdQueryRequest, SingleResponse<ProductImageFileDto>>
+public class GetProductImageByIdQueryHandler : IRequestHandler<GetProductImageByIdQueryRequest, SingleResponse<ProductImageFileDto?>>
 {
     private readonly IMapper _mapper;
     private readonly IProductImageFileReadRepository _productImageFileReadRepository;
@@ -21,9 +21,9 @@ public class GetProductImageByIdQueryHandler : IRequestHandler<GetProductImageBy
         _productImageFileReadRepository = productImageFileReadRepository;
     }
 
-    public async Task<SingleResponse<ProductImageFileDto>> Handle(GetProductImageByIdQueryRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<ProductImageFileDto?>> Handle(GetProductImageByIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<ProductImageFileDto>();
+        var response = new SingleResponse<ProductImageFileDto?>();
         try
         {
             var product = await _productImageFileReadRepository.GetByIdAsync(request.Id);

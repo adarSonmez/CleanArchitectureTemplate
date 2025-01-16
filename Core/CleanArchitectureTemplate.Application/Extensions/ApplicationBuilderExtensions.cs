@@ -1,4 +1,4 @@
-﻿using CleanArchitectureTemplate.Application.Abstractions.Services.Data;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
