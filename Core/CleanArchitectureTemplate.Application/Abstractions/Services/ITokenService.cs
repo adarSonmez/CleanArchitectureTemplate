@@ -1,11 +1,12 @@
-﻿using DTO = CleanArchitectureTemplate.Application.DTOs;
+﻿using CleanArchitectureTemplate.Domain.MarkerInterfaces;
+using DTO = CleanArchitectureTemplate.Application.DTOs;
 
-namespace CleanArchitectureTemplate.Application.Abstractions.Services.Token;
+namespace CleanArchitectureTemplate.Application.Abstractions.Services;
 
 /// <summary>
 /// Represents an interface for handling tokens.
 /// </summary>
-public interface ITokenService
+public interface ITokenService : IService
 {
     /// <summary>
     /// Generates a token for the specified user.

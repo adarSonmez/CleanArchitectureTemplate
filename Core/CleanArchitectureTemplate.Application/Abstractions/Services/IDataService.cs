@@ -1,9 +1,11 @@
-﻿namespace CleanArchitectureTemplate.Application.Abstractions.Services.Data;
+﻿using CleanArchitectureTemplate.Domain.MarkerInterfaces;
+
+namespace CleanArchitectureTemplate.Application.Abstractions.Services;
 
 /// <summary>
 /// Represents the data service interface for seeding and updating the database.
 /// </summary>
-public interface IDataService
+public interface IDataService : IService
 {
     /// <summary>
     /// Seeds the database with initial data.
