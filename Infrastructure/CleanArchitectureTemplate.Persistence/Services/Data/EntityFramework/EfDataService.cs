@@ -1,4 +1,4 @@
-﻿using CleanArchitectureTemplate.Application.Abstractions.Services.Data;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Domain.Constants.Enums;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using CleanArchitectureTemplate.Domain.Entities.Marketing;

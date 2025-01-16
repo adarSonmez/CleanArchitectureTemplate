@@ -8,6 +8,8 @@
 */
 
 using AutoMapper;
+using CleanArchitectureTemplate.Application.Dtos.Identity;
+using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.RegisterAppUser;
 using CleanArchitectureTemplate.Domain.Entities.Identity;
 
 namespace CleanArchitectureTemplate.Persistence.Identity;
@@ -25,6 +27,9 @@ public class IdentityMappingProfile : Profile
 
         CreateMap<AppUser, DomainUser>()
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => string.IsNullOrWhiteSpace(src.FullName) ? null : src.FullName));
+
+        CreateMap<RegisterAppUserCommandRequest, AppUser>();
+        CreateMap<AppUser, UserDto>();
 
         // Role Mapping
         CreateMap<DomainRole, AppRole>();

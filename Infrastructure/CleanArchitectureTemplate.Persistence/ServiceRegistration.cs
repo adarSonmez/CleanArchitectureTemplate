@@ -2,14 +2,16 @@
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Marketing;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Membership;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
-using CleanArchitectureTemplate.Application.Abstractions.Services.Data;
+using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Persistence.Contexts;
 using CleanArchitectureTemplate.Persistence.Identity;
 using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Files;
 using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Marketing;
 using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Membership;
 using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Ordering;
+using CleanArchitectureTemplate.Persistence.Services.Auth.Identity;
 using CleanArchitectureTemplate.Persistence.Services.Data.EntityFramework;
+using CleanArchitectureTemplate.Persistence.Services.User.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -96,6 +98,8 @@ public static class ServiceRegistration
         #region Custom services
 
         services.AddScoped<IDataService, EfDataService>();
+        services.AddScoped<IUserService, IdentityUserService>();
+        services.AddScoped<IAuthenticationService, IdentityAuthenticationService>();
 
         #endregion Custom services
 
