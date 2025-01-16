@@ -14,6 +14,8 @@ CleanArchitectureTemplate is a **modern, robust starting point** for building sc
 - ✂️ **AutoMapper**: Simplifies object-to-object mapping.
 - ☁️ **Azure Blob Storage Integration**: Supports file storage with Azure Storage Blobs.
 - 🔑 **JWT Authentication**: Provides secure authentication using JWT bearer tokens.
+- 🔐 **ASP.NET Core Identity Mechanism**: Offers a comprehensive identity management system for user authentication and role-based authorization.
+- 🌍 **Login with Facebook or Google**: Provides seamless integration with external login providers to enhance user experience.
 - 📜 **Swagger UI**: Includes interactive API documentation with Swashbuckle.AspNetCore.
 
 ---
@@ -61,6 +63,9 @@ Follow these steps to get the solution up and running:
 
 6. **Configure Azure Services (Optional)**  
    If you intend to use Azure Blob Storage, update the Azure storage configurations in `appsettings.json`.
+
+7. **Set Up External Login Providers (Optional)**  
+   Update the `Authentication:Google` and `Authentication:Facebook` sections in `appsettings.json` with the appropriate client ID and secret for Google and Facebook login.
 
 ---
 
@@ -138,4 +143,4 @@ This template is inspired by the principles outlined in 📘 [*Clean Architectur
 ### 🔗 Links
 
 - 🌟 [GitHub Repository](https://github.com/adarSonmez/CleanArchitectureTemplate)  
-- 🛠️ [Official .NET Documentation](https://docs.microsoft.com/dotnet/)  
+- 🛠️ [Official .NET Documentation](https://docs.microsoft.com/dotnet/)
