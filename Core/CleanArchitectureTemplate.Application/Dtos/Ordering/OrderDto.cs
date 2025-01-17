@@ -16,10 +16,10 @@ namespace CleanArchitectureTemplate.Application.Dtos.Ordering;
 /// <param name="OrderItems">The order items of the order.</param>
 public record OrderDto
 (
-    Guid Id,
-    OrderStatus Status,
-    Money? TotalAmount,
-    Address ShippingAddress,
-    Guid CustomerId,
-    ICollection<OrderItemDto>? OrderItems
+    Guid Id = default,
+    OrderStatus Status = default,
+    Money? TotalAmount = default,
+    Address ShippingAddress = default!,
+    Guid CustomerId = default,
+    ICollection<OrderItemDto>? OrderItems = default
 ) : IDto;

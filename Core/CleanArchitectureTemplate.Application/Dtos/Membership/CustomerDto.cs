@@ -15,9 +15,9 @@ namespace CleanArchitectureTemplate.Application.Dtos.Membership;
 /// <param name="Orders">The orders of the customer.</param>
 public record CustomerDto
 (
-    Guid Id,
-    Guid UserId,
-    short Age,
-    Gender Gender,
-    ICollection<OrderDto>? Orders
+    Guid Id = default!,
+    Guid UserId = default!,
+    short Age = 0,
+    Gender Gender = default!,
+    ICollection<OrderDto>? Orders = null
 ) : IDto;

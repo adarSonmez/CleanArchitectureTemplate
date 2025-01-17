@@ -10,7 +10,7 @@ namespace CleanArchitectureTemplate.Application.DTOs;
 /// <param name="RefreshToken">The refresh token.</param>
 public record TokenDto
 (
-    string? AccessToken,
-    DateTime ExpirationTime,
-    string? RefreshToken
+    string? AccessToken = default,
+    DateTime ExpirationTime = default,
+    string? RefreshToken = default
 ) : IDto;

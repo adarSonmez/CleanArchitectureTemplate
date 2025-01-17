@@ -12,7 +12,7 @@ namespace CleanArchitectureTemplate.Application.Dtos.Files;
 /// <param name="FileDetails">The file details data transfer object.</param>
 public record ReportFileDto
 (
-    Guid Id,
-    ReportType ReportType,
-    FileDetailsDto? FileDetails
+    Guid Id = default,
+    ReportType ReportType = default,
+    FileDetailsDto? FileDetails = default
 ) : IDto;

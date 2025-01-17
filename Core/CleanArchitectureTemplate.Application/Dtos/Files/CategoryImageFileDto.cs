@@ -11,7 +11,7 @@ namespace CleanArchitectureTemplate.Application.Dtos.Files;
 /// <param name="CategoryId">The category identifier.</param>
 public record CategoryImageFileDto
 (
-    Guid Id,
-    FileDetailsDto? FileDetails,
-    Guid CategoryId
+    Guid Id = default,
+    FileDetailsDto? FileDetails = default,
+    Guid CategoryId = default
 ) : IDto;

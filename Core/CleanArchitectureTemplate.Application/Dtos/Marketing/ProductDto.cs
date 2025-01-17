@@ -22,15 +22,15 @@ namespace CleanArchitectureTemplate.Application.Dtos.Marketing;
 /// <param name="Categories">The categories of the product.</param>
 public record ProductDto
 (
-    Guid Id,
-    string Name,
-    string? Description,
-    int Stock,
-    decimal DiscountRate,
-    Money StandardPrice,
-    Money DiscountedPrice,
-    Guid StoreId,
-    ICollection<ProductImageFileDto>? ProductImageFiles,
-    ICollection<OrderDto>? Orders,
-    ICollection<CategoryDto>? Categories
+    Guid Id = default,
+    string Name = default!,
+    string? Description = default,
+    int Stock = default,
+    decimal DiscountRate = default,
+    Money StandardPrice = default!,
+    Money DiscountedPrice = default!,
+    Guid StoreId = default,
+    ICollection<ProductImageFileDto>? ProductImageFiles = default,
+    ICollection<OrderDto>? Orders = default,
+    ICollection<CategoryDto>? Categories = default
 ) : IDto;

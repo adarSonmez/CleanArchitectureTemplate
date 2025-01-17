@@ -16,11 +16,11 @@ using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 /// <param name="Storage">The storage type.</param>
 public record FileDetailsDto
 (
-    Guid Id,
-    string Name,
-    string Extension,
-    long Size,
-    string HumanReadableSize,
-    string Folder,
-    StorageType Storage
+    Guid Id = default,
+    string Name = default!,
+    string Extension = default!,
+    long Size = default,
+    string HumanReadableSize = default!,
+    string Folder = default!,
+    StorageType Storage = default
 ) : IDto;

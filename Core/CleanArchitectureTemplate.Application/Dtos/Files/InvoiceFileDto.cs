@@ -11,7 +11,7 @@ namespace CleanArchitectureTemplate.Application.Dtos.Files;
 /// <param name="InvoiceId">The invoice identifier.</param>
 public record InvoiceFileDto
 (
-    Guid Id,
-    FileDetailsDto? FileDetails,
-    Guid InvoiceId
+    Guid Id = default,
+    FileDetailsDto? FileDetails = default,
+    Guid InvoiceId = default
 ) : IDto;

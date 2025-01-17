@@ -13,8 +13,8 @@ namespace CleanArchitectureTemplate.Application.Dtos.Ordering;
 /// <param name="TotalPrice">The total price of the order item.</param>
 public record OrderItemDto
 (
-    Guid Id,
-    Guid ProductId,
-    int Quantity,
-    Money TotalPrice
+    Guid Id = default,
+    Guid ProductId = default,
+    int Quantity = default,
+    Money TotalPrice = default!
 ) : IDto;

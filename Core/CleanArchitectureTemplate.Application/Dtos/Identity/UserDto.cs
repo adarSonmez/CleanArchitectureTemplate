@@ -16,12 +16,12 @@ namespace CleanArchitectureTemplate.Application.Dtos.Identity;
 /// <param name="TwoFactorEnabled">A flag indicating whether two factor authentication is enabled.</param>
 public record UserDto
 (
-    Guid? Id,
-    string? FullName,
-    string UserName,
-    string Email,
-    bool EmailConfirmed,
-    string? PhoneNumber,
-    bool PhoneNumberConfirmed,
-    bool TwoFactorEnabled
+    Guid? Id = default,
+    string? FullName = default,
+    string UserName = default!,
+    string Email = default!,
+    bool EmailConfirmed = default,
+    string? PhoneNumber = default,
+    bool PhoneNumberConfirmed = default,
+    bool TwoFactorEnabled = default
 ) : IDto;

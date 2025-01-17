@@ -10,6 +10,6 @@ namespace CleanArchitectureTemplate.Application.Dtos.Identity;
 /// <param name="Name">The name of the role.</param>
 public record RoleDto
 (
-    Guid Id,
-    string Name
+    Guid Id = default,
+    string Name = default!
 ) : IDto;

@@ -12,8 +12,8 @@ namespace CleanArchitectureTemplate.Application.Dtos.Files;
 /// <param name="FileDetails">The file details data transfer object.</param>
 public record ProductImageFileDto
 (
-    Guid Id,
-    Guid ProductId,
-    bool IsPrimary,
-    FileDetailsDto? FileDetails
+    Guid Id = default,
+    Guid ProductId = default,
+    bool IsPrimary = default,
+    FileDetailsDto? FileDetails = default
 ) : IDto;

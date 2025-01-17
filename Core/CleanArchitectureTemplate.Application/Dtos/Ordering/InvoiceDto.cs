@@ -19,14 +19,14 @@ namespace CleanArchitectureTemplate.Application.Dtos.Ordering;
 /// <param name="PaidAt">The date and time when the invoice was paid.</param>
 public record InvoiceDto
 (
-    Guid Id,
-    Address BillingAddress,
-    Guid OrderId,
-    DateTime IssuedAt,
-    DateTime DueDate,
-    InvoiceStatus Status,
-    PaymentMethod PaymentMethod,
-    string? TransactionId,
-    string? Notes,
-    DateTime? PaidAt
+    Guid Id = default,
+    Address BillingAddress = default!,
+    Guid OrderId = default,
+    DateTime IssuedAt = default,
+    DateTime DueDate = default,
+    InvoiceStatus Status = default,
+    PaymentMethod PaymentMethod = default,
+    string? TransactionId = default,
+    string? Notes = default,
+    DateTime? PaidAt = default
 );

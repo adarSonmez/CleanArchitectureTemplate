@@ -13,9 +13,9 @@ namespace CleanArchitectureTemplate.Application.Dtos.Marketing;
 /// <param name="Products">The products that belong to the category.</param>
 public record CategoryDto
 (
-    Guid Id,
-    string Name,
-    string? Description,
-    Guid? ParentCategoryId,
-    IEnumerable<ProductDto>? Products
+    Guid Id = default,
+    string Name = default!,
+    string? Description = default,
+    Guid? ParentCategoryId = default,
+    IEnumerable<ProductDto>? Products = default
 ) : IDto;

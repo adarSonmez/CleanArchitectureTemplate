@@ -11,7 +11,7 @@ namespace CleanArchitectureTemplate.Application.Dtos.Files;
 /// <param name="UserId">The identifier of the user who owns the avatar.</param>
 public record UserAvatarFileDto
 (
-    Guid Id,
-    Guid UserId,
-    FileDetailsDto? FileDetails
+    Guid Id = default,
+    Guid UserId = default,
+    FileDetailsDto? FileDetails = default
 ) : IDto;

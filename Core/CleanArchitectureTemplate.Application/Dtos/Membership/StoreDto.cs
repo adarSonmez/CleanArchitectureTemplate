@@ -13,8 +13,8 @@ namespace CleanArchitectureTemplate.Application.Dtos.Membership;
 /// <param name="Products">The products that the store has.</param>
 public record StoreDto
 (
-    Guid UserId,
-    string? Website,
-    string? Description,
-    ICollection<ProductDto>? Products
+    Guid UserId = default!,
+    string? Website = null,
+    string? Description = null,
+    ICollection<ProductDto>? Products = null
 ) : IDto;
