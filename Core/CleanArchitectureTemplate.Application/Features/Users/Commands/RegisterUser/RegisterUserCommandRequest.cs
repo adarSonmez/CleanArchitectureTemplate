@@ -2,7 +2,7 @@
 using CleanArchitectureTemplate.Application.Dtos.Identity;
 using MediatR;
 
-namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.RegisterAppUser;
+namespace CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
 
 /// <summary>
 /// Represents a request to create a new application user.
@@ -13,7 +13,7 @@ namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.Regis
 /// <param name="Password">The password of the user</param>
 /// <param name="PasswordConfirmation">The password confirmation of the user</param>
 /// <param name="PhoneNumber">The phone number of the user</param>
-public record RegisterAppUserCommandRequest
+public record RegisterUserCommandRequest
 (
     string FullName,
     string Email,

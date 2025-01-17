@@ -4,34 +4,34 @@ using CleanArchitectureTemplate.Application.DTOs;
 using CleanArchitectureTemplate.Domain.Common;
 using MediatR;
 
-namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.GoogleLoginAppUser;
+namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.GoogleLogin;
 
 /// <summary>
-/// Represents a handler for the <see cref="GoogleLoginAppUserCommandRequest"/>
+/// Represents a handler for the <see cref="GoogleLoginCommandRequest"/>
 /// </summary>
-public class GoogleLoginAppUserCommandHandler : IRequestHandler<GoogleLoginAppUserCommandRequest, SingleResponse<TokenDTO?>>
+public class GoogleLoginCommandHandler : IRequestHandler<GoogleLoginCommandRequest, SingleResponse<TokenDTO?>>
 {
     private readonly IAuthenticationService _authenticationService;
 
-    public GoogleLoginAppUserCommandHandler(IAuthenticationService authenticationService)
+    public GoogleLoginCommandHandler(IAuthenticationService authenticationService)
     {
         _authenticationService = authenticationService;
     }
 
-    public async Task<SingleResponse<TokenDTO?>> Handle(GoogleLoginAppUserCommandRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<TokenDTO?>> Handle(GoogleLoginCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<TokenDTO?>();
 
         try
         {
             var tokenDto = await _authenticationService.GoogleLoginAsync(request);
-            BusinessRules.Run(("USR697198", BusinessRules.CheckDtoNull(tokenDto)));
+            BusinessRules.Run(("AUR697198", BusinessRules.CheckDtoNull(tokenDto)));
 
             response.SetData(tokenDto);
         }
         catch (Exception ex)
         {
-            response.AddError("USR376285", ex.Message);
+            response.AddError("AUR376285", ex.Message);
         }
 
         return response;

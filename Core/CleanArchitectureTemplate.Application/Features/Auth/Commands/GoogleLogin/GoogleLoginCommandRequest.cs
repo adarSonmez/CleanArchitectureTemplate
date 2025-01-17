@@ -2,7 +2,7 @@
 using CleanArchitectureTemplate.Application.DTOs;
 using MediatR;
 
-namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.GoogleLoginAppUser;
+namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.GoogleLogin;
 
 /// <summary>
 /// Represents a request for a user to log in using Google credentials
@@ -14,7 +14,7 @@ namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.Googl
 /// <param name="FirstName">The first name of the user</param>
 /// <param name="LastName">The last name of the user</param>
 /// <param name="PhotoUrl">The photo URL of the user</param>
-public record GoogleLoginAppUserCommandRequest
+public record GoogleLoginCommandRequest
 (
     string Id,
     string Email,

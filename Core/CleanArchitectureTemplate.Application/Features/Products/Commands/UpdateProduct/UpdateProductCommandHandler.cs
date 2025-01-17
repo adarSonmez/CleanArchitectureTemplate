@@ -47,7 +47,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
 
             if (request.PrimaryProductImage != null)
             {
-                var uploadFileCommand = new UploadPrimaryProductImageCommandRequest(PathConstants.DefaultProductImagesPath, product.Id, request.PrimaryProductImage);
+                var uploadFileCommand = new UploadPrimaryProductImageCommandRequest(PathConstants.DefaultProductImagesPath, product!.Id, request.PrimaryProductImage);
                 var uploadFileResponse = await _mediator.Send(uploadFileCommand, cancellationToken);
                 if (!uploadFileResponse.IsSuccessful)
                 {
@@ -60,7 +60,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
             {
                 if (request.DeleteExistingSecondaryImages || request.SecondaryProductImages.Count == 0)
                 {
-                    var deleteProductImagesCommand = new DeleteProductImagesByProductIdCommandRequest(product.Id);
+                    var deleteProductImagesCommand = new DeleteProductImagesByProductIdCommandRequest(product!.Id);
                     await _mediator.Send(deleteProductImagesCommand, cancellationToken);
                 }
 

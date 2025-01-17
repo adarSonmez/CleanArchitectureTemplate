@@ -5,23 +5,23 @@ using CleanArchitectureTemplate.Application.Dtos.Identity;
 using CleanArchitectureTemplate.Domain.Common;
 using MediatR;
 
-namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.RegisterAppUser;
+namespace CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
 
 /// <summary>
-/// Represents a handler for the <see cref="RegisterAppUserCommandRequest"/>
+/// Represents a handler for the <see cref="RegisterUserCommandRequest"/>
 /// </summary>
-public class RegisterAppUserCommandHandler : IRequestHandler<RegisterAppUserCommandRequest, SingleResponse<UserDto?>>
+public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommandRequest, SingleResponse<UserDto?>>
 {
     public readonly IMapper _mapper;
     public readonly IUserService _userService;
 
-    public RegisterAppUserCommandHandler(IMapper mapper, IUserService userService)
+    public RegisterUserCommandHandler(IMapper mapper, IUserService userService)
     {
         _mapper = mapper;
         _userService = userService;
     }
 
-    public async Task<SingleResponse<UserDto?>> Handle(RegisterAppUserCommandRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<UserDto?>> Handle(RegisterUserCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<UserDto?>();
 

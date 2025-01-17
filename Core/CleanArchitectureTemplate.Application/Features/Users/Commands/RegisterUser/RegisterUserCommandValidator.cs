@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 
-namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.RegisterAppUser;
+namespace CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
 
 /// <summary>
-/// Validator for the <see cref="RegisterAppUserCommandRequest"/> class.
+/// Validator for the <see cref="RegisterUserCommandRequest"/> class.
 /// </summary>
-public class RegisterAppUserCommandValidator : AbstractValidator<RegisterAppUserCommandRequest>
+public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommandRequest>
 {
-    public RegisterAppUserCommandValidator()
+    public RegisterUserCommandValidator()
     {
         RuleFor(x => x.FullName)
             .NotEmpty()

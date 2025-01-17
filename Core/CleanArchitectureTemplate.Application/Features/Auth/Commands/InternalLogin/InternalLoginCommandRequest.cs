@@ -2,7 +2,7 @@
 using CleanArchitectureTemplate.Application.DTOs;
 using MediatR;
 
-namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.LoginAppUser;
+namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalLogin;
 
 /// <summary>
 /// Represents a request to log in a user
@@ -10,7 +10,7 @@ namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.Login
 /// <param name="Email">The email of the user</param>
 /// <param name="UserName">The username of the user</param>
 /// <param name="Password">The password of the user</param>
-public record LoginAppUserCommandRequest
+public record InternalLoginCommandRequest
 (
     string? Email,
     string? UserName,
