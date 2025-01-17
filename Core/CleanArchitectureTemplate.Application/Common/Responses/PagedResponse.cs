@@ -30,7 +30,7 @@ public class PagedResponse<T> : ResponseResult
     /// <summary>
     /// Gets the total pages.
     /// </summary>
-    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+    public int TotalPages => TotalCount == 0 ? 0 : (int)Math.Ceiling(TotalCount / (double)PageSize);
 
     /// <summary>
     /// Sets the data.

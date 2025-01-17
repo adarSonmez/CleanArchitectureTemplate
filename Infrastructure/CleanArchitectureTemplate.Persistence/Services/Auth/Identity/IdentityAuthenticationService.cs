@@ -10,6 +10,7 @@ using CleanArchitectureTemplate.Domain.Common;
 using CleanArchitectureTemplate.Persistence.Identity;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Json;
 
@@ -207,7 +208,7 @@ public class IdentityAuthenticationService : IAuthenticationService
     /// <inheritdoc />
     public async Task<TokenDTO?> RefreshTokenAsync(RefreshTokenCommandRequest model)
     {
-        var user = await _userManager.FindByIdAsync(model.UserId.ToString());
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == model.RefreshToken);
         BusinessRules.Run(("AUT913061", BusinessRules.CheckEntityNull(user)));
 
         if (user!.RefreshToken != model.RefreshToken)

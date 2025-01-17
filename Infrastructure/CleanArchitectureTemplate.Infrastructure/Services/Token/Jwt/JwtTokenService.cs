@@ -52,7 +52,7 @@ public class JwtTokenService : ITokenService
     /// <returns>The generated refresh token.</returns>
     private string GenerateRefreshToken()
     {
-        var randomNumber = new byte[128];
+        var randomNumber = new byte[32];
         using (var rng = RandomNumberGenerator.Create())
         {
             rng.GetBytes(randomNumber);
