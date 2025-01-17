@@ -19,7 +19,7 @@ public interface IAuthenticationService : IService
     /// </summary>
     /// <param name="model">Model containing the user credentials.</param>
     /// <returns>The generated token if the user is authenticated; otherwise, null.</returns>
-    Task<TokenDTO?> InternalLoginAsync(InternalLoginCommandRequest model);
+    Task<TokenDto?> InternalLoginAsync(InternalLoginCommandRequest model);
 
     #endregion Internal Authentication
 
@@ -30,14 +30,14 @@ public interface IAuthenticationService : IService
     /// </summary>
     /// <param name="model">Model containing the Facebook user credentials.</param>
     /// <returns>The generated token if the user is authenticated; otherwise, null.</returns>
-    Task<TokenDTO?> FacebookLoginAsync(FacebookLoginCommandRequest model);
+    Task<TokenDto?> FacebookLoginAsync(FacebookLoginCommandRequest model);
 
     /// <summary>
     /// Authenticates the user using Google.
     /// </summary>
     /// <param name="model">Model containing the Google user credentials.</param>
     /// <returns>The generated token if the user is authenticated; otherwise, null.</returns>
-    Task<TokenDTO?> GoogleLoginAsync(GoogleLoginCommandRequest model);
+    Task<TokenDto?> GoogleLoginAsync(GoogleLoginCommandRequest model);
 
     #endregion External Authentication
 
@@ -47,7 +47,7 @@ public interface IAuthenticationService : IService
     /// Refreshes the user token and enables the user to continue using the application.
     /// </summary>
     /// <param name="model">Model containing the refresh token and the user ID.</param>
-    Task<TokenDTO?> RefreshTokenAsync(RefreshTokenCommandRequest model);
+    Task<TokenDto?> RefreshTokenAsync(RefreshTokenCommandRequest model);
 
     #endregion Refresh Token
 }

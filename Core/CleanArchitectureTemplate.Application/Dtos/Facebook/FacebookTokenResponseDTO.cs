@@ -5,7 +5,7 @@ namespace CleanArchitectureTemplate.Application.DTOs.Facebook;
 /// <summary>
 /// Represents the Facebook token response data transfer object.
 /// </summary>
-public class FacebookTokenResponseDTO
+public class FacebookTokenResponseDto
 {
     [JsonPropertyName("access_token")]
     public string? AccessToken { get; set; }

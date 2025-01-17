@@ -21,7 +21,7 @@ public class JwtTokenService : ITokenService
     }
 
     /// </inheritdoc>
-    public DTO::TokenDTO GenerateToken(Guid userId, bool? infiniteExpiration = false)
+    public DTO::TokenDto GenerateToken(Guid userId, bool? infiniteExpiration = false)
     {
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
@@ -43,7 +43,7 @@ public class JwtTokenService : ITokenService
         var accessToken = jwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
         var refreshToken = GenerateRefreshToken();
 
-        return new DTO::TokenDTO(accessToken, expirationDate, refreshToken);
+        return new DTO::TokenDto(accessToken, expirationDate, refreshToken);
     }
 
     /// <summary>

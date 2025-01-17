@@ -8,7 +8,7 @@ namespace CleanArchitectureTemplate.Application.DTOs;
 /// <param name="AccessToken">The access token.</param>
 /// <param name="ExpirationTime">The expiration time of the token.</param>
 /// <param name="RefreshToken">The refresh token.</param>
-public record TokenDTO
+public record TokenDto
 (
     string? AccessToken,
     DateTime ExpirationTime,

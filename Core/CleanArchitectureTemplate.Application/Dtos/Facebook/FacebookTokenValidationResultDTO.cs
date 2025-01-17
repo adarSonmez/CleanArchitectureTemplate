@@ -6,7 +6,7 @@ namespace CleanArchitectureTemplate.Application.Dtos.Facebook;
 /// <summary>
 /// Represents the Facebook token response data transfer object.
 /// </summary>
-public record FacebookTokenValidationResultDTO
+public record FacebookTokenValidationResultDto
 (
-    [property: JsonPropertyName("data")] FacebookTokenDataDTO Data
+    [property: JsonPropertyName("data")] FacebookTokenDataDto Data
 ) : IDto;

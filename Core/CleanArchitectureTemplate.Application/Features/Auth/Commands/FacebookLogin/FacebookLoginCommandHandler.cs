@@ -11,7 +11,7 @@ namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.FacebookL
 /// Handles the logic of verifying a Facebook access token, validating and/or creating a corresponding user,
 /// and returning a token for the logged-in user.
 /// </summary>
-public class FacebookLoginCommandHandler : IRequestHandler<FacebookLoginCommandRequest, SingleResponse<TokenDTO?>>
+public class FacebookLoginCommandHandler : IRequestHandler<FacebookLoginCommandRequest, SingleResponse<TokenDto?>>
 {
     private readonly IAuthenticationService _authenticationService;
 
@@ -20,9 +20,9 @@ public class FacebookLoginCommandHandler : IRequestHandler<FacebookLoginCommandR
         _authenticationService = authenticationService;
     }
 
-    public async Task<SingleResponse<TokenDTO?>> Handle(FacebookLoginCommandRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<TokenDto?>> Handle(FacebookLoginCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<TokenDTO?>();
+        var response = new SingleResponse<TokenDto?>();
 
         try
         {

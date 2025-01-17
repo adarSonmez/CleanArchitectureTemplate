@@ -13,4 +13,4 @@ public record FacebookLoginCommandRequest
 (
     string AccessToken,
     string Provider
-) : IRequest<SingleResponse<TokenDTO?>>;
+) : IRequest<SingleResponse<TokenDto?>>;

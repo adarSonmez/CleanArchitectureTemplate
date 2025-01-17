@@ -36,7 +36,7 @@ public class IdentityAuthenticationService : IAuthenticationService
     #region Internal Authentication
 
     /// <inheritdoc />
-    public async Task<TokenDTO?> InternalLoginAsync(InternalLoginCommandRequest model)
+    public async Task<TokenDto?> InternalLoginAsync(InternalLoginCommandRequest model)
     {
         AppUser? user = null;
 
@@ -70,7 +70,7 @@ public class IdentityAuthenticationService : IAuthenticationService
     #region External Authentication
 
     /// <inheritdoc />
-    public async Task<TokenDTO?> FacebookLoginAsync(FacebookLoginCommandRequest model)
+    public async Task<TokenDto?> FacebookLoginAsync(FacebookLoginCommandRequest model)
     {
         // Validate the Facebook access token
         var appId = _configuration["OAuth:Facebook:AppId"];
@@ -87,7 +87,7 @@ public class IdentityAuthenticationService : IAuthenticationService
         var response = await httpClient.GetAsync(tokenValidationUrl);
         response.EnsureSuccessStatusCode();
 
-        var validationResult = await response.Content.ReadFromJsonAsync<FacebookTokenValidationResultDTO>();
+        var validationResult = await response.Content.ReadFromJsonAsync<FacebookTokenValidationResultDto>();
         if (validationResult?.Data == null || !validationResult.Data.IsValid)
         {
             throw new InvalidOperationException("Invalid Facebook access token.");
@@ -98,7 +98,7 @@ public class IdentityAuthenticationService : IAuthenticationService
         var userInfoResponse = await httpClient.GetAsync(userInfoUrl);
         userInfoResponse.EnsureSuccessStatusCode();
 
-        var userInfo = await userInfoResponse.Content.ReadFromJsonAsync<FacebookUserInfoDTO>();
+        var userInfo = await userInfoResponse.Content.ReadFromJsonAsync<FacebookUserInfoDto>();
         if (userInfo == null)
         {
             throw new InvalidOperationException("Failed to fetch user information from Facebook.");
@@ -147,7 +147,7 @@ public class IdentityAuthenticationService : IAuthenticationService
     }
 
     /// <inheritdoc />
-    public async Task<TokenDTO?> GoogleLoginAsync(GoogleLoginCommandRequest model)
+    public async Task<TokenDto?> GoogleLoginAsync(GoogleLoginCommandRequest model)
     {
         var settings = new GoogleJsonWebSignature.ValidationSettings
         {
@@ -206,7 +206,7 @@ public class IdentityAuthenticationService : IAuthenticationService
     #region Refresh Token
 
     /// <inheritdoc />
-    public async Task<TokenDTO?> RefreshTokenAsync(RefreshTokenCommandRequest model)
+    public async Task<TokenDto?> RefreshTokenAsync(RefreshTokenCommandRequest model)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == model.RefreshToken);
         BusinessRules.Run(("AUT913061", BusinessRules.CheckEntityNull(user)));

@@ -6,7 +6,7 @@ namespace CleanArchitectureTemplate.Application.DTOs.Facebook;
 /// <summary>
 /// Represents the Facebook user info data transfer object
 /// </summary>
-public record FacebookUserInfoDTO
+public record FacebookUserInfoDto
 (
     [property: JsonPropertyName("id")] string Id,
     [property: JsonPropertyName("email")] string Email,

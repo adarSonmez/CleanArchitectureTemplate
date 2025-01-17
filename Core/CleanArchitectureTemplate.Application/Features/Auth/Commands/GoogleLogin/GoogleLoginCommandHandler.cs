@@ -9,7 +9,7 @@ namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.GoogleLog
 /// <summary>
 /// Represents a handler for the <see cref="GoogleLoginCommandRequest"/>
 /// </summary>
-public class GoogleLoginCommandHandler : IRequestHandler<GoogleLoginCommandRequest, SingleResponse<TokenDTO?>>
+public class GoogleLoginCommandHandler : IRequestHandler<GoogleLoginCommandRequest, SingleResponse<TokenDto?>>
 {
     private readonly IAuthenticationService _authenticationService;
 
@@ -18,9 +18,9 @@ public class GoogleLoginCommandHandler : IRequestHandler<GoogleLoginCommandReque
         _authenticationService = authenticationService;
     }
 
-    public async Task<SingleResponse<TokenDTO?>> Handle(GoogleLoginCommandRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<TokenDto?>> Handle(GoogleLoginCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<TokenDTO?>();
+        var response = new SingleResponse<TokenDto?>();
 
         try
         {

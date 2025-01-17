@@ -10,7 +10,7 @@ namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalL
 /// <summary>
 /// Represents a handler for the <see cref="InternalLoginCommandRequest"/>
 /// </summary>
-public class InternalLoginCommandHandler : IRequestHandler<InternalLoginCommandRequest, SingleResponse<TokenDTO?>>
+public class InternalLoginCommandHandler : IRequestHandler<InternalLoginCommandRequest, SingleResponse<TokenDto?>>
 {
     private readonly IAuthenticationService _authenticationService;
 
@@ -19,9 +19,9 @@ public class InternalLoginCommandHandler : IRequestHandler<InternalLoginCommandR
         _authenticationService = authenticationService;
     }
 
-    public async Task<SingleResponse<TokenDTO?>> Handle(InternalLoginCommandRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<TokenDto?>> Handle(InternalLoginCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<TokenDTO?>();
+        var response = new SingleResponse<TokenDto?>();
 
         try
         {
