@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using CleanArchitectureTemplate.Application.Common.Responses;
+using CleanArchitectureTemplate.Application.DTOs;
+using MediatR;
 
-namespace CleanArchitectureTemplate.Application.Features.Commands.AppUsers.GoogleLoginAppUser;
+namespace CleanArchitectureTemplate.Application.Features.AppUsers.Commands.GoogleLoginAppUser;
 
 /// <summary>
 /// Represents a request for a user to log in using Google credentials
@@ -21,4 +23,4 @@ public record GoogleLoginAppUserCommandRequest
     string? FirstName,
     string? LastName,
     string? PhotoUrl
-) : IRequest<GoogleLoginAppUserCommandResponse>;
+) : IRequest<SingleResponse<TokenDTO?>>;
