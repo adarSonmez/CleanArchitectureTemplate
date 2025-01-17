@@ -83,4 +83,14 @@ public class DomainUser : IEntity
     /// Gets or sets the number of failed login attempts for the current user.
     /// </summary>
     public virtual int AccessFailedCount { get; set; }
+
+    /// <summary>
+    /// Gets or sets refresh token for the user.
+    /// </summary>
+    public string? RefreshToken { get; set; }
+
+    /// <summary>
+    /// Gets or sets the date and time when the refresh token expires.
+    /// </summary>
+    public DateTimeOffset? RefreshTokenExpiration { get; set; }
 }
