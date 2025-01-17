@@ -1,7 +1,8 @@
 ﻿using CleanArchitectureTemplate.Application.DTOs;
-using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.FacebookLoginAppUser;
-using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.GoogleLoginAppUser;
-using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.LoginAppUser;
+using CleanArchitectureTemplate.Application.Features.Auth.Commands.FacebookLogin;
+using CleanArchitectureTemplate.Application.Features.Auth.Commands.GoogleLogin;
+using CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalLogin;
+using CleanArchitectureTemplate.Application.Features.Auth.Commands.RefreshToken;
 using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 
 namespace CleanArchitectureTemplate.Application.Abstractions.Services;
@@ -18,7 +19,7 @@ public interface IAuthenticationService : IService
     /// </summary>
     /// <param name="model">Model containing the user credentials.</param>
     /// <returns>The generated token if the user is authenticated; otherwise, null.</returns>
-    Task<TokenDTO?> InternalLoginAsync(LoginAppUserCommandRequest model);
+    Task<TokenDTO?> InternalLoginAsync(InternalLoginCommandRequest model);
 
     #endregion Internal Authentication
 
@@ -29,14 +30,24 @@ public interface IAuthenticationService : IService
     /// </summary>
     /// <param name="model">Model containing the Facebook user credentials.</param>
     /// <returns>The generated token if the user is authenticated; otherwise, null.</returns>
-    Task<TokenDTO?> FacebookLoginAsync(FacebookLoginAppUserCommandRequest model);
+    Task<TokenDTO?> FacebookLoginAsync(FacebookLoginCommandRequest model);
 
     /// <summary>
     /// Authenticates the user using Google.
     /// </summary>
     /// <param name="model">Model containing the Google user credentials.</param>
     /// <returns>The generated token if the user is authenticated; otherwise, null.</returns>
-    Task<TokenDTO?> GoogleLoginAsync(GoogleLoginAppUserCommandRequest model);
+    Task<TokenDTO?> GoogleLoginAsync(GoogleLoginCommandRequest model);
 
     #endregion External Authentication
+
+    #region Refresh Token
+
+    /// <summary>
+    /// Refreshes the user token and enables the user to continue using the application.
+    /// </summary>
+    /// <param name="model">Model containing the refresh token and the user ID.</param>
+    Task<TokenDTO?> RefreshTokenAsync(RefreshTokenCommandRequest model);
+
+    #endregion Refresh Token
 }

@@ -1,6 +1,6 @@
-﻿using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.FacebookLoginAppUser;
-using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.GoogleLoginAppUser;
-using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.LoginAppUser;
+﻿using CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalLogin;
+using CleanArchitectureTemplate.Application.Features.Auth.Commands.FacebookLogin;
+using CleanArchitectureTemplate.Application.Features.Auth.Commands.GoogleLogin;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,21 +18,28 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> Login([FromBody] LoginAppUserCommandRequest request)
+    public async Task<IActionResult> Login([FromBody] InternalLoginCommandRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginAppUserCommandRequest request)
+    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginCommandRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> FacobookLogin([FromBody] FacebookLoginAppUserCommandRequest request)
+    public async Task<IActionResult> FacobookLogin([FromBody] FacebookLoginCommandRequest request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommandRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);

@@ -1,4 +1,4 @@
-﻿using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.RegisterAppUser;
+﻿using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +16,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> Register([FromBody] RegisterAppUserCommandRequest request)
+    public async Task<IActionResult> Register([FromBody] RegisterUserCommandRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);

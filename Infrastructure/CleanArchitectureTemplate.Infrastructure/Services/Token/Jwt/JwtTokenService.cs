@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 using System.Text;
 using DTO = CleanArchitectureTemplate.Application.DTOs;
 
@@ -27,7 +28,7 @@ public class JwtTokenService : ITokenService
 
         var expirationDate = infiniteExpiration == true
             ? DateTime.MaxValue
-            : DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:AccessExpiration"]));
+            : DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:AccessTokenExpiration"]));
 
         var jwtSecurityToken = new JwtSecurityToken(
             _configuration["Jwt:Issuer"],
@@ -40,8 +41,28 @@ public class JwtTokenService : ITokenService
 
         var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
         var accessToken = jwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
-        // token.RefreshToken = CreateRefreshToken();
+        var refreshToken = GenerateRefreshToken();
 
-        return new DTO::TokenDTO(accessToken, expirationDate, "");
+        return new DTO::TokenDTO(accessToken, expirationDate, refreshToken);
+    }
+
+    /// <summary>
+    /// Generates a refresh token to be used for refreshing the access token.
+    /// </summary>
+    /// <returns>The generated refresh token.</returns>
+    private string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[128];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomNumber);
+
+            for (var i = 0; i < randomNumber.Length; i++)
+            {
+                Console.Write(randomNumber[i]);
+            }
+
+            return Convert.ToBase64String(randomNumber);
+        }
     }
 }
