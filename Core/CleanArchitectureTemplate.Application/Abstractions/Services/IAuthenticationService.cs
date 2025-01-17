@@ -1,7 +1,7 @@
 ﻿using CleanArchitectureTemplate.Application.DTOs;
+using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.FacebookLoginAppUser;
+using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.GoogleLoginAppUser;
 using CleanArchitectureTemplate.Application.Features.AppUsers.Commands.LoginAppUser;
-using CleanArchitectureTemplate.Application.Features.Commands.AppUsers.FacebookLoginAppUser;
-using CleanArchitectureTemplate.Application.Features.Commands.AppUsers.GoogleLoginAppUser;
 using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 
 namespace CleanArchitectureTemplate.Application.Abstractions.Services;
