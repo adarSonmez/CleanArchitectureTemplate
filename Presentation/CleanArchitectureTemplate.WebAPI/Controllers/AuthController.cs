@@ -3,6 +3,7 @@ using CleanArchitectureTemplate.Application.Features.Auth.Commands.FacebookLogin
 using CleanArchitectureTemplate.Application.Features.Auth.Commands.GoogleLogin;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using CleanArchitectureTemplate.Application.Features.Auth.Commands.RefreshToken;
 
 namespace CleanArchitectureTemplate.WebAPI.Controllers;
 
