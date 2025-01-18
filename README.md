@@ -16,6 +16,8 @@ CleanArchitectureTemplate is a **modern, robust starting point** for building sc
 - 🔑 **JWT Authentication**: Provides secure authentication using JWT bearer tokens.
 - 🔐 **ASP.NET Core Identity Mechanism**: Offers a comprehensive identity management system for user authentication and role-based authorization.
 - 🌍 **Login with Facebook or Google**: Provides seamless integration with external login providers to enhance user experience.
+- 📌 **Logging with Serilog**: Structured logging for easier debugging and tracking.
+- 🔍 **Visualization with Seq**: Centralized logging visualization for enhanced observability.
 - 📜 **Swagger UI**: Includes interactive API documentation with Swashbuckle.AspNetCore.
 
 ---
@@ -30,6 +32,7 @@ Before setting up the project, ensure you have the following installed:
 - 🖥️ [Visual Studio 2022](https://visualstudio.microsoft.com/)
 - 🐘 [PostgreSQL](https://www.postgresql.org/download/)
 - ☁️ Azure account (optional, for Blob Storage integration)
+- 🔎 [Seq](https://datalust.co/seq) (optional, for log visualization)
 
 ---
 
@@ -53,7 +56,7 @@ Follow these steps to get the solution up and running:
    ```
 
 4. **Configure the Database Connection**  
-   Update the `ConnectionStrings` in `appsettings.json` located in  
+   Update the `ConnectionStrings:DefaultConnection` in `appsettings.json` located in  
    `Presentation/CleanArchitectureTemplate.WebAPI` with your PostgreSQL details.
 
 5. **Apply Migrations**  
@@ -61,11 +64,45 @@ Follow these steps to get the solution up and running:
    dotnet ef database update --project Infrastructure/CleanArchitectureTemplate.Persistence
    ```
 
-6. **Configure Azure Services (Optional)**  
-   If you intend to use Azure Blob Storage, update the Azure storage configurations in `appsettings.json`.
+6. **Set Up Serilog and Seq**  
+   - Ensure `appsettings.json` includes the Seq configuration under `Logging`:
+     ```json
+     "Logging": {
+         "LogLevel": {
+             "Default": "Information",
+             "Microsoft.AspNetCore": "Warning"
+         },
+         "Seq": {
+             "ServerUrl": "http://localhost:5341"
+         }
+     }
+     ```
+   - Start Seq locally or on a server and ensure the application is pointed to the correct URL.
 
-7. **Set Up External Login Providers (Optional)**  
-   Update the `Authentication:Google` and `Authentication:Facebook` sections in `appsettings.json` with the appropriate client ID and secret for Google and Facebook login.
+7. **Configure Azure, AWS, or Google Cloud Storage (Optional)**  
+   Update the `Storage` section in `appsettings.json` with your provider details. Example:
+   ```json
+   "Storage": {
+       "Azure": "<YourAzureBlobConnectionString>",
+       "AWS": "<YourAWSStorageKey>",
+       "Google": "<YourGoogleCloudStorageKey>"
+   }
+   ```
+
+8. **Set Up External Login Providers (Optional)**  
+   Update the `OAuth:Google` and `OAuth:Facebook` sections in `appsettings.json` with the appropriate client ID and secret for Google and Facebook login.
+
+9. **Configure JWT Authentication**  
+   Ensure the `Jwt` section in `appsettings.json` contains the necessary values for your application's secret key, issuer, audience, and token expiration times. Example:
+   ```json
+   "Jwt": {
+       "SecretKey": "PANTA RHEI!",
+       "Issuer": "<YourIssuer>",
+       "Audience": "<YourAudience>",
+       "AccessTokenExpiration": 360,
+       "RefreshTokenExpiration": 60
+   }
+   ```
 
 ---
 
@@ -78,6 +115,9 @@ Follow these steps to get the solution up and running:
 
 2. Open your browser and navigate to:  
    🌐 `http://localhost:5000/swagger` to access the Swagger UI for API documentation.
+
+3. View application logs in Seq by navigating to:  
+   🌐 `http://localhost:5341` (or your configured Seq server URL).
 
 ---
 
@@ -144,3 +184,4 @@ This template is inspired by the principles outlined in 📘 [*Clean Architectur
 
 - 🌟 [GitHub Repository](https://github.com/adarSonmez/CleanArchitectureTemplate)  
 - 🛠️ [Official .NET Documentation](https://docs.microsoft.com/dotnet/)
+
