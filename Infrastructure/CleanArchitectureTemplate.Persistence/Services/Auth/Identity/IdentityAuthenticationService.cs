@@ -55,7 +55,8 @@ public class IdentityAuthenticationService : IAuthenticationService
 
         if (result.Succeeded)
         {
-            var tokenDto = _tokenService.GenerateToken(user!.Id);
+            var roles = await _userManager.GetRolesAsync(user!);
+            var tokenDto = _tokenService.GenerateToken(user.UserName, roles);
             await _userService.UpdateRefreshTokenAsync(user!.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
             return tokenDto;
         }
@@ -141,7 +142,8 @@ public class IdentityAuthenticationService : IAuthenticationService
         }
 
         // Generate JWT token
-        var tokenDto = _tokenService.GenerateToken(user.Id);
+        var roles = await _userManager.GetRolesAsync(user);
+        var tokenDto = _tokenService.GenerateToken(user.UserName, roles);
         await _userService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
         return tokenDto;
     }
@@ -196,7 +198,8 @@ public class IdentityAuthenticationService : IAuthenticationService
             }
         }
 
-        var tokenDto = _tokenService.GenerateToken(user.Id);
+        var roles = await _userManager.GetRolesAsync(user);
+        var tokenDto = _tokenService.GenerateToken(user.UserName, roles);
         await _userService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
         return tokenDto;
     }
@@ -221,7 +224,8 @@ public class IdentityAuthenticationService : IAuthenticationService
             throw new InvalidOperationException("Refresh token has expired.");
         }
 
-        var tokenDto = _tokenService.GenerateToken(user.Id);
+        var roles = await _userManager.GetRolesAsync(user);
+        var tokenDto = _tokenService.GenerateToken(user.UserName, roles);
         await _userService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
 
         return tokenDto;

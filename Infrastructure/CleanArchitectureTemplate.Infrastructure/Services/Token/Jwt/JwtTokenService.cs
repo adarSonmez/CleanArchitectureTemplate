@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using DTO = CleanArchitectureTemplate.Application.DTOs;
@@ -21,7 +22,7 @@ public class JwtTokenService : ITokenService
     }
 
     /// </inheritdoc>
-    public DTO::TokenDto GenerateToken(Guid userId, bool? infiniteExpiration = false)
+    public DTO::TokenDto GenerateToken(string userName, IList<string> roles, bool? infiniteExpiration = false)
     {
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
@@ -35,8 +36,12 @@ public class JwtTokenService : ITokenService
             _configuration["Jwt:Audience"],
             expires: expirationDate,
             notBefore: DateTime.Now,
-            signingCredentials: signingCredentials
-        // claims: SetClaims(userId.ToString(), username, email, role)
+            signingCredentials: signingCredentials,
+            claims:
+            [
+                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.Role, string.Join(",", roles))
+            ]
         );
 
         var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();

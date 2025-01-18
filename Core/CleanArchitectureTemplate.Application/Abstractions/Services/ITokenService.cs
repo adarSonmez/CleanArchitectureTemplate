@@ -11,8 +11,9 @@ public interface ITokenService : IService
     /// <summary>
     /// Generates a token for the specified user.
     /// </summary>
-    /// <param name="userId">The user ID.</param>
+    /// <param name="userName">The user name.</param>
+    /// <param name="roles">The roles of the user.</param>
     /// <param name="infiniteExpiration">Indicates if the token has infinite expiration.</param>
     /// <returns>The generated token.</returns>
-    DTO::TokenDto GenerateToken(Guid userId, bool? infiniteExpiration = false);
+    DTO::TokenDto GenerateToken(string userName, IList<string> roles, bool? infiniteExpiration = false);
 }

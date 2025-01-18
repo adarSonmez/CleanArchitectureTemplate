@@ -18,7 +18,7 @@ namespace CleanArchitectureTemplate.Application.Dtos.Marketing;
 /// <param name="StoreId">The store that the product belongs to.</param>
 /// <param name="DiscountedPrice">The discounted price of the product.</param>
 /// <param name="ProductImageFiles">The product images of the product.</param>
-/// <param name="Orders">The orders which include the product.</param>
+/// <param name="OrderItems">The orders in which the product is included.</param>
 /// <param name="Categories">The categories of the product.</param>
 public record ProductDto
 (
@@ -31,6 +31,6 @@ public record ProductDto
     Money DiscountedPrice = default!,
     Guid StoreId = default,
     ICollection<ProductImageFileDto>? ProductImageFiles = default,
-    ICollection<OrderDto>? Orders = default,
+    ICollection<OrderDto>? OrderItems = default,
     ICollection<CategoryDto>? Categories = default
 ) : IDto;
