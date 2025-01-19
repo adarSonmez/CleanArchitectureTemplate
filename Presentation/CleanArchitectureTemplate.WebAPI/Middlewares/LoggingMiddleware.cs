@@ -38,19 +38,3 @@ public class LoggingMiddleware
         await _next(context);
     }
 }
-
-/// <summary>
-/// Extension method to add the <see cref="LoggingMiddleware"/> to the application's middleware pipeline.
-/// </summary>
-public static class LoggingMiddlewareExtensions
-{
-    /// <summary>
-    /// Adds the LoggingMiddleware to the application pipeline.
-    /// </summary>
-    /// <param name="builder">The application builder.</param>
-    /// <returns>The application builder.</returns>
-    public static IApplicationBuilder UseLoggingMiddleware(this IApplicationBuilder builder)
-    {
-        return builder.UseMiddleware<LoggingMiddleware>();
-    }
-}

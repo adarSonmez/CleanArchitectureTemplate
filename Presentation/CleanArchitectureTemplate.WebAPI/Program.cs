@@ -5,7 +5,7 @@ using CleanArchitectureTemplate.Infrastructure.Filters;
 using CleanArchitectureTemplate.Infrastructure.Services.Storage.Local;
 using CleanArchitectureTemplate.Persistence;
 using CleanArchitectureTemplate.WebAPI.Configurations.ColumnWriters;
-using CleanArchitectureTemplate.WebAPI.Middlewares;
+using CleanArchitectureTemplate.WebAPI.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -109,6 +109,8 @@ if (app.Environment.IsDevelopment())
     await app.UseSeederAsync();
 }
 
+app.UseGlobalExceptionHandler();
+
 app.UseStaticFiles();
 
 app.UseHttpLogging();
@@ -123,6 +125,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseLoggingMiddleware();
+app.UseLogging();
 
 app.Run();

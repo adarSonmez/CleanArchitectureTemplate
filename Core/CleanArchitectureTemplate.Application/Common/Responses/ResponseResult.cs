@@ -5,7 +5,7 @@ namespace CleanArchitectureTemplate.Application.Common.Responses;
 /// <summary>
 /// Represents a response message with a type and optional code.
 /// </summary>
-public abstract class ResponseResult
+public class ResponseResult
 {
     /// <summary>
     /// Indicates if the response is successful (no errors).
