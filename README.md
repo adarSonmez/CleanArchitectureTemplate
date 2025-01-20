@@ -19,6 +19,7 @@ CleanArchitectureTemplate is a **modern, robust starting point** for building sc
 - 📌 **Logging with Serilog**: Structured logging for easier debugging and tracking.
 - 🔍 **Visualization with Seq**: Centralized logging visualization for enhanced observability.
 - 📜 **Swagger UI**: Includes interactive API documentation with Swashbuckle.AspNetCore.
+- ⚙️ **Global Exception Handler**: Ensures centralized and consistent error handling across the application.
 
 ---
 
