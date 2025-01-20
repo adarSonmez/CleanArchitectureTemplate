@@ -1,7 +1,7 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.DTOs;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.GoogleLogin;
@@ -22,17 +22,10 @@ public class GoogleLoginCommandHandler : IRequestHandler<GoogleLoginCommandReque
     {
         var response = new SingleResponse<TokenDto?>();
 
-        try
-        {
-            var tokenDto = await _authenticationService.GoogleLoginAsync(request);
-            BusinessRules.Run(("AUR697198", BusinessRules.CheckDtoNull(tokenDto)));
+        var tokenDto = await _authenticationService.GoogleLoginAsync(request)
+            ?? throw new UnauthorizedException("Google login failed. Invalid credentials or authentication error.");
 
-            response.SetData(tokenDto);
-        }
-        catch (Exception ex)
-        {
-            response.AddError("AUR376285", ex.Message);
-        }
+        response.SetData(tokenDto);
 
         return response;
     }

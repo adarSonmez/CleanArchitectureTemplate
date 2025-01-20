@@ -1,7 +1,7 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.DTOs;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.FacebookLogin;
@@ -24,18 +24,10 @@ public class FacebookLoginCommandHandler : IRequestHandler<FacebookLoginCommandR
     {
         var response = new SingleResponse<TokenDto?>();
 
-        try
-        {
-            var tokenDto = await _authenticationService.FacebookLoginAsync(request);
-            BusinessRules.Run(("AUR957299", BusinessRules.CheckDtoNull(tokenDto)));
+        var tokenDto = await _authenticationService.FacebookLoginAsync(request)
+            ?? throw new UnauthorizedException("Facebook login failed. Invalid credentials or authentication error.");
 
-            response.SetData(tokenDto);
-        }
-        catch (Exception ex)
-        {
-            response.AddError("AUR701021", ex.Message);
-        }
-
+        response.SetData(tokenDto);
         return response;
     }
 }

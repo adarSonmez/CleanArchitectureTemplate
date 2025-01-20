@@ -1,13 +1,8 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Marketing;
-using CleanArchitectureTemplate.Application.Abstractions.Services;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
-using CleanArchitectureTemplate.Application.Dtos.Marketing;
 using CleanArchitectureTemplate.Application.DTOs;
-using CleanArchitectureTemplate.Domain.Common;
-using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
-using System.Linq.Expressions;
 
 namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.RefreshToken;
 
@@ -26,16 +21,12 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommandReq
     public async Task<SingleResponse<TokenDto?>> Handle(RefreshTokenCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<TokenDto?>();
-        try
-        {
-            var tokenDto = await _authenticationService.RefreshTokenAsync(request);
-            BusinessRules.Run(("AUT512033", BusinessRules.CheckDtoNull(tokenDto)));
-            response.SetData(tokenDto);
-        }
-        catch (Exception ex)
-        {
-            response.AddError("AUT380171", ex.Message);
-        }
+
+        var tokenDto = await _authenticationService.RefreshTokenAsync(request)
+            ?? throw new UnauthorizedException("The provided refresh token is invalid or has expired.");
+
+        response.SetData(tokenDto);
+
         return response;
     }
 }

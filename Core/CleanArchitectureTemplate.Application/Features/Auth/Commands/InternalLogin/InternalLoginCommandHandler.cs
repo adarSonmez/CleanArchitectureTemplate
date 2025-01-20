@@ -1,8 +1,7 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.DTOs;
-using CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalLogin;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalLogin;
@@ -23,18 +22,10 @@ public class InternalLoginCommandHandler : IRequestHandler<InternalLoginCommandR
     {
         var response = new SingleResponse<TokenDto?>();
 
-        try
-        {
-            var tokenDto = await _authenticationService.InternalLoginAsync(request);
-            BusinessRules.Run(("AUR131494", BusinessRules.CheckDtoNull(tokenDto)));
+        var tokenDto = await _authenticationService.InternalLoginAsync(request)
+            ?? throw new UnauthorizedException("Login failed. Invalid credentials or authentication error.");
 
-            response.SetData(tokenDto);
-        }
-        catch (Exception ex)
-        {
-            response.AddError("AUR618468", ex.Message);
-        }
-
+        response.SetData(tokenDto);
         return response;
     }
 }
