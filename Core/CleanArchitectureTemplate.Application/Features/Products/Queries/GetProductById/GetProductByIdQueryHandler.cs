@@ -2,8 +2,8 @@
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Marketing;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Marketing;
-using CleanArchitectureTemplate.Domain.Common;
 using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 using System.Linq.Expressions;
 
@@ -26,32 +26,26 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryReq
     public async Task<SingleResponse<ProductDto?>> Handle(GetProductByIdQueryRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<ProductDto?>();
-        try
+        var includes = new List<Expression<Func<Product, object>>>();
+
+        if (request.IncludeCategories)
         {
-            var includes = new List<Expression<Func<Product, object>>>();
-
-            if (request.IncludeCategories)
-            {
-                includes.Add(p => p.Categories);
-            }
-            if (request.IncludeOrderItems)
-            {
-                includes.Add(p => p.OrderItems);
-            }
-            if (request.IncludeProductImageFiles)
-            {
-                includes.Add(p => p.ProductImageFiles);
-            }
-
-            var product = await _productReadRepository.GetByIdAsync(request.Id, include: includes);
-            BusinessRules.Run(("PRD599445", BusinessRules.CheckEntityNull(product)));
-
-            response.SetData(_mapper.Map<ProductDto>(product));
+            includes.Add(p => p.Categories);
         }
-        catch (Exception ex)
+        if (request.IncludeOrderItems)
         {
-            response.AddError("PRD380171", ex.Message);
+            includes.Add(p => p.OrderItems);
         }
+        if (request.IncludeProductImageFiles)
+        {
+            includes.Add(p => p.ProductImageFiles);
+        }
+
+        var product = await _productReadRepository.GetByIdAsync(request.Id, include: includes)
+            ?? throw new NotFoundException(nameof(Product), request.Id);
+
+        response.SetData(_mapper.Map<ProductDto>(product));
+
         return response;
     }
 }

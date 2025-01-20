@@ -25,33 +25,27 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQueryReq
     public async Task<PagedResponse<ProductDto?>> Handle(GetAllProductsQueryRequest request, CancellationToken cancellationToken)
     {
         var response = new PagedResponse<ProductDto?>();
-        try
+
+        var includes = new List<Expression<Func<Product, object>>>();
+
+        if (request.IncludeCategories)
         {
-            var includes = new List<Expression<Func<Product, object>>>();
-
-            if (request.IncludeCategories)
-            {
-                includes.Add(p => p.Categories);
-            }
-            if (request.IncludeOrderItems)
-            {
-                includes.Add(p => p.OrderItems);
-            }
-            if (request.IncludeProductImageFiles)
-            {
-                includes.Add(p => p.ProductImageFiles);
-            }
-
-            var products = await _productReadRepository.GetAllPaginatedAsync(
-                pagination: request.Pagination,
-                include: includes);
-
-            response.SetData(_mapper.Map<IEnumerable<ProductDto>>(products), request.Pagination?.Page, request.Pagination?.Size);
+            includes.Add(p => p.Categories);
         }
-        catch (Exception ex)
+        if (request.IncludeOrderItems)
         {
-            response.AddError("PRD602774", ex.Message);
+            includes.Add(p => p.OrderItems);
         }
+        if (request.IncludeProductImageFiles)
+        {
+            includes.Add(p => p.ProductImageFiles);
+        }
+
+        var products = await _productReadRepository.GetAllPaginatedAsync(
+            pagination: request.Pagination,
+            include: includes);
+
+        response.SetData(_mapper.Map<IEnumerable<ProductDto>>(products), request.Pagination?.Page, request.Pagination?.Size);
 
         return response;
     }

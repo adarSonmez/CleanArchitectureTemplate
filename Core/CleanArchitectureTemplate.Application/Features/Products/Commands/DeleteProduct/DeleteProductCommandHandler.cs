@@ -4,7 +4,8 @@ using CleanArchitectureTemplate.Application.Abstractions.Repositories.Marketing;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Marketing;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.DeleteProductImagesByProductId;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.DeleteProduct;
@@ -30,21 +31,16 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandR
     public async Task<SingleResponse<ProductDto?>> Handle(DeleteProductCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<ProductDto?>();
-        try
-        {
-            var product = await _productReadRepository.GetByIdAsync(request.Id);
-            BusinessRules.Run(("PRD770975", BusinessRules.CheckEntityNull(product)));
 
-            var deleteProductImagesCommand = new DeleteProductImagesByProductIdCommandRequest(product!.Id);
-            await _mediator.Send(deleteProductImagesCommand, cancellationToken);
-            await _productWriteRepository.SoftDeleteAsync(product!);
+        var product = await _productReadRepository.GetByIdAsync(request.Id)
+            ?? throw new NotFoundException(nameof(Product), request.Id);
 
-            response.SetData(_mapper.Map<ProductDto>(product));
-        }
-        catch (Exception ex)
-        {
-            response.AddError("PRD677818", ex.Message);
-        }
+        var deleteProductImagesCommand = new DeleteProductImagesByProductIdCommandRequest(product!.Id);
+        await _mediator.Send(deleteProductImagesCommand, cancellationToken);
+        await _productWriteRepository.SoftDeleteAsync(product!);
+
+        response.SetData(_mapper.Map<ProductDto>(product));
+
         return response;
     }
 }

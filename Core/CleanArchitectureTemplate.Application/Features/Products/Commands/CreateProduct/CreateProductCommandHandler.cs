@@ -6,6 +6,7 @@ using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;
 using CleanArchitectureTemplate.Domain.Constants.StringContants;
 using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.CreateProduct;
@@ -34,44 +35,42 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
     {
         var response = new SingleResponse<ProductDto?>();
 
-        try
+        var product = _mapper.Map<Product>(request);
+        var categories = await _categoryReadRepository.GetByIdRangeAsync(request.CategoryIds);
+
+        product.Categories = categories.ToList();
+
+        if (request.PrimaryProductImage != null)
         {
-            var product = _mapper.Map<Product>(request);
-            var categories = await _categoryReadRepository.GetByIdRangeAsync(request.CategoryIds);
-
-            product.Categories = categories.ToList();
-
-            if (request.PrimaryProductImage != null)
+            var uploadFileCommand = new UploadPrimaryProductImageCommandRequest(PathConstants.DefaultProductImagesPath, product.Id, request.PrimaryProductImage);
+            try
             {
-                var uploadFileCommand = new UploadPrimaryProductImageCommandRequest(PathConstants.DefaultProductImagesPath, product.Id, request.PrimaryProductImage);
-                var uploadFileResponse = await _mediator.Send(uploadFileCommand, cancellationToken);
-                if (!uploadFileResponse.IsSuccessful)
-                {
-                    response.AddError("PRD898336", uploadFileResponse.Messages.FirstOrDefault()?.Message ?? "Error while uploading primary image.");
-                    return response;
-                }
+                await _mediator.Send(uploadFileCommand, cancellationToken);
             }
-
-            if (request.SecondaryProductImages != null && request.SecondaryProductImages.Count > 0)
+            catch (Exception ex)
             {
-                var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(PathConstants.DefaultProductImagesPath, product.Id, request.SecondaryProductImages);
-                var uploadFilesResponse = await _mediator.Send(uploadFilesCommand, cancellationToken);
-                if (!uploadFilesResponse.IsSuccessful)
-                {
-                    response.AddError("PRD680515", uploadFilesResponse.Messages.FirstOrDefault()?.Message ?? "Error while uploading secondary images.");
-                    return response;
-                }
+                throw new FailedDependencyException("Error while uploading primary image.", innerException: ex);
             }
-
-            var addedProduct = await _productWriteRepository.AddAsync(product);
-            var detailedProduct = await _productReadRepository.GetByIdAsync(addedProduct.Id, include: [product => product.Categories, product => product.ProductImageFiles]);
-
-            response.SetData(_mapper.Map<ProductDto>(detailedProduct));
         }
-        catch (Exception ex)
+
+        if (request.SecondaryProductImages != null && request.SecondaryProductImages.Count > 0)
         {
-            response.AddError("PRD300483", ex.Message);
+            var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(PathConstants.DefaultProductImagesPath, product.Id, request.SecondaryProductImages);
+
+            try
+            {
+                await _mediator.Send(uploadFilesCommand, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new FailedDependencyException("Error while uploading secondary images.", innerException: ex);
+            }
         }
+
+        var addedProduct = await _productWriteRepository.AddAsync(product);
+        var detailedProduct = await _productReadRepository.GetByIdAsync(addedProduct.Id, include: [product => product.Categories, product => product.ProductImageFiles]);
+
+        response.SetData(_mapper.Map<ProductDto>(detailedProduct));
 
         return response;
     }
