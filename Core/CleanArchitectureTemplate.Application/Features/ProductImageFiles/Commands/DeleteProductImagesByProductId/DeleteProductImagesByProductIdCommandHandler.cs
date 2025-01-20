@@ -1,6 +1,7 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
 using CleanArchitectureTemplate.Application.Common.Responses;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.DeleteProductImagesByProductId;
@@ -24,29 +25,18 @@ public class DeleteProductImagesByProductIdCommandHandler : IRequestHandler<Dele
     public async Task<SingleResponse<bool>> Handle(DeleteProductImagesByProductIdCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<bool>();
-        try
+
+        var productImageFiles = await _productImageFileReadRepository.GetAllPaginatedAsync(x => x.Product.Id == request.ProductId)
+            ?? throw new NotFoundException($"No product images found for the product with ID: {request.ProductId}");
+
+        foreach (var productImageFile in productImageFiles)
         {
-            var productImageFiles = await _productImageFileReadRepository.GetAllPaginatedAsync(x => x.Product.Id == request.ProductId);
-
-            if (!productImageFiles.Any())
-            {
-                response.AddError("PIF250940", "No product images found for the product.");
-                return response;
-            }
-
-            foreach (var productImageFile in productImageFiles)
-            {
-                await _productImageFileWriteRepository.HardDeleteAsync(productImageFile.Id, saveChanges: false);
-                await _storageService.DeleteFileAsync(productImageFile.FileDetails.Folder, productImageFile.FileDetails.Name);
-            }
-
-            await _productImageFileWriteRepository.SaveChangesAsync();
-            response.SetData(true);
+            await _productImageFileWriteRepository.HardDeleteAsync(productImageFile.Id, saveChanges: false);
+            await _storageService.DeleteFileAsync(productImageFile.FileDetails.Folder, productImageFile.FileDetails.Name);
         }
-        catch (Exception ex)
-        {
-            response.AddError("PIF191120", ex.Message);
-        }
+
+        await _productImageFileWriteRepository.SaveChangesAsync();
+        response.SetData(true);
 
         return response;
     }

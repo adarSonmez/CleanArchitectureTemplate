@@ -9,4 +9,4 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queri
 /// Represents the request for getting a <see cref="ProductImageFile"/>'s by folder.
 /// </summary>
 /// <param name="Folder">The folder name where the images are stored.</param>
-public record GetProductImageByFolderQueryRequest(string Folder) : IRequest<PagedResponse<ProductImageFileDto?>>;
+public record GetProductImagesByFolderQueryRequest(string Folder) : IRequest<PagedResponse<ProductImageFileDto?>>;

@@ -1,7 +1,8 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
 using CleanArchitectureTemplate.Application.Common.Responses;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Entities.Files;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.DeleteProductImageById;
@@ -25,19 +26,13 @@ public class DeleteProductImageByIdCommandHandler : IRequestHandler<DeleteProduc
     public async Task<SingleResponse<bool>> Handle(DeleteProductImageByIdCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<bool>();
-        try
-        {
-            var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.ProductId);
-            BusinessRules.Run(("PIF640271", BusinessRules.CheckEntityNull(productImageFile)));
 
-            await _productImageFileWriteRepository.HardDeleteAsync(productImageFile!.Id);
-            await _storageService.DeleteFileAsync(productImageFile.FileDetails.Folder, productImageFile.FileDetails.Name);
-            response.SetData(true);
-        }
-        catch (Exception ex)
-        {
-            response.AddError("PIF896067", ex.Message);
-        }
+        var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.ProductId)
+            ?? throw new NotFoundException(nameof(ProductImageFile), request.ProductId);
+
+        await _productImageFileWriteRepository.HardDeleteAsync(productImageFile!.Id);
+        await _storageService.DeleteFileAsync(productImageFile.FileDetails.Folder, productImageFile.FileDetails.Name);
+        response.SetData(true);
 
         return response;
     }

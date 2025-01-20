@@ -7,9 +7,9 @@ using MediatR;
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queries.GetProductImagesByFolder;
 
 /// <summary>
-/// Handles the <see cref="GetProductImageByFolderQueryRequest"/>.
+/// Handles the <see cref="GetProductImagesByFolderQueryRequest"/>.
 /// </summary>
-public class GetProductImageByProductIdQueryHandler : IRequestHandler<GetProductImageByFolderQueryRequest, PagedResponse<ProductImageFileDto?>>
+public class GetProductImageByProductIdQueryHandler : IRequestHandler<GetProductImagesByFolderQueryRequest, PagedResponse<ProductImageFileDto?>>
 {
     private readonly IMapper _mapper;
     private readonly IProductImageFileReadRepository _productImageFileReadRepository;
@@ -20,18 +20,12 @@ public class GetProductImageByProductIdQueryHandler : IRequestHandler<GetProduct
         _productImageFileReadRepository = productImageFileReadRepository;
     }
 
-    public async Task<PagedResponse<ProductImageFileDto?>> Handle(GetProductImageByFolderQueryRequest request, CancellationToken cancellationToken)
+    public async Task<PagedResponse<ProductImageFileDto?>> Handle(GetProductImagesByFolderQueryRequest request, CancellationToken cancellationToken)
     {
         var response = new PagedResponse<ProductImageFileDto?>();
-        try
-        {
-            var products = await _productImageFileReadRepository.GetAllPaginatedAsync(pi => pi.FileDetails.Folder == request.Folder, include: [pi => pi.FileDetails]);
-            response.SetData(_mapper.Map<IEnumerable<ProductImageFileDto>>(products));
-        }
-        catch (Exception ex)
-        {
-            response.AddError("PIF518440", ex.Message);
-        }
+
+        var products = await _productImageFileReadRepository.GetAllPaginatedAsync(pi => pi.FileDetails.Folder == request.Folder, include: [pi => pi.FileDetails]);
+        response.SetData(_mapper.Map<IEnumerable<ProductImageFileDto>>(products));
 
         return response;
     }

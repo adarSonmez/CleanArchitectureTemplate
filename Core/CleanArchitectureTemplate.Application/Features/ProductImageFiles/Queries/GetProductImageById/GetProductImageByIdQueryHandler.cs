@@ -2,7 +2,8 @@
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Files;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Entities.Files;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queries.GetProductImageById;
@@ -24,17 +25,11 @@ public class GetProductImageByIdQueryHandler : IRequestHandler<GetProductImageBy
     public async Task<SingleResponse<ProductImageFileDto?>> Handle(GetProductImageByIdQueryRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<ProductImageFileDto?>();
-        try
-        {
-            var product = await _productImageFileReadRepository.GetByIdAsync(request.Id);
-            BusinessRules.Run(("PIF916690", BusinessRules.CheckEntityNull(product)));
 
-            response.SetData(_mapper.Map<ProductImageFileDto>(product));
-        }
-        catch (Exception ex)
-        {
-            response.AddError("PIF593212", ex.Message);
-        }
+        var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.Id)
+            ?? throw new NotFoundException(nameof(ProductImageFile), request.Id);
+
+        response.SetData(_mapper.Map<ProductImageFileDto>(productImageFile));
 
         return response;
     }
