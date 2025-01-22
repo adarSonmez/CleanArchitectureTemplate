@@ -5,7 +5,7 @@ namespace CleanArchitectureTemplate.Domain.Exceptions;
 /// <summary>
 /// Represents an exception that is thrown when a requested feature is not implemented.
 /// </summary>
-public class NotImplementedException : Exception
+public class MissingImpementationException : Exception
 {
     private const string DefaultMessage = "The requested feature is not implemented.";
 
@@ -20,12 +20,12 @@ public class NotImplementedException : Exception
     public HttpStatusCode StatusCode { get; } = HttpStatusCode.NotImplemented;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="NotImplementedException"/> class.
+    /// Initializes a new instance of the <see cref="MissingImpementationException"/> class.
     /// </summary>
     /// <param name="message">The message that describes the error. Defaults to a standard message if null.</param>
     /// <param name="errorCode">A string-based error code (default is "NOT_IMPLEMENTED").</param>
     /// <param name="innerException">The exception that caused the current exception, if any.</param>
-    public NotImplementedException(string? message = DefaultMessage, string? errorCode = null, Exception? innerException = null)
+    public MissingImpementationException(string? message = DefaultMessage, string? errorCode = null, Exception? innerException = null)
         : base(message ?? DefaultMessage, innerException)
     {
         if (!string.IsNullOrWhiteSpace(errorCode))

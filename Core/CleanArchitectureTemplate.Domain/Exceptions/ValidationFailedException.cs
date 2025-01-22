@@ -5,7 +5,7 @@ namespace CleanArchitectureTemplate.Domain.Exceptions
     /// <summary>
     /// Represents an exception that is thrown when validation of input fails.
     /// </summary>
-    public class ValidationException : Exception
+    public class ValidationFailedException : Exception
     {
         private const string DefaultMessage = "Validation of the input failed.";
 
@@ -20,12 +20,12 @@ namespace CleanArchitectureTemplate.Domain.Exceptions
         public HttpStatusCode StatusCode { get; } = HttpStatusCode.UnprocessableEntity;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidationException"/> class.
+        /// Initializes a new instance of the <see cref="ValidationFailedException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the validation error. Defaults to a standard message if null.</param>
         /// <param name="errorCode">A string-based error code (default is "VALIDATION_ERROR").</param>
         /// <param name="innerException">The exception that caused the current exception, if any.</param>
-        public ValidationException(string? message = DefaultMessage, string? errorCode = null, Exception? innerException = null)
+        public ValidationFailedException(string? message = DefaultMessage, string? errorCode = null, Exception? innerException = null)
             : base(message ?? DefaultMessage, innerException)
         {
             if (!string.IsNullOrWhiteSpace(errorCode))

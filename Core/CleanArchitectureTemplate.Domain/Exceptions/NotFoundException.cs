@@ -31,4 +31,14 @@ public class NotFoundException : Exception
         if (!string.IsNullOrWhiteSpace(errorCode))
             ErrorCode = errorCode;
     }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NotFoundException"/> class for a specific resource and identifier.
+    /// </summary>
+    /// <param name="resourceName">The name of the resource that was not found.</param>
+    /// <param name="identifier">The identifier of the resource that was not found.</param>
+    public NotFoundException(string resourceName, object identifier)
+        : base($"The resource '{resourceName}' with identifier '{identifier}' was not found.")
+    {
+    }
 }
