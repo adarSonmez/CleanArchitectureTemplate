@@ -34,7 +34,7 @@ public class ProductImagesController : ControllerBase
     [HttpGet("product/{productId}")]
     public async Task<IActionResult> GetByProductId([FromRoute] Guid productId)
     {
-        var request = new GetProductImageByProductIdQueryRequest(productId);
+        var request = new GetProductImagesByProductIdQueryRequest(productId);
         var response = await _mediator.Send(request);
         return Ok(response);
     }
@@ -42,7 +42,7 @@ public class ProductImagesController : ControllerBase
     [HttpGet("folder/{folderName}")]
     public async Task<IActionResult> GetByFolderName([FromRoute] string folderName)
     {
-        var request = new GetProductImageByFolderQueryRequest(folderName);
+        var request = new GetProductImagesByFolderQueryRequest(folderName);
         var response = await _mediator.Send(request);
         return Ok(response);
     }
