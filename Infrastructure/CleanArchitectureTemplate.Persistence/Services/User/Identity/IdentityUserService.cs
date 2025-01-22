@@ -53,7 +53,7 @@ public class IdentityUserService : IUserService
         var refreshTokenExpirationTime = accessTokenCreationTime.AddMinutes(refreshTokenExpirationAddition);
         var user = await _userManager.FindByIdAsync(userId.ToString());
 
-        BusinessRules.Run(("USR211795", BusinessRules.CheckEntityNull(user)));
+        BusinessRules.ThrowIfViolated(("USR211795", BusinessRules.CheckEntityNull(user)));
 
         user!.RefreshToken = refreshToken;
         user.RefreshTokenExpiration = refreshTokenExpirationTime;

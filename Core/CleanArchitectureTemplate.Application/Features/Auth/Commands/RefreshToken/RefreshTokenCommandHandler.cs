@@ -21,9 +21,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommandReq
     public async Task<SingleResponse<TokenDto?>> Handle(RefreshTokenCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<TokenDto?>();
-
-        var tokenDto = await _authenticationService.RefreshTokenAsync(request)
-            ?? throw new UnauthorizedException("The provided refresh token is invalid or has expired.");
+        var tokenDto = await _authenticationService.RefreshTokenAsync(request);
 
         response.SetData(tokenDto);
 

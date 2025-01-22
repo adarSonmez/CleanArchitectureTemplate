@@ -24,8 +24,7 @@ public class FacebookLoginCommandHandler : IRequestHandler<FacebookLoginCommandR
     {
         var response = new SingleResponse<TokenDto?>();
 
-        var tokenDto = await _authenticationService.FacebookLoginAsync(request)
-            ?? throw new UnauthorizedException("Facebook login failed. Invalid credentials or authentication error.");
+        var tokenDto = await _authenticationService.FacebookLoginAsync(request);
 
         response.SetData(tokenDto);
         return response;

@@ -21,9 +21,7 @@ public class GoogleLoginCommandHandler : IRequestHandler<GoogleLoginCommandReque
     public async Task<SingleResponse<TokenDto?>> Handle(GoogleLoginCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<TokenDto?>();
-
-        var tokenDto = await _authenticationService.GoogleLoginAsync(request)
-            ?? throw new UnauthorizedException("Google login failed. Invalid credentials or authentication error.");
+        var tokenDto = await _authenticationService.GoogleLoginAsync(request);
 
         response.SetData(tokenDto);
 

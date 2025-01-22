@@ -21,9 +21,7 @@ public class InternalLoginCommandHandler : IRequestHandler<InternalLoginCommandR
     public async Task<SingleResponse<TokenDto?>> Handle(InternalLoginCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<TokenDto?>();
-
-        var tokenDto = await _authenticationService.InternalLoginAsync(request)
-            ?? throw new UnauthorizedException("Login failed. Invalid credentials or authentication error.");
+        var tokenDto = await _authenticationService.InternalLoginAsync(request);
 
         response.SetData(tokenDto);
         return response;

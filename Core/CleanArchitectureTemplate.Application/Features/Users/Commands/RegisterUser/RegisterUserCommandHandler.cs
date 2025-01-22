@@ -2,7 +2,7 @@
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Identity;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
@@ -25,18 +25,10 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommandReq
     {
         var response = new SingleResponse<UserDto?>();
 
-        try
-        {
-            var userDto = await _userService.CreateAsync(request);
+        var userDto = await _userService.CreateAsync(request)
+            ?? throw new UnauthorizedException("User registration failed.");
 
-            BusinessRules.Run(("USR215761", BusinessRules.CheckDtoNull(userDto)));
-
-            response.SetData(userDto);
-        }
-        catch (Exception ex)
-        {
-            response.AddError("USR633428", ex.Message);
-        }
+        response.SetData(userDto);
 
         return response;
     }

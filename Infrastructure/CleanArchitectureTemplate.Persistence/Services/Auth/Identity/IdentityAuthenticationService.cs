@@ -6,7 +6,7 @@ using CleanArchitectureTemplate.Application.Features.Auth.Commands.FacebookLogin
 using CleanArchitectureTemplate.Application.Features.Auth.Commands.GoogleLogin;
 using CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalLogin;
 using CleanArchitectureTemplate.Application.Features.Auth.Commands.RefreshToken;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using CleanArchitectureTemplate.Persistence.Identity;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
@@ -49,20 +49,21 @@ public class IdentityAuthenticationService : IAuthenticationService
             user = await _userManager.FindByEmailAsync(model.Email);
         }
 
-        BusinessRules.Run(("AUT853660", BusinessRules.CheckEntityNull(user)));
+        if (user == null)
+            throw new UnauthorizedAccessException("Invalid credentials.");
 
         var result = await _signInManager.CheckPasswordSignInAsync(user!, model.Password, false);
 
         if (result.Succeeded)
         {
             var roles = await _userManager.GetRolesAsync(user!);
-            var tokenDto = _tokenService.GenerateToken(user.UserName, roles);
+            var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
             await _userService.UpdateRefreshTokenAsync(user!.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
             return tokenDto;
         }
         else
         {
-            throw new Exception("Invalid password");
+            throw new UnauthorizedAccessException("Invalid credentials.");
         }
     }
 
@@ -74,13 +75,8 @@ public class IdentityAuthenticationService : IAuthenticationService
     public async Task<TokenDto?> FacebookLoginAsync(FacebookLoginCommandRequest model)
     {
         // Validate the Facebook access token
-        var appId = _configuration["OAuth:Facebook:AppId"];
-        var appSecret = _configuration["OAuth:Facebook:AppSecret"];
-
-        if (string.IsNullOrEmpty(appId) || string.IsNullOrEmpty(appSecret))
-        {
-            throw new InvalidOperationException("Facebook AppId or AppSecret is not configured.");
-        }
+        var appId = _configuration["OAuth:Facebook:AppId"]!;
+        var appSecret = _configuration["OAuth:Facebook:AppSecret"]!;
 
         var tokenValidationUrl = $"https://graph.facebook.com/debug_token?input_token={model.AccessToken}&access_token={appId}|{appSecret}";
 
@@ -91,7 +87,7 @@ public class IdentityAuthenticationService : IAuthenticationService
         var validationResult = await response.Content.ReadFromJsonAsync<FacebookTokenValidationResultDto>();
         if (validationResult?.Data == null || !validationResult.Data.IsValid)
         {
-            throw new InvalidOperationException("Invalid Facebook access token.");
+            throw new UnauthorizedException("Invalid Facebook access token.");
         }
 
         // Fetch user information from Facebook Graph API
@@ -99,11 +95,8 @@ public class IdentityAuthenticationService : IAuthenticationService
         var userInfoResponse = await httpClient.GetAsync(userInfoUrl);
         userInfoResponse.EnsureSuccessStatusCode();
 
-        var userInfo = await userInfoResponse.Content.ReadFromJsonAsync<FacebookUserInfoDto>();
-        if (userInfo == null)
-        {
-            throw new InvalidOperationException("Failed to fetch user information from Facebook.");
-        }
+        var userInfo = await userInfoResponse.Content.ReadFromJsonAsync<FacebookUserInfoDto>()
+            ?? throw new FailedDependencyException("Failed to fetch user information from Facebook.");
 
         // Prepare UserLoginInfo for external login
         var info = new UserLoginInfo(model.Provider, userInfo.Id, model.Provider);
@@ -129,7 +122,7 @@ public class IdentityAuthenticationService : IAuthenticationService
                 var creationResult = await _userManager.CreateAsync(user);
                 if (!creationResult.Succeeded)
                 {
-                    throw new Exception("Failed to create user: " + string.Join(", ", creationResult.Errors.Select(e => e.Description)));
+                    throw new BadRequestException("Failed to create user: " + string.Join(", ", creationResult.Errors.Select(e => e.Description)));
                 }
             }
 
@@ -137,13 +130,16 @@ public class IdentityAuthenticationService : IAuthenticationService
             var loginResult = await _userManager.AddLoginAsync(user, info);
             if (!loginResult.Succeeded)
             {
-                throw new Exception("Failed to add external login: " + string.Join(", ", loginResult.Errors.Select(e => e.Description)));
+                // Rollback user creation if failed to link external login
+                await _userManager.DeleteAsync(user);
+
+                throw new BadRequestException("Failed to add external login: " + string.Join(", ", loginResult.Errors.Select(e => e.Description)));
             }
         }
 
         // Generate JWT token
         var roles = await _userManager.GetRolesAsync(user);
-        var tokenDto = _tokenService.GenerateToken(user.UserName, roles);
+        var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
         await _userService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
         return tokenDto;
     }
@@ -161,9 +157,9 @@ public class IdentityAuthenticationService : IAuthenticationService
         {
             payload = await GoogleJsonWebSignature.ValidateAsync(model.IdToken, settings);
         }
-        catch (Exception ex)
+        catch
         {
-            throw new InvalidOperationException("Invalid Google ID token.", ex);
+            throw new UnauthorizedException("Invalid Google ID token.");
         }
 
         //  This model is used to store the user's information to the AspNetUserLogins table
@@ -187,19 +183,22 @@ public class IdentityAuthenticationService : IAuthenticationService
                 var result = await _userManager.CreateAsync(user);
                 if (!result.Succeeded)
                 {
-                    throw new Exception("Failed to create user");
+                    throw new BadRequestException("Failed to create user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
                 }
             }
 
             var loginResult = await _userManager.AddLoginAsync(user, info);
             if (!loginResult.Succeeded)
             {
-                throw new Exception("Failed to add login");
+                // Rollback user creation if failed to link external login
+                await _userManager.DeleteAsync(user);
+
+                throw new BadRequestException("Failed to add external login: " + string.Join(", ", loginResult.Errors.Select(e => e.Description)));
             }
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-        var tokenDto = _tokenService.GenerateToken(user.UserName, roles);
+        var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
         await _userService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
         return tokenDto;
     }
@@ -212,20 +211,14 @@ public class IdentityAuthenticationService : IAuthenticationService
     public async Task<TokenDto?> RefreshTokenAsync(RefreshTokenCommandRequest model)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == model.RefreshToken);
-        BusinessRules.Run(("AUT913061", BusinessRules.CheckEntityNull(user)));
 
-        if (user!.RefreshToken != model.RefreshToken)
+        if (user == null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiration < DateTime.UtcNow)
         {
-            throw new InvalidOperationException("Invalid refresh token.");
-        }
-
-        if (user.RefreshTokenExpiration < DateTime.UtcNow)
-        {
-            throw new InvalidOperationException("Refresh token has expired.");
+            throw new UnauthorizedException("Invalid refresh token.");
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-        var tokenDto = _tokenService.GenerateToken(user.UserName, roles);
+        var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
         await _userService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
 
         return tokenDto;

@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services.Storage.Local;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using CleanArchitectureTemplate.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +20,8 @@ public class LocalStorage : Storage, ILocalStorage
     /// <inheritdoc/>
     public async Task<(string Folder, string Name, long Size)> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
     {
-        ArgumentNullException.ThrowIfNull(file);
+        if (file == null)
+            throw new Domain.Exceptions.ValidationFailedException("File is required.");
 
         var uploadsFolder = GetUploadFolderPath(path);
         FileHelper.EnsureDirectoryExists(uploadsFolder);
@@ -38,7 +40,8 @@ public class LocalStorage : Storage, ILocalStorage
     /// <inheritdoc/>
     public async Task<IEnumerable<(string Folder, string Name, long Size)>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true)
     {
-        ArgumentNullException.ThrowIfNull(files);
+        if (files == null || files.Count == 0)
+            throw new Domain.Exceptions.ValidationFailedException("Files are required.");
 
         var filePaths = new List<(string Path, string Name, long Size)>();
         foreach (var file in files)
