@@ -2,7 +2,7 @@
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Dtos.Identity;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using CleanArchitectureTemplate.Persistence.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -38,11 +38,11 @@ public class IdentityUserService : IUserService
         if (result.Errors.Any())
         {
             var errors = result.Errors.Select(e => e.Description);
-            throw new Exception($"Failed to create user: {string.Join(", ", errors)}");
+            throw new OperationFailedException(string.Join(", ", errors));
         }
         else
         {
-            throw new Exception("Failed to create user");
+            throw new OperationFailedException("Failed to create user");
         }
     }
 
@@ -51,9 +51,8 @@ public class IdentityUserService : IUserService
     {
         var refreshTokenExpirationAddition = Convert.ToDouble(_configuration["Jwt:RefreshTokenExpiration"]);
         var refreshTokenExpirationTime = accessTokenCreationTime.AddMinutes(refreshTokenExpirationAddition);
-        var user = await _userManager.FindByIdAsync(userId.ToString());
-
-        BusinessRules.ThrowIfViolated(("USR211795", BusinessRules.CheckEntityNull(user)));
+        var user = await _userManager.FindByIdAsync(userId.ToString())
+            ?? throw new NotFoundException($"User with id {userId} not found.");
 
         user!.RefreshToken = refreshToken;
         user.RefreshTokenExpiration = refreshTokenExpirationTime;

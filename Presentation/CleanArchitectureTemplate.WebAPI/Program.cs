@@ -4,6 +4,7 @@ using CleanArchitectureTemplate.Infrastructure;
 using CleanArchitectureTemplate.Infrastructure.Filters;
 using CleanArchitectureTemplate.Infrastructure.Services.Storage.Local;
 using CleanArchitectureTemplate.Persistence;
+using CleanArchitectureTemplate.SignalR;
 using CleanArchitectureTemplate.WebAPI.Configurations.ColumnWriters;
 using CleanArchitectureTemplate.WebAPI.Extensions;
 using FluentValidation;
@@ -29,6 +30,7 @@ builder.Services.AddValidatorsFromAssemblyContaining(typeof(CleanArchitectureTem
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddSignalRServices();
 
 builder.Services.AddStorage<LocalStorage>();
 
@@ -124,6 +126,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHubs();
 
 app.UseLogging();
 

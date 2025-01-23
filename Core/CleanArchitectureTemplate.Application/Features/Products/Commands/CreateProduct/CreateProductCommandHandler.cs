@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CleanArchitectureTemplate.Application.Abstractions.Hubs;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Marketing;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Marketing;
@@ -21,14 +22,16 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
     private readonly IProductReadRepository _productReadRepository;
     private readonly IProductWriteRepository _productWriteRepository;
     private readonly ICategoryReadRepository _categoryReadRepository;
+    private readonly IProductHubService _productHubService;
 
-    public CreateProductCommandHandler(IMediator mediator, IMapper mapper, IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, ICategoryReadRepository categoryReadRepository)
+    public CreateProductCommandHandler(IMediator mediator, IMapper mapper, IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, ICategoryReadRepository categoryReadRepository, IProductHubService productHubService)
     {
         _mediator = mediator;
         _mapper = mapper;
         _productReadRepository = productReadRepository;
         _productWriteRepository = productWriteRepository;
         _categoryReadRepository = categoryReadRepository;
+        _productHubService = productHubService;
     }
 
     public async Task<SingleResponse<ProductDto?>> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
@@ -68,9 +71,13 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
         }
 
         var addedProduct = await _productWriteRepository.AddAsync(product);
-        var detailedProduct = await _productReadRepository.GetByIdAsync(addedProduct.Id, include: [product => product.Categories, product => product.ProductImageFiles]);
+        var detailedProduct = await _productReadRepository.GetByIdAsync(addedProduct.Id, include: [product => product.Categories, product => product.ProductImageFiles])
+            ?? throw new NotFoundException(nameof(Product), addedProduct.Id);
 
-        response.SetData(_mapper.Map<ProductDto>(detailedProduct));
+        var productDto = _mapper.Map<ProductDto>(detailedProduct);
+
+        response.SetData(productDto);
+        await _productHubService.SendProductAddedAsync(productDto);
 
         return response;
     }

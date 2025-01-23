@@ -11,6 +11,7 @@ namespace CleanArchitectureTemplate.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProductsController : ControllerBase
 {
     private readonly IMediator _mediator;

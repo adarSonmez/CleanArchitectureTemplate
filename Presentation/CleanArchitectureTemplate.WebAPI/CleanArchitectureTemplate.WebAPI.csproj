@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\Core\CleanArchitectureTemplate.Application\CleanArchitectureTemplate.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\CleanArchitectureTemplate.Infrastructure\CleanArchitectureTemplate.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\CleanArchitectureTemplate.Persistence\CleanArchitectureTemplate.Persistence.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\CleanArchitectureTemplate.SignalR\CleanArchitectureTemplate.SignalR.csproj" />
   </ItemGroup>
 
   <ItemGroup>
