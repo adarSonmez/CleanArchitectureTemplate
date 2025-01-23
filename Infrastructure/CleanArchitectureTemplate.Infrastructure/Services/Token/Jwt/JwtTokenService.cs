@@ -28,20 +28,23 @@ public class JwtTokenService : ITokenService
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
         var expirationDate = infiniteExpiration == true
-            ? DateTime.MaxValue
+            ? DateTime.UtcNow.AddYears(500)
             : DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:AccessTokenExpiration"]));
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, userName)
+        };
+
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var jwtSecurityToken = new JwtSecurityToken(
             _configuration["Jwt:Issuer"],
             _configuration["Jwt:Audience"],
             expires: expirationDate,
-            notBefore: DateTime.Now,
+            notBefore: DateTime.UtcNow,
             signingCredentials: signingCredentials,
-            claims:
-            [
-                new Claim(ClaimTypes.Name, userName),
-                new Claim(ClaimTypes.Role, string.Join(",", roles))
-            ]
+            claims: claims
         );
 
         var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
