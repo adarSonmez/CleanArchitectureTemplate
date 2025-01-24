@@ -1,4 +1,4 @@
-﻿using CleanArchitectureTemplate.Application.Dtos.Marketing;
+﻿using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Membership;
 using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 

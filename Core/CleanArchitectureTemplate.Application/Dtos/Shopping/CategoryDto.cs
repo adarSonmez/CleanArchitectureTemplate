@@ -1,7 +1,7 @@
-﻿using CleanArchitectureTemplate.Domain.Entities.Marketing;
+﻿using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 
-namespace CleanArchitectureTemplate.Application.Dtos.Marketing;
+namespace CleanArchitectureTemplate.Application.Dtos.Shopping;
 
 /// <summary>
 /// Represents data transfer object for <see cref="Category"/>

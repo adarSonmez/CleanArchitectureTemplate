@@ -1,5 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Hubs;
-using CleanArchitectureTemplate.Application.Dtos.Marketing;
+using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.SignalR.Constants;
 using CleanArchitectureTemplate.SignalR.Hubs;
 using Microsoft.AspNetCore.SignalR;

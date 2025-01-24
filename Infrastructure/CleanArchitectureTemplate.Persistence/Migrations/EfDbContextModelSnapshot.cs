@@ -17,7 +17,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -34,7 +34,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.HasIndex("ProductsId");
 
-                    b.ToTable("CategoryProduct", "Marketing");
+                    b.ToTable("CategoryProduct", "Shopping");
                 });
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Common.BaseEntity", b =>
@@ -395,66 +395,6 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     b.ToTable("UserAvatarFiles", "Files");
                 });
 
-            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Marketing.Category", b =>
-                {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<Guid?>("ParentCategoryId")
-                        .HasColumnType("uuid");
-
-                    b.HasIndex("Name")
-                        .HasDatabaseName("IX_Categories_Name");
-
-                    b.HasIndex("ParentCategoryId");
-
-                    b.ToTable("Categories", "Marketing");
-                });
-
-            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", b =>
-                {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("DiscountRate")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("numeric(5,2)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("StandardPrice")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Stock")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
-
-                    b.Property<Guid>("StoreId")
-                        .HasColumnType("uuid");
-
-                    b.HasIndex("Name")
-                        .HasDatabaseName("IX_Products_Name");
-
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("Products", "Marketing");
-                });
-
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", b =>
                 {
                     b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
@@ -570,15 +510,75 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     b.ToTable("OrderItems", "Ordering");
                 });
 
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Category", b =>
+                {
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<Guid?>("ParentCategoryId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("Name")
+                        .HasDatabaseName("IX_Categories_Name");
+
+                    b.HasIndex("ParentCategoryId");
+
+                    b.ToTable("Categories", "Shopping");
+                });
+
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", b =>
+                {
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("DiscountRate")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("StandardPrice")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Stock")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("Name")
+                        .HasDatabaseName("IX_Products_Name");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("Products", "Shopping");
+                });
+
             modelBuilder.Entity("CategoryProduct", b =>
                 {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Marketing.Category", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Shopping.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -638,7 +638,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Files.CategoryImageFile", b =>
                 {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Marketing.Category", "Category")
+                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Shopping.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -709,7 +709,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", "Product")
+                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", "Product")
                         .WithMany("ProductImageFiles")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -758,39 +758,6 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("FileDetails");
-                });
-
-            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Marketing.Category", b =>
-                {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
-                        .WithOne()
-                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Marketing.Category", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Marketing.Category", "ParentCategory")
-                        .WithMany()
-                        .HasForeignKey("ParentCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ParentCategory");
-                });
-
-            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", b =>
-                {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
-                        .WithOne()
-                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Membership.Store", "Store")
-                        .WithMany("Products")
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", b =>
@@ -931,7 +898,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", "Product")
+                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -942,11 +909,37 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Marketing.Product", b =>
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Category", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                        .WithOne()
+                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Shopping.Category", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ProductImageFiles");
+                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Shopping.Category", "ParentCategory")
+                        .WithMany()
+                        .HasForeignKey("ParentCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ParentCategory");
+                });
+
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", b =>
+                {
+                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                        .WithOne()
+                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Membership.Store", "Store")
+                        .WithMany("Products")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", b =>
@@ -962,6 +955,13 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Ordering.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", b =>
+                {
+                    b.Navigation("OrderItems");
+
+                    b.Navigation("ProductImageFiles");
                 });
 #pragma warning restore 612, 618
         }

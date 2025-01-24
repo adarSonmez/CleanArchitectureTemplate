@@ -1,7 +1,6 @@
 ﻿using CleanArchitectureTemplate.Domain.Common;
-using CleanArchitectureTemplate.Domain.Entities.Files;
 
-namespace CleanArchitectureTemplate.Domain.Entities.Marketing;
+namespace CleanArchitectureTemplate.Domain.Entities.Shopping;
 
 /// <summary>
 /// Represents a category entity.

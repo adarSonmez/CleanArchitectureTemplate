@@ -1,9 +1,9 @@
-﻿using CleanArchitectureTemplate.Domain.Entities.Marketing;
+﻿using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Persistence.ValueConverters.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CleanArchitectureTemplate.Persistence.Configurations.EntityFramework.Marketing;
+namespace CleanArchitectureTemplate.Persistence.Configurations.EntityFramework.Shopping;
 
 /// <summary>
 /// Configuration for the Product entity.
@@ -13,7 +13,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         // Table Configuration
-        builder.ToTable("Products", "Marketing");
+        builder.ToTable("Products", "Shopping");
 
         // Property Configurations
         builder.Ignore(p => p.DiscountedPrice);

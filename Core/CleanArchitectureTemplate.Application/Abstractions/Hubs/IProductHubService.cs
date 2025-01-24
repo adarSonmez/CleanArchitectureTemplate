@@ -1,4 +1,4 @@
-﻿using CleanArchitectureTemplate.Application.Dtos.Marketing;
+﻿using CleanArchitectureTemplate.Application.Dtos.Shopping;
 
 namespace CleanArchitectureTemplate.Application.Abstractions.Hubs;
 

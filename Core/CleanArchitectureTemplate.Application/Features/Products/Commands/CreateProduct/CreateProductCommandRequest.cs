@@ -1,6 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Common.Responses;
-using CleanArchitectureTemplate.Application.Dtos.Marketing;
-using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Application.Dtos.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Http;

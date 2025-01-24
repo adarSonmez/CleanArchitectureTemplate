@@ -1,5 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Common.Responses;
-using CleanArchitectureTemplate.Application.Dtos.Marketing;
+using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Queries.GetProductById;

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Marketing;
+using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Common.Responses;
-using CleanArchitectureTemplate.Application.Dtos.Marketing;
+using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.DeleteProductImagesByProductId;
-using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 

@@ -4,7 +4,7 @@ using CleanArchitectureTemplate.Domain.Entities.Membership;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 
-namespace CleanArchitectureTemplate.Domain.Entities.Marketing;
+namespace CleanArchitectureTemplate.Domain.Entities.Shopping;
 
 /// <summary>
 /// Represents a product entity.

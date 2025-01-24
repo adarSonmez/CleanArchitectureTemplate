@@ -1,10 +1,10 @@
 ﻿using CleanArchitectureTemplate.Application.Dtos.Files;
 using CleanArchitectureTemplate.Application.Dtos.Ordering;
-using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 
-namespace CleanArchitectureTemplate.Application.Dtos.Marketing;
+namespace CleanArchitectureTemplate.Application.Dtos.Shopping;
 
 /// <summary>
 /// Represents data transfer object for <see cref="Product"/>

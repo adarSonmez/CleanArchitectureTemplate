@@ -1,7 +1,7 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Domain.Constants.Enums;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
-using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Membership;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
 using CleanArchitectureTemplate.Domain.ValueObjects;

@@ -1,8 +1,8 @@
-﻿using CleanArchitectureTemplate.Domain.Entities.Marketing;
+﻿using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CleanArchitectureTemplate.Persistence.Configurations.EntityFramework.Marketing;
+namespace CleanArchitectureTemplate.Persistence.Configurations.EntityFramework.Shopping;
 
 /// <summary>
 /// EF Core configuration for the <see cref="Category"/> entity.
@@ -12,7 +12,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     public void Configure(EntityTypeBuilder<Category> builder)
     {
         // Table Configuration
-        builder.ToTable("Categories", "Marketing");
+        builder.ToTable("Categories", "Shopping");
 
         // Property Configurations
         builder.Property(c => c.Name)

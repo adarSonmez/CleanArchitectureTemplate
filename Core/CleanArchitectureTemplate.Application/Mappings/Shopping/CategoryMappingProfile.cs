@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Dtos.Marketing;
-using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Application.Dtos.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 
-namespace CleanArchitectureTemplate.Application.Mappings.Marketing;
+namespace CleanArchitectureTemplate.Application.Mappings.Shopping;
 
 /// <summary>
 /// AutoMapper profile for <see cref="Category"/> mapping."/>

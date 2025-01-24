@@ -1,5 +1,5 @@
 ﻿using CleanArchitectureTemplate.Domain.Common;
-using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Files;
 

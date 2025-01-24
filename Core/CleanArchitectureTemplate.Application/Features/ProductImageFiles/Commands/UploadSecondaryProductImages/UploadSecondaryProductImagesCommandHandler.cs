@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Marketing;
+using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Files;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Files;
 using CleanArchitectureTemplate.Domain.Entities.Files;
-using CleanArchitectureTemplate.Domain.Entities.Marketing;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 

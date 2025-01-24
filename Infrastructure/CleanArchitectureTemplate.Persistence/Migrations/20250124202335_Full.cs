@@ -16,7 +16,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 name: "Ordering");
 
             migrationBuilder.EnsureSchema(
-                name: "Marketing");
+                name: "Shopping");
 
             migrationBuilder.EnsureSchema(
                 name: "Files");
@@ -88,7 +88,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Categories",
-                schema: "Marketing",
+                schema: "Shopping",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -108,7 +108,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_Categories_Categories_ParentCategoryId",
                         column: x => x.ParentCategoryId,
-                        principalSchema: "Marketing",
+                        principalSchema: "Shopping",
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -331,7 +331,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_CategoryImageFiles_Categories_CategoryId",
                         column: x => x.CategoryId,
-                        principalSchema: "Marketing",
+                        principalSchema: "Shopping",
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -434,7 +434,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Products",
-                schema: "Marketing",
+                schema: "Shopping",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -520,7 +520,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "CategoryProduct",
-                schema: "Marketing",
+                schema: "Shopping",
                 columns: table => new
                 {
                     CategoriesId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -532,14 +532,14 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_CategoryProduct_Categories_CategoriesId",
                         column: x => x.CategoriesId,
-                        principalSchema: "Marketing",
+                        principalSchema: "Shopping",
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CategoryProduct_Products_ProductsId",
                         column: x => x.ProductsId,
-                        principalSchema: "Marketing",
+                        principalSchema: "Shopping",
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -574,7 +574,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_OrderItems_Products_ProductId",
                         column: x => x.ProductId,
-                        principalSchema: "Marketing",
+                        principalSchema: "Shopping",
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -609,7 +609,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_ProductImageFiles_Products_ProductId",
                         column: x => x.ProductId,
-                        principalSchema: "Marketing",
+                        principalSchema: "Shopping",
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -673,13 +673,13 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_Name",
-                schema: "Marketing",
+                schema: "Shopping",
                 table: "Categories",
                 column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_ParentCategoryId",
-                schema: "Marketing",
+                schema: "Shopping",
                 table: "Categories",
                 column: "ParentCategoryId");
 
@@ -697,7 +697,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryProduct_ProductsId",
-                schema: "Marketing",
+                schema: "Shopping",
                 table: "CategoryProduct",
                 column: "ProductsId");
 
@@ -764,13 +764,13 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_Name",
-                schema: "Marketing",
+                schema: "Shopping",
                 table: "Products",
                 column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_StoreId",
-                schema: "Marketing",
+                schema: "Shopping",
                 table: "Products",
                 column: "StoreId");
 
@@ -865,7 +865,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "CategoryProduct",
-                schema: "Marketing");
+                schema: "Shopping");
 
             migrationBuilder.DropTable(
                 name: "InvoiceFiles",
@@ -913,7 +913,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories",
-                schema: "Marketing");
+                schema: "Shopping");
 
             migrationBuilder.DropTable(
                 name: "Invoices",
@@ -921,7 +921,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products",
-                schema: "Marketing");
+                schema: "Shopping");
 
             migrationBuilder.DropTable(
                 name: "FileDetails",
