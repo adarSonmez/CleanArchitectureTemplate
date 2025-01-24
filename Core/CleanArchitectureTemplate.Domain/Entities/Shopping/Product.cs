@@ -65,4 +65,9 @@ public class Product : BaseEntity
     /// Gets or sets the categories of the product.
     /// </summary>
     public IList<Category> Categories { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets the basket items where the product is included.
+    /// </summary>
+    public ICollection<BasketItem> BasketItems { get; set; } = [];
 }

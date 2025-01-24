@@ -3,8 +3,8 @@
 namespace CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 
 /// <summary>
-/// Represents the read repository interface for the <see cref="Category"/> entity.
+/// Represents the read repository interface for the <see cref="Basket"/> entity.
 /// </summary>
-public interface ICategoryReadRepository : IReadRepository<Category>
+public interface IBasketReadRepository : IReadRepository<Basket>
 {
 }

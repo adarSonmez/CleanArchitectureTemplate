@@ -26,7 +26,7 @@ public class Order : BaseEntity
     public Address ShippingAddress { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the foreign key for the invoice associated with the order.
+    /// Gets or sets the foreign key for the cutomer associated with the order.
     /// </summary>
     public Guid CustomerId { get; set; }
 

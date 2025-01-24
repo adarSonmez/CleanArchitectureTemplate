@@ -32,6 +32,16 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     public DbSet<Product> Products { get; set; } = default!;
 
     /// <summary>
+    /// Gets or sets the baskets table.
+    /// </summary>
+    public DbSet<Basket> Baskets { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the basket items table.
+    /// </summary>
+    public DbSet<BasketItem> BasketItems { get; set; } = default!;
+
+    /// <summary>
     /// Gets or sets the customers table.
     /// </summary>
     public DbSet<Customer> Customers { get; set; } = default!;

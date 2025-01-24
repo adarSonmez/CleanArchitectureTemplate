@@ -1,14 +1,14 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Membership;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
+using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Persistence.Contexts;
 using CleanArchitectureTemplate.Persistence.Identity;
 using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Files;
-using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Shopping;
 using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Membership;
 using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Ordering;
+using CleanArchitectureTemplate.Persistence.Repositories.EntityFramework.Shopping;
 using CleanArchitectureTemplate.Persistence.Services.Auth.Identity;
 using CleanArchitectureTemplate.Persistence.Services.Data.EntityFramework;
 using CleanArchitectureTemplate.Persistence.Services.User.Identity;
@@ -78,6 +78,8 @@ public static class ServiceRegistration
         services.AddScoped<ICategoryWriteRepository, EfCategoryWriteRepository>();
         services.AddScoped<IProductReadRepository, EfProductReadRepository>();
         services.AddScoped<IProductWriteRepository, EfProductWriteRepository>();
+        services.AddScoped<IBasketItemReadRepository, EfBasketItemReadRepository>();
+        services.AddScoped<IBasketItemWriteRepository, EfBasketItemWriteRepository>();
 
         // Membership
         services.AddScoped<ICustomerReadRepository, EfCustomerReadRepository>();
