@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.ValueObjects;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Shopping;
 
@@ -31,4 +32,9 @@ public class BasketItem : BaseEntity
     /// Gets or sets the quantity of the product in the basket.
     /// </summary>
     public int Quantity { get; set; }
+
+    /// <summary>
+    /// Gets the total price for this item (price * quantity).
+    /// </summary>
+    public Money TotalPrice => new(Product.DiscountedPrice.Amount * Quantity, Product.DiscountedPrice.Currency);
 }

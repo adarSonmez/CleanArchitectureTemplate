@@ -52,11 +52,6 @@ public class Product : BaseEntity
     public Store Store { get; set; } = default!;
 
     /// <summary>
-    /// Gets or sets the order items where the product is included.
-    /// </summary>
-    public ICollection<OrderItem> OrderItems { get; set; } = [];
-
-    /// <summary>
     /// Gets or sets the product image files.
     /// </summary>
     public ICollection<ProductImageFile> ProductImageFiles { get; set; } = [];
