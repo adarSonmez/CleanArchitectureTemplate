@@ -9,6 +9,9 @@ public sealed class FileExtension : Enumeration
 {
     #region Properties
 
+    /// <summary>
+    /// Gets the file extension.
+    /// </summary>
     public string Extension { get; }
 
     #endregion Properties

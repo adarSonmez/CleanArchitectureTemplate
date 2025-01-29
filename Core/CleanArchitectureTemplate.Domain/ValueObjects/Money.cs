@@ -12,6 +12,7 @@ public record Money
     /// <summary>
     /// Gets the monetary amount.
     /// </summary>
+    /// <remarks>Can also be negative.</remarks>
     public decimal Amount { get; init; }
 
     /// <summary>
@@ -28,14 +29,8 @@ public record Money
     /// </summary>
     /// <param name="amount">The monetary amount.</param>
     /// <param name="currency">The currency of the monetary value.</param>
-    /// <exception cref="ArgumentException">Thrown when the amount is negative.</exception>
     public Money(decimal amount, Currency currency)
     {
-        if (amount < 0)
-        {
-            throw new ArgumentException("Amount cannot be negative.", nameof(amount));
-        }
-
         Amount = amount;
         Currency = currency;
     }

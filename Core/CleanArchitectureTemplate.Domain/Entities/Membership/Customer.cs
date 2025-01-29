@@ -1,7 +1,6 @@
 ﻿using CleanArchitectureTemplate.Domain.Common;
 using CleanArchitectureTemplate.Domain.Constants.Enums;
 using CleanArchitectureTemplate.Domain.Entities.Identity;
-using CleanArchitectureTemplate.Domain.Entities.Ordering;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Membership;
@@ -27,9 +26,9 @@ public class Customer : BaseEntity
     public ICollection<Basket> Baskets { get; set; } = [];
 
     /// <summary>
-    /// Gets or sets the age of the customer.
+    /// Gets or sets the date of birth of the customer.
     /// </summary>
-    public required short Age { get; set; }
+    public DateOnly DateOfBirth { get; set; }
 
     /// <summary>
     /// Gets or sets the gender of the customer.

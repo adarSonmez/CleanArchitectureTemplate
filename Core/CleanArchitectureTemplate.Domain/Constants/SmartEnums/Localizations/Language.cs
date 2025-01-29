@@ -69,7 +69,14 @@ public sealed class Language : Enumeration
     public static readonly Language Japanese = new(301, "Japanese", "ja", "jpn");
     public static readonly Language Korean = new(302, "Korean", "ko", "kor");
     public static readonly Language Turkish = new(303, "Turkish", "tr", "tur");
+    public static readonly Language Kurdish = new(305, "Kurdish", "ku", "kur");
     public static readonly Language Persian = new(304, "Persian", "fa", "fas");
+    public static readonly Language Urdu = new(306, "Urdu", "ur", "urd");
+    public static readonly Language Thai = new(307, "Thai", "th", "tha");
+    public static readonly Language Vietnamese = new(308, "Vietnamese", "vi", "vie");
+    public static readonly Language Malay = new(309, "Malay", "ms", "msa");
+    public static readonly Language Indonesian = new(310, "Indonesian", "id", "ind");
+    public static readonly Language Filipino = new(311, "Filipino", "fil", "fil");
 
     #endregion Asian Languages (301-399)
 

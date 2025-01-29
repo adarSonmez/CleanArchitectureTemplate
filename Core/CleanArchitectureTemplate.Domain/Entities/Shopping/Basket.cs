@@ -1,5 +1,7 @@
 ﻿using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using CleanArchitectureTemplate.Domain.Entities.Membership;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Shopping;
@@ -27,7 +29,7 @@ public class Basket : BaseEntity
     /// <summary>
     /// The total amount for the order.
     /// </summary>
-    public Money? TotalAmount => CalculateTotalAmount();
+    public Money TotalAmount => CalculateTotalAmount();
 
     /// <summary>
     /// Gets or sets the items in the basket.
@@ -39,15 +41,23 @@ public class Basket : BaseEntity
     /// <summary>
     /// Computes the total amount of the order.
     /// </summary>
-    private Money? CalculateTotalAmount()
+    private Money CalculateTotalAmount()
     {
         if (BasketItems == null || BasketItems.Count == 0)
         {
-            return null;
+            return new Money(0, Currency.Usd);
+        }
+
+        // Ensure all items have the same currency
+        var firstCurrency = BasketItems.First().TotalPrice.Currency;
+
+        if (BasketItems.Any(item => item.TotalPrice.Currency != firstCurrency))
+        {
+            throw new OperationFailedException("All items in the basket must have the same currency.");
         }
 
         var total = BasketItems.Sum(item => item.TotalPrice.Amount);
-        return new Money(total, BasketItems.First().TotalPrice.Currency);
+        return new Money(total, firstCurrency);
     }
 
     #endregion Private Methods

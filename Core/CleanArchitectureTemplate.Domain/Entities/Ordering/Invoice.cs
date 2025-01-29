@@ -1,5 +1,6 @@
 ﻿using CleanArchitectureTemplate.Domain.Common;
 using CleanArchitectureTemplate.Domain.Constants.Enums;
+using CleanArchitectureTemplate.Domain.Exceptions;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Ordering;
@@ -68,7 +69,12 @@ public class Invoice : BaseEntity
     {
         if (Status != InvoiceStatus.Pending)
         {
-            throw new InvalidOperationException("Only pending invoices can be marked as paid.");
+            throw new ForbiddenException("Only pending invoices can be marked as paid.");
+        }
+
+        if (!IsOverdue())
+        {
+            throw new ForbiddenException("Only overdue invoices can be marked as paid.");
         }
 
         PaymentMethod = paymentMethod;

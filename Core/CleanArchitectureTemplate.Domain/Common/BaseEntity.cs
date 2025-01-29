@@ -1,5 +1,4 @@
 ﻿using CleanArchitectureTemplate.Domain.MarkerInterfaces;
-using System.ComponentModel.DataAnnotations;
 
 namespace CleanArchitectureTemplate.Domain.Common;
 
@@ -38,9 +37,7 @@ public abstract class BaseEntity : IEntity
     /// </summary>
     public DateTime? DeletedAt { get; set; }
 
-    /// <summary>
-    /// Gets or sets the concurrency token for the entity.
-    /// </summary>
+    // TODO: Add RowVersion property if you need it.
     //[Timestamp]
     //[ConcurrencyCheck]
     //public byte[] RowVersion { get; set; } = default!;

@@ -51,7 +51,7 @@ public class DomainUser : IEntity
     /// <summary>
     /// Gets or sets the hashed password for this user.
     /// </summary>
-    public string? PasswordHash { get; set; }
+    public required string PasswordHash { get; set; }
 
     /// <summary>
     /// Gets or sets the phone number associated with this user.
