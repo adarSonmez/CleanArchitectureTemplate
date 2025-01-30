@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace CleanArchitectureTemplate.Domain.Exceptions;
+namespace CleanArchitectureTemplate.Application.Exceptions;
 
 /// <summary>
 /// Represents an exception that is thrown when a resource is locked and cannot be modified.

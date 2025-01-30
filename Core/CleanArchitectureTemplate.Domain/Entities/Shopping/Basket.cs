@@ -1,7 +1,6 @@
 ﻿using CleanArchitectureTemplate.Domain.Common;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using CleanArchitectureTemplate.Domain.Entities.Membership;
-using CleanArchitectureTemplate.Domain.Exceptions;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Shopping;
@@ -53,7 +52,7 @@ public class Basket : BaseEntity
 
         if (BasketItems.Any(item => item.TotalPrice.Currency != firstCurrency))
         {
-            throw new OperationFailedException("All items in the basket must have the same currency.");
+            throw new InvalidOperationException("All items in the basket must have the same currency.");
         }
 
         var total = BasketItems.Sum(item => item.TotalPrice.Amount);

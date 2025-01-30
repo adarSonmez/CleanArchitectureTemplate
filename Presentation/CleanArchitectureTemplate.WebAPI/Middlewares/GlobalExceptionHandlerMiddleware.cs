@@ -1,5 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Common.Responses;
-using CleanArchitectureTemplate.Domain.Exceptions;
+using CleanArchitectureTemplate.Application.Exceptions;
 using Newtonsoft.Json;
 using Serilog;
 using System.Net;
@@ -51,6 +51,7 @@ public class GlobalExceptionHandlerMiddleware
         // Map the exception to HTTP status, error code, and message
         var (statusCode, errorCode, message) = exception switch
         {
+            // Custom HTTP exceptions
             BadRequestException ex => (ex.StatusCode, ex.ErrorCode, ex.Message),
             ConflictException ex => (ex.StatusCode, ex.ErrorCode, ex.Message),
             ExpectationFailedException ex => (ex.StatusCode, ex.ErrorCode, ex.Message),
@@ -70,7 +71,10 @@ public class GlobalExceptionHandlerMiddleware
             TooManyRequestsException ex => (ex.StatusCode, ex.ErrorCode, ex.Message),
             UnauthorizedException ex => (ex.StatusCode, ex.ErrorCode, ex.Message),
             UnavailableForLegalReasonsException ex => (ex.StatusCode, ex.ErrorCode, ex.Message),
-            Domain.Exceptions.ValidationFailedException ex => (ex.StatusCode, ex.ErrorCode, ex.Message),
+            ValidationFailedException ex => (ex.StatusCode, ex.ErrorCode, ex.Message),
+
+            // Built-in exceptions
+            InvalidOperationException ex => (HttpStatusCode.BadRequest, "INVALID_OPERATION", ex.Message),
             _ => (HttpStatusCode.InternalServerError, "INTERNAL_SERVER_ERROR", "An unexpected error occurred. Please try again later.")
         };
 

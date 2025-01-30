@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace CleanArchitectureTemplate.Domain.Exceptions;
+namespace CleanArchitectureTemplate.Application.Exceptions;
 
 /// <summary>
 /// Represents an exception that is thrown when a conflict occurs with the current state of a resource.
