@@ -1,6 +1,4 @@
-﻿using CleanArchitectureTemplate.Application.Common.Constants.Enums;
-
-namespace CleanArchitectureTemplate.Application.Common.Responses;
+﻿namespace CleanArchitectureTemplate.Application.Common.Responses;
 
 /// <summary>
 /// Represents a response message with a type and optional code.

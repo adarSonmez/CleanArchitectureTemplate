@@ -1,4 +1,4 @@
-﻿namespace CleanArchitectureTemplate.Application.Common.Constants.StringConstants;
+﻿namespace CleanArchitectureTemplate.Application.Common.Responses;
 
 /// <summary>
 /// Represents the response constants.

@@ -1,6 +1,4 @@
-﻿using CleanArchitectureTemplate.Application.Common.Constants.StringConstants;
-
-namespace CleanArchitectureTemplate.Application.Common.Responses;
+﻿namespace CleanArchitectureTemplate.Application.Common.Responses;
 
 /// <summary>
 /// Response for a paginated collection.
