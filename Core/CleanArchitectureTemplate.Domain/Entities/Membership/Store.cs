@@ -1,6 +1,6 @@
-﻿using CleanArchitectureTemplate.Domain.Common;
-using CleanArchitectureTemplate.Domain.Entities.Identity;
+﻿using CleanArchitectureTemplate.Domain.Entities.Identity;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
+using CleanArchitectureTemplate.Domain.Shared;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Membership;
 

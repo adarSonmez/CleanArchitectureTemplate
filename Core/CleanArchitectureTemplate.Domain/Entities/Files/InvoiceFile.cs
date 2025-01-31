@@ -1,5 +1,5 @@
-﻿using CleanArchitectureTemplate.Domain.Common;
-using CleanArchitectureTemplate.Domain.Entities.Ordering;
+﻿using CleanArchitectureTemplate.Domain.Entities.Ordering;
+using CleanArchitectureTemplate.Domain.Shared;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Files;
 

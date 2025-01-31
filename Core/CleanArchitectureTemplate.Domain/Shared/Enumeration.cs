@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace CleanArchitectureTemplate.Domain.Common;
+namespace CleanArchitectureTemplate.Domain.Shared;
 
 /// <summary>
 /// Base class for creating enumeration types.

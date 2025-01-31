@@ -1,4 +1,4 @@
-﻿using CleanArchitectureTemplate.Domain.Common;
+﻿using CleanArchitectureTemplate.Domain.Shared;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Shopping;

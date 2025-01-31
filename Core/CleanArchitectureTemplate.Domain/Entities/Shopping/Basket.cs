@@ -1,6 +1,6 @@
-﻿using CleanArchitectureTemplate.Domain.Common;
-using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
+﻿using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using CleanArchitectureTemplate.Domain.Entities.Membership;
+using CleanArchitectureTemplate.Domain.Shared;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Shopping;

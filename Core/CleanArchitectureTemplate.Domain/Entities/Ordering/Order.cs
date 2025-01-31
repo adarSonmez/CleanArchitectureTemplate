@@ -1,6 +1,6 @@
-﻿using CleanArchitectureTemplate.Domain.Common;
-using CleanArchitectureTemplate.Domain.Constants.Enums;
+﻿using CleanArchitectureTemplate.Domain.Constants.Enums;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
+using CleanArchitectureTemplate.Domain.Shared;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 
 namespace CleanArchitectureTemplate.Domain.Entities.Ordering;

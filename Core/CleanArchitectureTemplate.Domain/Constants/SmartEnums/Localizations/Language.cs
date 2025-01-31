@@ -1,4 +1,4 @@
-﻿using CleanArchitectureTemplate.Domain.Common;
+﻿using CleanArchitectureTemplate.Domain.Shared;
 
 namespace CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 

@@ -1,6 +1,6 @@
 ﻿using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 
-namespace CleanArchitectureTemplate.Domain.Common;
+namespace CleanArchitectureTemplate.Domain.Shared;
 
 /// <summary>
 /// Represents a base entity which has common properties for all entities.
