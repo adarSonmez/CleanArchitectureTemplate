@@ -1,9 +1,9 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Domain.Constants.Enums;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
-using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Membership;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Domain.ValueObjects;
 using CleanArchitectureTemplate.Persistence.Contexts;
 using CleanArchitectureTemplate.Persistence.Identity;
@@ -171,25 +171,87 @@ public class EfDataService : IDataService
 
         #endregion Seed Products
 
+        #region Seed Baskets
+
+        var basket1 = new Basket { CustomerId = customerMember.Id };
+
+        var basket2 = new Basket { CustomerId = customerMember.Id };
+
+        var basket3 = new Basket { CustomerId = customerMember.Id };
+
+        var basket4 = new Basket { CustomerId = customerMember.Id };
+
+        _context.Baskets.AddRange(basket1, basket2, basket3, basket4);
+
+        #endregion Seed Baskets
+
+        #region Seed Basket Items
+
+        var laptopBasketItem = new BasketItem
+        {
+            Product = laptopProduct,
+            Quantity = 2,
+            Basket = basket1,
+        };
+
+        var phoneBasketItem = new BasketItem
+        {
+            Product = phoneProduct,
+            Quantity = 1,
+            Basket = basket1,
+        };
+
+        var shirtBasketItem = new BasketItem
+        {
+            Product = shirtProduct,
+            Quantity = 3,
+            Basket = basket2,
+        };
+
+        var bookBasketItem1 = new BasketItem
+        {
+            Product = bookProduct,
+            Quantity = 4,
+            Basket = basket3,
+        };
+
+        var bookBasketItem2 = new BasketItem
+        {
+            Product = bookProduct,
+            Quantity = 2,
+            Basket = basket4,
+        };
+
+        var bookBasketItem3 = new BasketItem
+        {
+            Product = bookProduct,
+            Quantity = 10,
+            Basket = basket1,
+        };
+
+        _context.BasketItems.AddRange(laptopBasketItem, phoneBasketItem, shirtBasketItem, bookBasketItem1, bookBasketItem2, bookBasketItem3);
+
+        #endregion Seed Basket Items
+
         #region Seed Orders
 
         var shippedOrder = new Order
         {
-            CustomerId = customerMember.Id,
+            Basket = basket1,
             ShippingAddress = new Address("12345", "Istanbul", Country.Turkey),
             Status = OrderStatus.Shipped,
         };
 
         var deliveredOrder = new Order
         {
-            CustomerId = customerMember.Id,
+            Basket = basket2,
             ShippingAddress = new Address("54321", "Izmir", Country.Turkey),
             Status = OrderStatus.Delivered,
         };
 
         var pendingOrder = new Order
         {
-            CustomerId = customerMember.Id,
+            Basket = basket3,
             ShippingAddress = new Address("67890", "Ankara", Country.Turkey),
             Status = OrderStatus.Pending,
         };
@@ -197,40 +259,6 @@ public class EfDataService : IDataService
         _context.Orders.AddRange(shippedOrder, deliveredOrder, pendingOrder);
 
         #endregion Seed Orders
-
-        #region Seed Order Items
-
-        var laptopOrderItem = new OrderItem
-        {
-            Product = laptopProduct,
-            Quantity = 2,
-            Order = shippedOrder,
-        };
-
-        var phoneOrderItem = new OrderItem
-        {
-            Product = phoneProduct,
-            Quantity = 1,
-            Order = shippedOrder,
-        };
-
-        var shirtOrderItem = new OrderItem
-        {
-            Product = shirtProduct,
-            Quantity = 3,
-            Order = deliveredOrder,
-        };
-
-        var bookOrderItem = new OrderItem
-        {
-            Product = bookProduct,
-            Quantity = 4,
-            Order = pendingOrder,
-        };
-
-        _context.OrderItems.AddRange(laptopOrderItem, phoneOrderItem, shirtOrderItem, bookOrderItem);
-
-        #endregion Seed Order Items
 
         #region Seed Invoices
 
@@ -274,9 +302,10 @@ public class EfDataService : IDataService
     }
 
     /// <inheritdoc/>
-    public void Migrate()
+    public async Task MigrateAsync()
     {
-        if (_context.Database.GetPendingMigrations().Any())
-            _context.Database.Migrate();
+        var pendingMigrations = await _context.Database.GetPendingMigrationsAsync();
+        if (pendingMigrations.Any())
+            await _context.Database.MigrateAsync();
     }
 }

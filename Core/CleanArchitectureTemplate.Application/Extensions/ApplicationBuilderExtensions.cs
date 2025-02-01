@@ -12,12 +12,12 @@ public static class ApplicationBuilderExtensions
     /// <summary>
     /// Migrates the database to the latest version.
     /// </summary>
-    public static void UseMigrator(this IApplicationBuilder builder)
+    public static async Task UseMigrator(this IApplicationBuilder builder)
     {
         using var scope = builder.ApplicationServices.CreateScope();
         var services = scope.ServiceProvider;
         var migrator = services.GetRequiredService<IDataService>();
-        migrator.Migrate();
+        await migrator.MigrateAsync();
     }
 
     /// <summary>
