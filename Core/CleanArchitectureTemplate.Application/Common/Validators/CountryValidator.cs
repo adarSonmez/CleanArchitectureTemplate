@@ -1,5 +1,5 @@
-﻿using CleanArchitectureTemplate.Domain.Common;
-using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
+﻿using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
+using CleanArchitectureTemplate.Domain.Shared;
 using FluentValidation;
 
 namespace CleanArchitectureTemplate.Application.Common.Validators;

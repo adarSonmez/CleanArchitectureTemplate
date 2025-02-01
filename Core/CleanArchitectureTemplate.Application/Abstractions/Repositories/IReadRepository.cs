@@ -1,5 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.RequestParameters;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Shared;
 using System.Linq.Expressions;
 
 namespace CleanArchitectureTemplate.Application.Abstractions.Repositories;
