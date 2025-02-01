@@ -8,7 +8,7 @@ using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 namespace CleanArchitectureTemplate.Application.Abstractions.Services;
 
 /// <summary>
-/// Represents the authentication service interface for internal and external authentications.
+/// Handles user authentication, token management, and logout.
 /// </summary>
 public interface IAuthenticationService : IService
 {
@@ -41,7 +41,7 @@ public interface IAuthenticationService : IService
 
     #endregion External Authentication
 
-    #region Refresh Token
+    #region Token Management
 
     /// <summary>
     /// Refreshes the user token and enables the user to continue using the application.
@@ -49,5 +49,24 @@ public interface IAuthenticationService : IService
     /// <param name="model">Model containing the refresh token and the user ID.</param>
     Task<TokenDto?> RefreshTokenAsync(RefreshTokenCommandRequest model);
 
-    #endregion Refresh Token
+    /// <summary>
+    /// Revokes the refresh token for a given user without signing them out.
+    /// Useful for invalidating a refresh token while keeping the session active.
+    /// </summary>
+    /// <param name="userId">The ID of the user whose refresh token should be revoked.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    Task RevokeRefreshTokenAsync(Guid userId);
+
+    #endregion Token Management
+
+    #region Logout
+
+    /// <summary>
+    /// Logs out the current user by revoking the refresh token and signing out.
+    /// </summary>
+    /// <param name="userId">The ID of the user to log out.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    Task LogoutAsync(Guid userId);
+
+    #endregion Logout
 }

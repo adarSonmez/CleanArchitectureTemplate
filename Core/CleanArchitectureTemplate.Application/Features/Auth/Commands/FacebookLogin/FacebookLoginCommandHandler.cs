@@ -1,13 +1,12 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.DTOs;
-using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.FacebookLogin;
 
 /// <summary>
-/// Represents a handler for the <see cref="FacebookLoginAppUserCommandRequest"/>.
+/// Represents a handler for the <see cref="FacebookLoginCommandRequest"/>.
 /// Handles the logic of verifying a Facebook access token, validating and/or creating a corresponding user,
 /// and returning a token for the logged-in user.
 /// </summary>
