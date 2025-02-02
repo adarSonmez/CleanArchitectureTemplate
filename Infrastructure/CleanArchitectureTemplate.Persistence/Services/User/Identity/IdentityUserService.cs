@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Dtos.Identity;
+using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
-using CleanArchitectureTemplate.Domain.Exceptions;
 using CleanArchitectureTemplate.Persistence.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -10,20 +10,24 @@ using Microsoft.Extensions.Configuration;
 namespace CleanArchitectureTemplate.Persistence.Services.User.Identity;
 
 /// <summary>
-/// Represents an user service that is on top of the ASP.NET Core Identity mechanism.
+/// Represents a user service that is on top of the ASP.NET Core Identity mechanism.
 /// </summary>
 public class IdentityUserService : IUserService
 {
-    private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
+    private readonly IEmailService _emailService;
     private readonly UserManager<AppUser> _userManager;
 
-    public IdentityUserService(IConfiguration configuration, IMapper mapper, UserManager<AppUser> userManager)
+    public IdentityUserService(IMapper mapper, IConfiguration configuration, IEmailService emailService, UserManager<AppUser> userManager)
     {
-        _configuration = configuration;
         _mapper = mapper;
+        _configuration = configuration;
+        _emailService = emailService;
         _userManager = userManager;
     }
+
+    #region User Management
 
     /// <inheritdoc />
     public async Task<UserDto?> CreateAsync(RegisterUserCommandRequest model)
@@ -38,25 +42,80 @@ public class IdentityUserService : IUserService
         if (result.Errors.Any())
         {
             var errors = result.Errors.Select(e => e.Description);
-            throw new OperationFailedException(string.Join(", ", errors));
+            throw new UnauthorizedException(string.Join(", ", errors));
         }
         else
         {
-            throw new OperationFailedException("Failed to create user");
+            throw new UnauthorizedException("Failed to create user");
         }
     }
 
+    #endregion User Management
+
+    #region Password Management
+
     /// <inheritdoc />
-    public async Task UpdateRefreshTokenAsync(Guid userId, string refreshToken, DateTime accessTokenCreationTime)
+    public async Task<bool> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword)
     {
-        var refreshTokenExpirationAddition = Convert.ToDouble(_configuration["Jwt:RefreshTokenExpiration"]);
-        var refreshTokenExpirationTime = accessTokenCreationTime.AddMinutes(refreshTokenExpirationAddition);
         var user = await _userManager.FindByIdAsync(userId.ToString())
-            ?? throw new NotFoundException($"User with id {userId} not found.");
+            ?? throw new NotFoundException($"User with ID {userId} not found.");
 
-        user!.RefreshToken = refreshToken;
-        user.RefreshTokenExpiration = refreshTokenExpirationTime;
-
-        await _userManager.UpdateAsync(user);
+        var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        return result.Succeeded;
     }
+
+    /// <inheritdoc />
+    public async Task<bool> ForgotPasswordAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email)
+            ?? throw new NotFoundException("User with this email does not exist.");
+
+        var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        if (string.IsNullOrEmpty(resetToken))
+        {
+            throw new BadRequestException("Failed to generate password reset token.");
+        }
+
+        // Retrieve and compose the reset password URL
+        string baseUrl = _configuration["FrontEnd:BaseUrl"]?.TrimEnd('/')!;
+        string resetPasswordPath = _configuration["FrontEnd:ResetPasswordPath"]!;
+
+        // Format the path by replacing placeholders
+        string resetPasswordUrl = $"{baseUrl}{resetPasswordPath}"
+            .Replace("{email}", Uri.EscapeDataString(email))
+            .Replace("{token}", Uri.EscapeDataString(resetToken));
+
+        // Compose email content
+        string subject = "Password Reset Request - Clean Architecture Template";
+        string body = $@"
+        <p>Hello <strong>{user.UserName}</strong>,</p>
+        <p>You requested a password reset. Click the link below to reset your password:</p>
+        <p><a href='{resetPasswordUrl}' target='_blank'>{resetPasswordUrl}</a></p>
+        <p>If you did not request this, please ignore this email.</p>
+        <p>Best regards,<br>Clean Architecture Template Support Team</p>";
+
+        await _emailService.SendEmailAsync(
+            toAddresses: [user.Email!],
+            subject: subject,
+            body: body,
+            isHtml: true,
+            ccAddresses: null,
+            bccAddresses: null,
+            attachments: null
+        );
+
+        return true;
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> ResetPasswordAsync(Guid userId, string token, string newPassword)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString())
+            ?? throw new NotFoundException("User not found.");
+
+        var resetResult = await _userManager.ResetPasswordAsync(user, token, newPassword);
+        return resetResult.Succeeded;
+    }
+
+    #endregion Password Management
 }

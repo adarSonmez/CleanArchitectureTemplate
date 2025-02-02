@@ -2,11 +2,11 @@
 using CleanArchitectureTemplate.Application.Dtos.Facebook;
 using CleanArchitectureTemplate.Application.DTOs;
 using CleanArchitectureTemplate.Application.DTOs.Facebook;
+using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Features.Auth.Commands.FacebookLogin;
 using CleanArchitectureTemplate.Application.Features.Auth.Commands.GoogleLogin;
 using CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalLogin;
 using CleanArchitectureTemplate.Application.Features.Auth.Commands.RefreshToken;
-using CleanArchitectureTemplate.Domain.Exceptions;
 using CleanArchitectureTemplate.Persistence.Identity;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
@@ -20,15 +20,13 @@ public class IdentityAuthenticationService : IAuthenticationService
 {
     private readonly IConfiguration _configuration;
     private readonly ITokenService _tokenService;
-    private readonly IUserService _userService;
     private readonly UserManager<AppUser> _userManager;
     public readonly SignInManager<AppUser> _signInManager;
 
-    public IdentityAuthenticationService(IConfiguration configuration, ITokenService tokenService, IUserService userService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    public IdentityAuthenticationService(IConfiguration configuration, ITokenService tokenService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
     {
         _configuration = configuration;
         _tokenService = tokenService;
-        _userService = userService;
         _userManager = userManager;
         _signInManager = signInManager;
     }
@@ -58,7 +56,7 @@ public class IdentityAuthenticationService : IAuthenticationService
         {
             var roles = await _userManager.GetRolesAsync(user!);
             var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
-            await _userService.UpdateRefreshTokenAsync(user!.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
+            await UpdateRefreshTokenAsync(user!.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
             return tokenDto;
         }
         else
@@ -140,7 +138,7 @@ public class IdentityAuthenticationService : IAuthenticationService
         // Generate JWT token
         var roles = await _userManager.GetRolesAsync(user);
         var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
-        await _userService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
+        await UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
         return tokenDto;
     }
 
@@ -199,11 +197,22 @@ public class IdentityAuthenticationService : IAuthenticationService
 
         var roles = await _userManager.GetRolesAsync(user);
         var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
-        await _userService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
+        await UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
         return tokenDto;
     }
 
     #endregion External Authentication
+
+    #region Logout
+
+    /// <inheritdoc />
+    public async Task LogoutAsync(Guid userId)
+    {
+        await RevokeRefreshTokenAsync(userId);
+        await _signInManager.SignOutAsync();
+    }
+
+    #endregion Logout
 
     #region Refresh Token
 
@@ -219,9 +228,39 @@ public class IdentityAuthenticationService : IAuthenticationService
 
         var roles = await _userManager.GetRolesAsync(user);
         var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
-        await _userService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
+        await UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
 
         return tokenDto;
+    }
+
+    /// <summary>
+    /// Updates refresh token for the user after login or token refresh.
+    /// </summary>
+    /// <param name="userId">The user ID.</param>
+    /// <param name="refreshToken">The new refresh token.</param>
+    /// <param name="accessTokenCreationTime">The time when the access token was created.</param>
+    private async Task UpdateRefreshTokenAsync(Guid userId, string refreshToken, DateTime accessTokenCreationTime)
+    {
+        var refreshTokenExpirationAddition = Convert.ToDouble(_configuration["Jwt:RefreshTokenExpiration"]);
+        var refreshTokenExpirationTime = accessTokenCreationTime.AddMinutes(refreshTokenExpirationAddition);
+        var user = await _userManager.FindByIdAsync(userId.ToString())
+            ?? throw new NotFoundException($"User with id {userId} not found.");
+
+        user!.RefreshToken = refreshToken;
+        user.RefreshTokenExpiration = refreshTokenExpirationTime;
+
+        await _userManager.UpdateAsync(user);
+    }
+
+    /// <inheritdoc />
+    public async Task RevokeRefreshTokenAsync(Guid userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString())
+            ?? throw new NotFoundException("User not found.");
+
+        user.RefreshToken = null;
+        user.RefreshTokenExpiration = DateTime.UtcNow;
+        await _userManager.UpdateAsync(user);
     }
 
     #endregion Refresh Token

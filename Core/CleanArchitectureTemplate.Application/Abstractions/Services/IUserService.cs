@@ -5,10 +5,12 @@ using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 namespace CleanArchitectureTemplate.Application.Abstractions.Services;
 
 /// <summary>
-/// Represents the user service interface.
+/// Handles user account management, including creation and password updates.
 /// </summary>
 public interface IUserService : IService
 {
+    #region User Management
+
     /// <summary>
     /// Creates a new application user.
     /// </summary>
@@ -16,16 +18,34 @@ public interface IUserService : IService
     /// <returns>The user data transfer object.</returns>
     Task<UserDto?> CreateAsync(RegisterUserCommandRequest model);
 
+    #endregion User Management
+
+    #region Password Management
+
     /// <summary>
-    /// Updates refresh token for the user.
+    /// Changes the password for a given user.
     /// </summary>
-    /// <remarks>
-    /// The expiration date of the refresh token is calculated based adding some amount of time to the access token creation date.
-    /// This time is defined in the appsettings.json file.
-    /// </remarks>
-    /// <param name="userId">The user id.</param>
-    /// <param name="refreshToken">The refresh token.</param>
-    /// <param name="accessTokenCreationTime">The access token creation date.</param>
-    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    Task UpdateRefreshTokenAsync(Guid userId, string refreshToken, DateTime accessTokenCreationTime);
+    /// <param name="userId">The ID of the user.</param>
+    /// <param name="currentPassword">The user's current password.</param>
+    /// <param name="newPassword">The new password.</param>
+    /// <returns>True if the password change was successful; otherwise, false.</returns>
+    Task<bool> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
+
+    /// <summary>
+    /// Initiates a password reset process for a user who forgot their password.
+    /// </summary>
+    /// <param name="email">The email of the user requesting a password reset.</param>
+    /// <returns>True if the reset process was successfully initiated.</returns>
+    Task<bool> ForgotPasswordAsync(string email);
+
+    /// <summary>
+    /// Resets the password for a user using a reset token.
+    /// </summary>
+    /// <param name="userId">The ID of the user.</param>
+    /// <param name="token">The reset token.</param>
+    /// <param name="newPassword">The new password.</param>
+    /// <returns>True if the password reset was successful; otherwise, false.</returns>
+    Task<bool> ResetPasswordAsync(Guid userId, string token, string newPassword);
+
+    #endregion Password Management
 }
