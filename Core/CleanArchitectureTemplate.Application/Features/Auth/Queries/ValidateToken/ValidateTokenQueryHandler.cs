@@ -1,5 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
+using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
 using System.Security.Claims;
 
@@ -33,7 +34,7 @@ public class ValidateTokenQueryHandler : IRequestHandler<ValidateTokenQueryReque
 
         if (principal == null)
         {
-            throw new UnauthorizedAccessException("Invalid token.");
+            throw new ValidationFailedException("Invalid token.");
         }
         else
         {

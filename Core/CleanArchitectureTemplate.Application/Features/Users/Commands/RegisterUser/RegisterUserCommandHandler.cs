@@ -2,7 +2,6 @@
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Identity;
-using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
@@ -24,10 +23,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommandReq
     public async Task<SingleResponse<UserDto?>> Handle(RegisterUserCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<UserDto?>();
-
-        var userDto = await _userService.CreateAsync(request)
-            ?? throw new UnauthorizedException("User registration failed.");
-
+        var userDto = await _userService.CreateAsync(request);
         response.SetData(userDto);
 
         return response;
