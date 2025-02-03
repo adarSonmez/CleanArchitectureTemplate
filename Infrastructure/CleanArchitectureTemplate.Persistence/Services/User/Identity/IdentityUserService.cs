@@ -5,6 +5,7 @@ using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
 using CleanArchitectureTemplate.Persistence.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace CleanArchitectureTemplate.Persistence.Services.User.Identity;
@@ -51,6 +52,17 @@ public class IdentityUserService : IUserService
     }
 
     #endregion User Management
+
+    #region User Retrieval
+
+    /// <inheritdoc />
+    public async Task<UserDto?> GetByIdAsync(Guid id)
+    {
+        var user = await _userManager.FindByIdAsync(id.ToString())
+            ?? throw new NotFoundException($"User with ID {id} not found.");
+
+        return _mapper.Map<UserDto>(user);
+    }
 
     #region Password Management
 

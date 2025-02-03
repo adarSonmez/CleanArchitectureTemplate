@@ -15,10 +15,21 @@ public interface IUserService : IService
     /// Creates a new application user.
     /// </summary>
     /// <param name="model">The model.</param>
-    /// <returns>The user data transfer object.</returns>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the user data transfer object.</returns>
     Task<UserDto?> CreateAsync(RegisterUserCommandRequest model);
 
     #endregion User Management
+
+    #region User Retrieval
+
+    /// <summary>
+    /// Retrieves a user by their unique identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the user.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the user data transfer object.</returns>
+    Task<UserDto?> GetByIdAsync(Guid id);
+
+    #endregion User Retrieval
 
     #region Password Management
 
