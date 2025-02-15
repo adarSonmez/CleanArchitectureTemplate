@@ -8,14 +8,15 @@ namespace CleanArchitectureTemplate.Application.Mappings.Shopping;
 /// <summary>
 /// AutoMapper profile for <see cref="Product"/> mapping."/>
 /// </summary>
-public class ProductImageFilesMappingProfile : Profile
+public class ProductMappingProfile : Profile
 {
-    public ProductImageFilesMappingProfile()
+    public ProductMappingProfile()
     {
         CreateMap<CreateProductCommandRequest, Product>()
+            .ForMember(dest => dest.Store, opt => opt.Ignore())
             .ForMember(dest => dest.Categories, opt => opt.Ignore())
             .ForMember(dest => dest.ProductImageFiles, opt => opt.Ignore())
-            .ForMember(dest => dest.OrderItems, opt => opt.Ignore());
+            .ForMember(dest => dest.BasketItems, opt => opt.Ignore());
 
         CreateMap<Product, ProductDto>();
     }
