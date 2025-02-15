@@ -1,5 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Dtos.Identity;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
+using CleanArchitectureTemplate.Application.RequestParameters;
 using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 
 namespace CleanArchitectureTemplate.Application.Abstractions.Services;
@@ -28,6 +29,11 @@ public interface IUserService : IService
     /// <param name="id">The unique identifier of the user.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the user data transfer object.</returns>
     Task<UserDto?> GetByIdAsync(Guid id);
+
+    /// <summary>
+    /// Retrieves all users in the system with pagination.
+    /// </summary>
+    Task<IEnumerable<UserDto>> GetAllPaginatedAsync(Pagination? pagination = null);
 
     #endregion User Retrieval
 

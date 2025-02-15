@@ -9,12 +9,12 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Queries.GetPro
 /// </summary>
 /// <param name="Id">The product ID.</param>
 /// <param name="IncludeCategories">A flag to include categories.</param>
-/// <param name="IncludeOrderItems">A flag to include order items.</param>
+/// <param name="IncludeBasketItems">A flag to include basket items.</param>
 /// <param name="IncludeProductImageFiles">A flag to include product image files.</param>
 public record GetProductByIdQueryRequest
 (
     Guid Id,
     bool IncludeCategories,
-    bool IncludeOrderItems,
+    bool IncludeBasketItems,
     bool IncludeProductImageFiles
 ) : IRequest<SingleResponse<ProductDto?>>;

@@ -3,7 +3,7 @@ using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
-using CleanArchitectureTemplate.Domain.Exceptions;
+using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
 using System.Linq.Expressions;
 
@@ -32,9 +32,9 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryReq
         {
             includes.Add(p => p.Categories);
         }
-        if (request.IncludeOrderItems)
+        if (request.IncludeBasketItems)
         {
-            includes.Add(p => p.OrderItems);
+            includes.Add(p => p.BasketItems);
         }
         if (request.IncludeProductImageFiles)
         {

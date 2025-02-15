@@ -32,9 +32,9 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQueryReq
         {
             includes.Add(p => p.Categories);
         }
-        if (request.IncludeOrderItems)
+        if (request.IncludeBasketItems)
         {
-            includes.Add(p => p.OrderItems);
+            includes.Add(p => p.BasketItems);
         }
         if (request.IncludeProductImageFiles)
         {

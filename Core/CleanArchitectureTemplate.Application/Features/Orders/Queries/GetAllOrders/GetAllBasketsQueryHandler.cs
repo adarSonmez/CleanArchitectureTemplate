@@ -32,7 +32,6 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQueryRequest
             includes.Add(p => p.Basket);
         }
 
-        // Fetch paginated Orders from the repository
         var orders = await _orderReadRepository.GetAllPaginatedAsync(
             pagination: request.Pagination,
             include: includes

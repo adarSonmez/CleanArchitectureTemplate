@@ -7,7 +7,7 @@ using CleanArchitectureTemplate.Application.Dtos.Files;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Files;
 using CleanArchitectureTemplate.Domain.Entities.Files;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
-using CleanArchitectureTemplate.Domain.Exceptions;
+using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;

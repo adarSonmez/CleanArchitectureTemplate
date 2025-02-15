@@ -7,7 +7,7 @@ using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;
 using CleanArchitectureTemplate.Domain.Constants.StringContants;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
-using CleanArchitectureTemplate.Domain.Exceptions;
+using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.CreateProduct;

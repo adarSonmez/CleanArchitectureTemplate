@@ -3,7 +3,7 @@ using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Files;
 using CleanArchitectureTemplate.Domain.Entities.Files;
-using CleanArchitectureTemplate.Domain.Exceptions;
+using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queries.GetProductImageById;
