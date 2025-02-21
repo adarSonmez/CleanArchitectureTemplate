@@ -15,4 +15,4 @@ public record InternalLoginCommandRequest
     string? Email,
     string? UserName,
     string Password
-) : IRequest<SingleResponse<TokenDto?>>;
+) : IRequest<SingleResponse<bool>>;

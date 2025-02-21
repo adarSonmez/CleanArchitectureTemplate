@@ -8,7 +8,7 @@ namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.RefreshTo
 /// <summary>
 /// Handles the <see cref="RefreshTokenCommandRequest"/>.
 /// </summary>
-public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommandRequest, SingleResponse<TokenDto?>>
+public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommandRequest, SingleResponse<bool>>
 {
     private readonly IAuthenticationService _authenticationService;
 
@@ -17,12 +17,13 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommandReq
         _authenticationService = authenticationService;
     }
 
-    public async Task<SingleResponse<TokenDto?>> Handle(RefreshTokenCommandRequest request, CancellationToken cancellationToken)
+    public async Task<SingleResponse<bool>> Handle(RefreshTokenCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<TokenDto?>();
+        var response = new SingleResponse<bool>();
         var tokenDto = await _authenticationService.RefreshTokenAsync(request);
+        var loggedIn = tokenDto is not null || tokenDto?.AccessToken is not null;
 
-        response.SetData(tokenDto);
+        response.SetData(loggedIn);
 
         return response;
     }

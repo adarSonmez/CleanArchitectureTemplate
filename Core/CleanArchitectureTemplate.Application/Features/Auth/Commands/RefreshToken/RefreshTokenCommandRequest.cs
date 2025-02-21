@@ -12,4 +12,4 @@ namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.RefreshTo
 public record RefreshTokenCommandRequest
 (
     [FromQuery] string RefreshToken
-) : IRequest<SingleResponse<TokenDto?>>;
+) : IRequest<SingleResponse<bool>>;
