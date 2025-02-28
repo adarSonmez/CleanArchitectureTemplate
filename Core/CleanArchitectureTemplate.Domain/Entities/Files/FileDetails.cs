@@ -47,7 +47,7 @@ public class FileDetails : BaseEntity
     /// <summary>
     /// Gets or sets the storage type.
     /// </summary>
-    public required StorageType Storage { get; set; }
+    public StorageType Storage { get; set; }
 
     #endregion Properties
 }

@@ -28,7 +28,7 @@ public class Customer : BaseEntity
     /// <summary>
     /// Gets or sets the date of birth of the customer.
     /// </summary>
-    public DateOnly DateOfBirth { get; set; }
+    public required DateOnly DateOfBirth { get; set; }
 
     /// <summary>
     /// Gets or sets the gender of the customer.

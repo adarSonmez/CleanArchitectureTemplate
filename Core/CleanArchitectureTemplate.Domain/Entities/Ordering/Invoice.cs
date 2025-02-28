@@ -27,12 +27,12 @@ public class Invoice : BaseEntity
     /// <summary>
     /// The issue date of the invoice.
     /// </summary>
-    public DateTime IssuedAt { get; set; } = DateTime.UtcNow;
+    public required DateTime IssuedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// The due date of the invoice.
     /// </summary>
-    public DateTime DueDate { get; set; }
+    public required DateTime DueDate { get; set; }
 
     /// <summary>
     /// The status of the invoice (e.g., Pending, Paid, Overdue).
