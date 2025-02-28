@@ -1,7 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage.Azure;
-using CleanArchitectureTemplate.Domain.Exceptions;
+using CleanArchitectureTemplate.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -54,7 +54,7 @@ public class AzureStorage : Storage, IAzureStorage
     public async Task<(string Folder, string Name, long Size)> UploadFileAsync(string path, IFormFile file, bool useGuid = true)
     {
         if (file == null)
-            throw new Domain.Exceptions.ValidationFailedException("File is required.");
+            throw new ValidationFailedException("File is required.");
 
         var containerClient = _blobServiceClient.GetBlobContainerClient(path);
         await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
@@ -74,7 +74,7 @@ public class AzureStorage : Storage, IAzureStorage
     public async Task<IEnumerable<(string Folder, string Name, long Size)>> UploadFilesAsync(string path, IFormFileCollection files, bool useGuid = true)
     {
         if (files == null || files.Count == 0)
-            throw new Domain.Exceptions.ValidationFailedException("Files are required.");
+            throw new ValidationFailedException("Files are required.");
 
         var filePaths = new List<(string Path, string Name, long Size)>();
         foreach (var file in files)

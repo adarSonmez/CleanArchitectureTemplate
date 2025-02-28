@@ -1,5 +1,7 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
+using CleanArchitectureTemplate.Infrastructure.Services.Cookie;
+using CleanArchitectureTemplate.Infrastructure.Services.Mailing.MimeKit;
 using CleanArchitectureTemplate.Infrastructure.Services.Storage;
 using CleanArchitectureTemplate.Infrastructure.Services.Token.Jwt;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +21,8 @@ public static class ServiceRegistration
     {
         services.AddScoped<IStorageService, StorageService>();
         services.AddScoped<ITokenService, JwtTokenService>();
+        services.AddScoped<IEmailService, MimeKitEmailService>();
+        services.AddScoped<ICookieService, CookieService>();
     }
 
     /// <summary>

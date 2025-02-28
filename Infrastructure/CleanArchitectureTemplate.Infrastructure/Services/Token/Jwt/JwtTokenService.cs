@@ -29,7 +29,7 @@ public class JwtTokenService : ITokenService
 
         var expirationDate = infiniteExpiration == true
             ? DateTime.UtcNow.AddYears(500)
-            : DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:AccessTokenExpiration"]));
+            : DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:AccessTokenExpiration"]));
 
         var claims = new List<Claim>
         {
@@ -54,6 +54,35 @@ public class JwtTokenService : ITokenService
         return new DTO::TokenDto(accessToken, expirationDate, refreshToken);
     }
 
+    /// <inheritdoc />
+    public ClaimsPrincipal? ValidateToken(string token)
+    {
+        try
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!);
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidIssuer = _configuration["Jwt:Issuer"],
+                ValidateAudience = true,
+                ValidAudience = _configuration["Jwt:Audience"],
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+            return principal;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
     /// <summary>
     /// Generates a refresh token to be used for refreshing the access token.
     /// </summary>
@@ -61,16 +90,8 @@ public class JwtTokenService : ITokenService
     private string GenerateRefreshToken()
     {
         var randomNumber = new byte[32];
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(randomNumber);
-
-            for (var i = 0; i < randomNumber.Length; i++)
-            {
-                Console.Write(randomNumber[i]);
-            }
-
-            return Convert.ToBase64String(randomNumber);
-        }
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
     }
 }
