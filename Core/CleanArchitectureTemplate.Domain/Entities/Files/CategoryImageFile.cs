@@ -16,7 +16,7 @@ public class CategoryImageFile : BaseEntity
     /// <summary>
     /// Gets or sets the file details.
     /// </summary>
-    public FileDetails FileDetails { get; set; } = default!;
+    public FileDetails? FileDetails { get; set; }
 
     /// <summary>
     /// Gets or sets the foreign key for the category.
@@ -26,5 +26,5 @@ public class CategoryImageFile : BaseEntity
     /// <summary>
     /// Gets or sets the category that the file belongs to.
     /// </summary>
-    public Category Category { get; set; } = default!;
+    public Category? Category { get; set; }
 }

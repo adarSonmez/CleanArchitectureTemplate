@@ -48,7 +48,7 @@ public class Product : BaseEntity
     /// <summary>
     /// Gets or sets the store that the product belongs to.
     /// </summary>
-    public Store Store { get; set; } = default!;
+    public Store? Store { get; set; }
 
     /// <summary>
     /// Gets or sets the product image files.

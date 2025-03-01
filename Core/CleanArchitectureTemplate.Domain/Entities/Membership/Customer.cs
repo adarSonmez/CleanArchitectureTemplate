@@ -13,12 +13,7 @@ public class Customer : BaseEntity
     /// <summary>
     /// Gets or sets the domain user associated with the customer.
     /// </summary>
-    public DomainUser DomainUser { get; set; } = default!;
-
-    /// <summary>
-    /// Gets or sets foreign key for the user.
-    /// </summary>
-    public Guid UserId { get; set; }
+    public DomainUser? DomainUser { get; set; }
 
     /// <summary>
     /// Gets or sets the baskets of the customer. (include both ordered and not ordered baskets)

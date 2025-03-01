@@ -16,7 +16,7 @@ public class UserAvatarFile : BaseEntity
     /// <summary>
     /// Gets or sets the file details.
     /// </summary>
-    public FileDetails FileDetails { get; set; } = default!;
+    public FileDetails? FileDetails { get; set; }
 
     /// <summary>
     /// Gets or sets the foreign key for the user.
@@ -26,5 +26,5 @@ public class UserAvatarFile : BaseEntity
     /// <summary>
     /// Gets or sets the user that the file belongs to.
     /// </summary>
-    public DomainUser DomainUser { get; set; } = default!;
+    public DomainUser? DomainUser { get; set; }
 }

@@ -12,7 +12,7 @@ public class Invoice : BaseEntity
     /// <summary>
     /// The billing address for the invoice.
     /// </summary>
-    public Address BillingAddress { get; set; } = default!;
+    public Address? BillingAddress { get; set; }
 
     /// <summary>
     /// The foreign key for the order.
@@ -22,7 +22,7 @@ public class Invoice : BaseEntity
     /// <summary>
     /// The order associated with the invoice.
     /// </summary>
-    public Order Order { get; set; } = default!;
+    public Order? Order { get; set; }
 
     /// <summary>
     /// The issue date of the invoice.

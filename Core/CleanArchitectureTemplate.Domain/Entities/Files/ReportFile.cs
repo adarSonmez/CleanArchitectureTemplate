@@ -21,5 +21,5 @@ public class ReportFile : BaseEntity
     /// <summary>
     /// Gets or sets the file details.
     /// </summary>
-    public FileDetails FileDetails { get; set; } = default!;
+    public FileDetails? FileDetails { get; set; }
 }

@@ -23,7 +23,7 @@ public class ProductImageFile : BaseEntity
 
     /// <summary>
     /// Gets or sets the product that the image belongs to.
-    public Product Product { get; set; } = default!;
+    public Product? Product { get; set; }
 
     /// <summary>
     /// Gets or sets the foreign key for the FileDetails.
@@ -32,5 +32,5 @@ public class ProductImageFile : BaseEntity
 
     /// Gets or sets the file details.
     /// </summary>
-    public FileDetails FileDetails { get; set; } = default!;
+    public FileDetails? FileDetails { get; set; }
 }
