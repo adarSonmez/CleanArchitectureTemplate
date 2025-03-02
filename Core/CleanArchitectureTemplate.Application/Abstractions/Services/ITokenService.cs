@@ -1,6 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.DTOs;
 using CleanArchitectureTemplate.Domain.MarkerInterfaces;
-using System.Security.Claims;
 
 namespace CleanArchitectureTemplate.Application.Abstractions.Services;
 
@@ -17,11 +16,4 @@ public interface ITokenService : IService
     /// <param name="infiniteExpiration">Indicates if the token has infinite expiration.</param>
     /// <returns>The generated token.</returns>
     TokenDto GenerateToken(string userName, IList<string> roles, bool? infiniteExpiration = false);
-
-    /// <summary>
-    /// Validates a given JWT token.
-    /// </summary>
-    /// <param name="token">The token to validate.</param>
-    /// <returns>The claims principal if the token is valid; otherwise, null.</returns>
-    ClaimsPrincipal? ValidateToken(string token);
 }

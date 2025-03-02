@@ -53,9 +53,8 @@ public interface IAuthenticationService : IService
     /// Revokes the refresh token for a given user without signing them out.
     /// Useful for invalidating a refresh token while keeping the session active.
     /// </summary>
-    /// <param name="userId">The ID of the user whose refresh token should be revoked.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    Task RevokeRefreshTokenAsync(Guid userId);
+    Task RevokeRefreshTokenAsync();
 
     #endregion Token Management
 
@@ -64,9 +63,8 @@ public interface IAuthenticationService : IService
     /// <summary>
     /// Logs out the current user by revoking the refresh token and signing out.
     /// </summary>
-    /// <param name="userId">The ID of the user to log out.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    Task LogoutAsync(Guid userId);
+    Task LogoutAsync();
 
     #endregion Logout
 }

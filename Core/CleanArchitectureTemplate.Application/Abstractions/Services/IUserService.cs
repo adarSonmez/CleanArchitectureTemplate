@@ -45,15 +45,14 @@ public interface IUserService : IService
     /// <param name="userId">The ID of the user.</param>
     /// <param name="currentPassword">The user's current password.</param>
     /// <param name="newPassword">The new password.</param>
-    /// <returns>True if the password change was successful; otherwise, false.</returns>
-    Task<bool> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
+    /// <returns>A task that represents the asynchronous operation. The task result contains a list of errors, if any.</returns>
+    Task ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
 
     /// <summary>
     /// Initiates a password reset process for a user who forgot their password.
     /// </summary>
     /// <param name="email">The email of the user requesting a password reset.</param>
-    /// <returns>True if the reset process was successfully initiated.</returns>
-    Task<bool> ForgotPasswordAsync(string email);
+    Task ForgotPasswordAsync(string email);
 
     /// <summary>
     /// Resets the password for a user using a reset token.
@@ -61,8 +60,8 @@ public interface IUserService : IService
     /// <param name="userId">The ID of the user.</param>
     /// <param name="token">The reset token.</param>
     /// <param name="newPassword">The new password.</param>
-    /// <returns>True if the password reset was successful; otherwise, false.</returns>
-    Task<bool> ResetPasswordAsync(Guid userId, string token, string newPassword);
+    /// <returns>A task that represents the asynchronous operation. The task result contains a list of errors, if any.</returns>
+    Task ResetPasswordAsync(Guid userId, string token, string newPassword);
 
     #endregion Password Management
 }
