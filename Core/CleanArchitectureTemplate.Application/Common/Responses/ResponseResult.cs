@@ -1,9 +1,12 @@
-﻿namespace CleanArchitectureTemplate.Application.Common.Responses;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CleanArchitectureTemplate.Application.Common.Responses;
 
 /// <summary>
 /// Represents a response message with a type and optional code.
 /// </summary>
-public class ResponseResult
+public class ResponseResult : IActionResult
 {
     /// <summary>
     /// Indicates if the response is successful (no errors).
@@ -32,4 +35,15 @@ public class ResponseResult
     /// </summary>
     public void AddError(string code, string message) =>
         Messages.Add(ResponseMessage.Error(code, message));
+
+    /// <inheritdoc/>
+    public async Task ExecuteResultAsync(ActionContext context)
+    {
+        var result = new ObjectResult(this)
+        {
+            StatusCode = IsSuccessful ? StatusCodes.Status200OK : StatusCodes.Status400BadRequest
+        };
+
+        await result.ExecuteResultAsync(context);
+    }
 }

@@ -8,6 +8,7 @@ public static class ResponseConstants
     #region Response Codes
 
     public const string NotFoundErrorCode = "APP-404";
+    public const string InvalidModelErrorCode = "APP-422";
 
     #endregion Response Codes
 

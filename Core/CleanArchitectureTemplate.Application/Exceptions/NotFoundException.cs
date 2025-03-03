@@ -37,7 +37,7 @@ public class NotFoundException : Exception
     /// </summary>
     /// <param name="resourceName">The name of the resource that was not found.</param>
     /// <param name="identifier">The identifier of the resource that was not found.</param>
-    public NotFoundException(string resourceName, object identifier)
+    public NotFoundException(string resourceName, Guid identifier)
         : base($"The resource '{resourceName}' with identifier '{identifier}' was not found.")
     {
     }
