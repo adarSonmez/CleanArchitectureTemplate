@@ -1,6 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
-using CleanArchitectureTemplate.Application.DTOs;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalLogin;
@@ -8,7 +7,7 @@ namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalL
 /// <summary>
 /// Represents a handler for the <see cref="InternalLoginCommandRequest"/>
 /// </summary>
-public class InternalLoginCommandHandler : IRequestHandler<InternalLoginCommandRequest, SingleResponse<bool>>
+public class InternalLoginCommandHandler : IRequestHandler<InternalLoginCommandRequest, ResponseResult>
 {
     private readonly IAuthenticationService _authenticationService;
 
@@ -17,13 +16,10 @@ public class InternalLoginCommandHandler : IRequestHandler<InternalLoginCommandR
         _authenticationService = authenticationService;
     }
 
-    public async Task<SingleResponse<bool>> Handle(InternalLoginCommandRequest request, CancellationToken cancellationToken)
+    public async Task<ResponseResult> Handle(InternalLoginCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<bool>();
-        var tokenDto = await _authenticationService.InternalLoginAsync(request);
-        var loggedIn = tokenDto is not null || tokenDto?.AccessToken is not null;
+        await _authenticationService.InternalLoginAsync(request);
 
-        response.SetData(loggedIn);
-        return response;
+        return new();
     }
 }

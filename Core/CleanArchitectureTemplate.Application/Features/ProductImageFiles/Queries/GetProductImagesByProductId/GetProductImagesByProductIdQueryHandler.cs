@@ -25,7 +25,7 @@ public class GetProductImagesByProductIdQueryHandler : IRequestHandler<GetProduc
         var response = new PagedResponse<ProductImageFileDto?>();
 
         var productImages = await _productImageFileReadRepository.GetAllPaginatedAsync(pi => pi.ProductId == request.ProductId);
-        response.SetData(_mapper.Map<IEnumerable<ProductImageFileDto>>(productImages));
+        response.SetData(_mapper.Map<IEnumerable<ProductImageFileDto>>(productImages), request.Pagination?.Page, request.Pagination?.Size);
 
         return response;
     }

@@ -7,7 +7,7 @@ namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.RevokeRef
 /// <summary>
 /// Handles the logic for revoking a user's refresh token.
 /// </summary>
-public class RevokeRefreshTokenCommandHandler : IRequestHandler<RevokeRefreshTokenCommandRequest, SingleResponse<bool>>
+public class RevokeRefreshTokenCommandHandler : IRequestHandler<RevokeRefreshTokenCommandRequest, ResponseResult>
 {
     private readonly IAuthenticationService _authenticationService;
 
@@ -16,13 +16,10 @@ public class RevokeRefreshTokenCommandHandler : IRequestHandler<RevokeRefreshTok
         _authenticationService = authenticationService;
     }
 
-    public async Task<SingleResponse<bool>> Handle(RevokeRefreshTokenCommandRequest request, CancellationToken cancellationToken)
+    public async Task<ResponseResult> Handle(RevokeRefreshTokenCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<bool>();
+        await _authenticationService.RevokeRefreshTokenAsync();
 
-        await _authenticationService.RevokeRefreshTokenAsync(request.UserId);
-
-        response.SetData(true);
-        return response;
+        return new();
     }
 }

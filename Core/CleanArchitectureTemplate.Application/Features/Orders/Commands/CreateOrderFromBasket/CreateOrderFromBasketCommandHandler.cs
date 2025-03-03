@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Ordering;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
@@ -20,13 +21,20 @@ public class CreateOrderFromBasketCommandHandler : IRequestHandler<CreateOrderFr
     private readonly IBasketReadRepository _basketReadRepository;
     private readonly IBasketWriteRepository _basketWriteRepository;
     private readonly IOrderWriteRepository _orderWriteRepository;
+    private readonly IUserContextService _userContextService;
 
-    public CreateOrderFromBasketCommandHandler(IMapper mapper, IBasketReadRepository basketReadRepository, IBasketWriteRepository basketWriteRepository, IOrderWriteRepository orderWriteRepository)
+    public CreateOrderFromBasketCommandHandler(
+        IMapper mapper,
+        IBasketReadRepository basketReadRepository,
+        IBasketWriteRepository basketWriteRepository,
+        IOrderWriteRepository orderWriteRepository,
+        IUserContextService userContextService)
     {
         _mapper = mapper;
         _basketReadRepository = basketReadRepository;
         _basketWriteRepository = basketWriteRepository;
         _orderWriteRepository = orderWriteRepository;
+        _userContextService = userContextService;
     }
 
     public async Task<SingleResponse<OrderDto?>> Handle(CreateOrderFromBasketCommandRequest request, CancellationToken cancellationToken)
@@ -39,6 +47,9 @@ public class CreateOrderFromBasketCommandHandler : IRequestHandler<CreateOrderFr
 
         var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, include: includes)
             ?? throw new NotFoundException(nameof(Basket), request.BasketId);
+
+        if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
+            throw new ForbiddenException();
 
         if (basket.BasketItems == null || basket.BasketItems.Count == 0)
         {

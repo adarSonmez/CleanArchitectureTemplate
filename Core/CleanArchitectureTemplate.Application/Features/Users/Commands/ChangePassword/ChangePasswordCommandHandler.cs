@@ -8,26 +8,24 @@ namespace CleanArchitectureTemplate.Application.Features.Users.Commands.ChangePa
 /// <summary>
 /// Handles the change password request.
 /// </summary>
-public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommandRequest, SingleResponse<bool>>
+public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommandRequest, ResponseResult>
 {
     private readonly IUserService _userService;
+    private readonly IUserContextService _userContextService;
 
-    public ChangePasswordCommandHandler(IUserService userService)
+    public ChangePasswordCommandHandler(IUserService userService, IUserContextService userContextService)
     {
         _userService = userService;
+        _userContextService = userContextService;
     }
 
-    public async Task<SingleResponse<bool>> Handle(ChangePasswordCommandRequest request, CancellationToken cancellationToken)
+    public async Task<ResponseResult> Handle(ChangePasswordCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<bool>();
-        var success = await _userService.ChangePasswordAsync(request.UserId, request.CurrentPassword, request.NewPassword);
+        if (!_userContextService.IsCurrentUser(request.UserId))
+            throw new ForbiddenException();
 
-        if (!success)
-        {
-            throw new UnauthorizedException("Password change failed.");
-        }
+        await _userService.ChangePasswordAsync(request.UserId, request.CurrentPassword, request.NewPassword);
 
-        response.SetData(true);
-        return response;
+        return new();
     }
 }

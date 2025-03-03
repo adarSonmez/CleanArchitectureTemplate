@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
+using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.DeleteProductImagesByProductId;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadPrimaryProductImage;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;
 using CleanArchitectureTemplate.Domain.Constants.StringContants;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
-using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.UpdateProduct;
@@ -22,14 +23,16 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
     private readonly IProductReadRepository _productReadRepository;
     private readonly IProductWriteRepository _productWriteRepository;
     private readonly ICategoryReadRepository _categoryReadRepository;
+    private readonly IUserContextService _userContextService;
 
-    public UpdateProductCommandHandler(IMediator mediator, IMapper mapper, IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, ICategoryReadRepository categoryReadRepository)
+    public UpdateProductCommandHandler(IMediator mediator, IMapper mapper, IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, ICategoryReadRepository categoryReadRepository, IUserContextService userContextService)
     {
         _mediator = mediator;
         _mapper = mapper;
         _productReadRepository = productReadRepository;
         _productWriteRepository = productWriteRepository;
         _categoryReadRepository = categoryReadRepository;
+        _userContextService = userContextService;
     }
 
     public async Task<SingleResponse<ProductDto?>> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
@@ -37,7 +40,10 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
         var response = new SingleResponse<ProductDto?>();
 
         var product = await _productReadRepository.GetByIdAsync(request.Id)
-            ?? throw new NotFoundException(nameof(Product), request.Id);
+        ?? throw new NotFoundException(nameof(Product), request.Id);
+
+        if (!_userContextService.IsAdminOrSelf(product.StoreId))
+            throw new ForbiddenException();
 
         if (request.CategoryIds?.Count > 0)
         {
@@ -68,7 +74,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
 
             if (request.SecondaryProductImages.Count > 0)
             {
-                var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(PathConstants.DefaultProductImagesPath, product!.Id, request.SecondaryProductImages);
+                var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(null, PathConstants.DefaultProductImagesPath, product!.Id, request.SecondaryProductImages);
                 try
                 {
                     await _mediator.Send(uploadFilesCommand, cancellationToken);

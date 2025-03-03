@@ -7,4 +7,4 @@ namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.Logout;
 /// Represents a request to log out a user.
 /// </summary>
 /// <param name="UserId">The ID of the user to log out.</param>
-public record LogoutCommandRequest(Guid UserId) : IRequest<SingleResponse<bool>>;
+public record LogoutCommandRequest() : IRequest<ResponseResult>;

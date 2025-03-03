@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
@@ -16,11 +17,16 @@ public class GetBasketByIdQueryHandler : IRequestHandler<GetBasketByIdQueryReque
 {
     private readonly IMapper _mapper;
     private readonly IBasketReadRepository _basketReadRepository;
+    private readonly IUserContextService _userContextService;
 
-    public GetBasketByIdQueryHandler(IMapper mapper, IBasketReadRepository basketReadRepository)
+    public GetBasketByIdQueryHandler(
+        IMapper mapper,
+        IBasketReadRepository basketReadRepository,
+        IUserContextService userContextService)
     {
         _mapper = mapper;
         _basketReadRepository = basketReadRepository;
+        _userContextService = userContextService;
     }
 
     public async Task<SingleResponse<BasketDto?>> Handle(GetBasketByIdQueryRequest request, CancellationToken cancellationToken)
@@ -33,10 +39,13 @@ public class GetBasketByIdQueryHandler : IRequestHandler<GetBasketByIdQueryReque
             includes.Add(p => p.BasketItems);
         }
 
-        var product = await _basketReadRepository.GetByIdAsync(request.Id, include: includes)
-            ?? throw new NotFoundException(nameof(Product), request.Id);
+        var basket = await _basketReadRepository.GetByIdAsync(request.Id, include: includes)
+            ?? throw new NotFoundException(nameof(Basket), request.Id);
 
-        response.SetData(_mapper.Map<BasketDto>(product));
+        if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
+            throw new ForbiddenException();
+
+        response.SetData(_mapper.Map<BasketDto>(basket));
 
         return response;
     }

@@ -7,4 +7,4 @@ namespace CleanArchitectureTemplate.Application.Features.Users.Commands.ForgotPa
 /// Represents a request to initiate a password reset process.
 /// </summary>
 /// <param name="Email">The email of the user requesting a password reset</param>
-public record ForgotPasswordCommandRequest(string Email) : IRequest<SingleResponse<bool>>;
+public record ForgotPasswordCommandRequest(string Email) : IRequest<ResponseResult>;

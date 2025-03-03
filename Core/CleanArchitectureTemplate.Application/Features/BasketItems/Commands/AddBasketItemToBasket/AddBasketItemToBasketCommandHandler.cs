@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
@@ -20,8 +21,16 @@ public class AddBasketItemToBasketCommandHandler : IRequestHandler<AddBasketItem
     private readonly IBasketItemWriteRepository _basketItemWriteRepository;
     private readonly IBasketItemReadRepository _basketItemReadRepository;
     private readonly IProductReadRepository _productReadRepository;
+    private readonly IUserContextService _userContextService;
 
-    public AddBasketItemToBasketCommandHandler(IMapper mapper, IBasketReadRepository basketReadRepository, IBasketWriteRepository basketWriteRepository, IBasketItemWriteRepository basketItemWriteRepository, IBasketItemReadRepository basketItemReadRepository, IProductReadRepository productReadRepository)
+    public AddBasketItemToBasketCommandHandler(
+        IMapper mapper,
+        IBasketReadRepository basketReadRepository,
+        IBasketWriteRepository basketWriteRepository,
+        IBasketItemWriteRepository basketItemWriteRepository,
+        IBasketItemReadRepository basketItemReadRepository,
+        IProductReadRepository productReadRepository,
+        IUserContextService userContextService)
     {
         _mapper = mapper;
         _basketReadRepository = basketReadRepository;
@@ -29,6 +38,7 @@ public class AddBasketItemToBasketCommandHandler : IRequestHandler<AddBasketItem
         _basketItemWriteRepository = basketItemWriteRepository;
         _basketItemReadRepository = basketItemReadRepository;
         _productReadRepository = productReadRepository;
+        _userContextService = userContextService;
     }
 
     public async Task<SingleResponse<BasketDto?>> Handle(AddBasketItemToBasketCommandRequest request, CancellationToken cancellationToken)
@@ -42,6 +52,9 @@ public class AddBasketItemToBasketCommandHandler : IRequestHandler<AddBasketItem
 
         var basket = await _basketReadRepository.GetByIdAsync(request.BasketId)
             ?? throw new NotFoundException(nameof(Basket), request.BasketId);
+
+        if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
+            throw new ForbiddenException();
 
         var product = await _productReadRepository.GetByIdAsync(request.ProductId)
             ?? throw new NotFoundException(nameof(Product), request.ProductId);

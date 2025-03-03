@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
@@ -16,12 +17,18 @@ public class RemoveBasketItemFromBasketCommandHandler : IRequestHandler<RemoveBa
     private readonly IMapper _mapper;
     private readonly IBasketReadRepository _basketReadRepository;
     private readonly IBasketItemWriteRepository _basketItemWriteRepository;
+    private readonly IUserContextService _userContextService;
 
-    public RemoveBasketItemFromBasketCommandHandler(IMapper mapper, IBasketReadRepository basketReadRepository, IBasketItemWriteRepository basketItemWriteRepository)
+    public RemoveBasketItemFromBasketCommandHandler(
+        IMapper mapper,
+        IBasketReadRepository basketReadRepository,
+        IBasketItemWriteRepository basketItemWriteRepository,
+        IUserContextService userContextService)
     {
         _mapper = mapper;
         _basketReadRepository = basketReadRepository;
         _basketItemWriteRepository = basketItemWriteRepository;
+        _userContextService = userContextService;
     }
 
     public async Task<SingleResponse<BasketDto?>> Handle(RemoveBasketItemFromBasketCommandRequest request, CancellationToken cancellationToken)
@@ -30,6 +37,9 @@ public class RemoveBasketItemFromBasketCommandHandler : IRequestHandler<RemoveBa
 
         var basket = await _basketReadRepository.GetByIdAsync(request.BasketId)
             ?? throw new NotFoundException(nameof(Basket), request.BasketId);
+
+        if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
+            throw new ForbiddenException();
 
         var basketItem = basket.BasketItems.FirstOrDefault(x => x.ProductId == request.ProductId)
             ?? throw new NotFoundException(nameof(BasketItem), request.ProductId);

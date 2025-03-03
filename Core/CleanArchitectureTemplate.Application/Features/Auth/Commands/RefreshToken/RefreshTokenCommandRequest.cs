@@ -1,5 +1,4 @@
 ﻿using CleanArchitectureTemplate.Application.Common.Responses;
-using CleanArchitectureTemplate.Application.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,4 +11,4 @@ namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.RefreshTo
 public record RefreshTokenCommandRequest
 (
     [FromQuery] string RefreshToken
-) : IRequest<SingleResponse<bool>>;
+) : IRequest<ResponseResult>;

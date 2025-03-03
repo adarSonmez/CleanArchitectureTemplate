@@ -29,7 +29,7 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQueryRequest
         var includes = new List<Expression<Func<Order, object>>>();
         if (request.IncludeBasket)
         {
-            includes.Add(p => p.Basket);
+            includes.Add(p => p.Basket!);
         }
 
         var orders = await _orderReadRepository.GetAllPaginatedAsync(

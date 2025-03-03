@@ -10,5 +10,5 @@ namespace CleanArchitectureTemplate.Application.Features.Users.Commands.ResetPas
     /// <param name="UserId">The ID of the user.</param>
     /// <param name="Token">The password reset token.</param>
     /// <param name="NewPassword">The new password.</param>
-    public record ResetPasswordCommandRequest(Guid UserId, string Token, string NewPassword) : IRequest<SingleResponse<bool>>;
+    public record ResetPasswordCommandRequest(Guid UserId, string Token, string NewPassword) : IRequest<ResponseResult>;
 }

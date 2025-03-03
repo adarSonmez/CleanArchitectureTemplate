@@ -13,7 +13,6 @@ namespace CleanArchitectureTemplate.Application.Features.Orders.Queries.GetOrder
 /// <param name="IncludeBasket">A flag to include basket.</param>
 public record GetOrdersByCustomerIdQueryRequest
 (
-    Guid CustomerId,
     Pagination? Pagination,
     bool IncludeBasket
 ) : IRequest<PagedResponse<OrderDto>>;

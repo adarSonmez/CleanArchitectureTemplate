@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Files;
@@ -22,14 +23,22 @@ public class UploadPrimaryProductImageCommandHandler : IRequestHandler<UploadPri
     private readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
     private readonly IProductReadRepository _productReadRepository;
     private readonly IStorageService _storageService;
+    private readonly IUserContextService _userContextService;
 
-    public UploadPrimaryProductImageCommandHandler(IMapper mapper, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IProductReadRepository productReadRepository, IStorageService storageService)
+    public UploadPrimaryProductImageCommandHandler(
+        IMapper mapper,
+        IProductImageFileReadRepository productImageFileReadRepository,
+        IProductImageFileWriteRepository productImageFileWriteRepository,
+        IProductReadRepository productReadRepository,
+        IStorageService storageService,
+        IUserContextService userContextService)
     {
         _mapper = mapper;
         _productImageFileReadRepository = productImageFileReadRepository;
         _productImageFileWriteRepository = productImageFileWriteRepository;
         _productReadRepository = productReadRepository;
         _storageService = storageService;
+        _userContextService = userContextService;
     }
 
     public async Task<SingleResponse<ProductImageFileDto>> Handle(UploadPrimaryProductImageCommandRequest request, CancellationToken cancellationToken)
@@ -39,7 +48,10 @@ public class UploadPrimaryProductImageCommandHandler : IRequestHandler<UploadPri
         var product = await _productReadRepository.GetByIdAsync(request.ProductId)
             ?? throw new NotFoundException(nameof(Product), request.ProductId);
 
-        var existingPrimaryImage = await _productImageFileReadRepository.GetAsync(x => x.Product.Id == request.ProductId && x.IsPrimary);
+        if (!_userContextService.IsAdminOrSelf(product.StoreId))
+            throw new ForbiddenException();
+
+        var existingPrimaryImage = await _productImageFileReadRepository.GetAsync(x => x.ProductId == request.ProductId && x.IsPrimary);
 
         if (existingPrimaryImage != null)
         {

@@ -16,4 +16,4 @@ public record ChangePasswordCommandRequest
     string CurrentPassword,
     string NewPassword,
     string ConfirmNewPassword
-) : IRequest<SingleResponse<bool>>;
+) : IRequest<ResponseResult>;

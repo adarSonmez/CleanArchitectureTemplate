@@ -7,7 +7,7 @@ namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.Logout;
 /// <summary>
 /// Handles the logic for logging out a user by revoking their refresh token and signing them out.
 /// </summary>
-public class LogoutCommandHandler : IRequestHandler<LogoutCommandRequest, SingleResponse<bool>>
+public class LogoutCommandHandler : IRequestHandler<LogoutCommandRequest, ResponseResult>
 {
     private readonly IAuthenticationService _authenticationService;
 
@@ -16,13 +16,10 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommandRequest, Single
         _authenticationService = authenticationService;
     }
 
-    public async Task<SingleResponse<bool>> Handle(LogoutCommandRequest request, CancellationToken cancellationToken)
+    public async Task<ResponseResult> Handle(LogoutCommandRequest request, CancellationToken cancellationToken)
     {
-        var response = new SingleResponse<bool>();
+        await _authenticationService.LogoutAsync();
 
-        await _authenticationService.LogoutAsync(request.UserId);
-
-        response.SetData(true);
-        return response;
+        return new();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using CleanArchitectureTemplate.Application.Common.Responses;
-using CleanArchitectureTemplate.Application.DTOs;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.FacebookLogin;
@@ -13,4 +12,4 @@ public record FacebookLoginCommandRequest
 (
     string AccessToken,
     string Provider
-) : IRequest<SingleResponse<bool>>;
+) : IRequest<ResponseResult>;

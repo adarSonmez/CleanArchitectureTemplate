@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Hubs;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadPrimaryProductImage;
@@ -23,8 +24,16 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
     private readonly IProductWriteRepository _productWriteRepository;
     private readonly ICategoryReadRepository _categoryReadRepository;
     private readonly IProductHubService _productHubService;
+    private readonly IUserContextService _userContextService;
 
-    public CreateProductCommandHandler(IMediator mediator, IMapper mapper, IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, ICategoryReadRepository categoryReadRepository, IProductHubService productHubService)
+    public CreateProductCommandHandler(
+        IMediator mediator,
+        IMapper mapper,
+        IProductReadRepository productReadRepository,
+        IProductWriteRepository productWriteRepository,
+        ICategoryReadRepository categoryReadRepository,
+        IProductHubService productHubService,
+        IUserContextService userContextService)
     {
         _mediator = mediator;
         _mapper = mapper;
@@ -32,16 +41,20 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
         _productWriteRepository = productWriteRepository;
         _categoryReadRepository = categoryReadRepository;
         _productHubService = productHubService;
+        _userContextService = userContextService;
     }
 
     public async Task<SingleResponse<ProductDto?>> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<ProductDto?>();
 
+        var userId = _userContextService.GetUserId()!;
+
         var product = _mapper.Map<Product>(request);
         var categories = await _categoryReadRepository.GetByIdRangeAsync(request.CategoryIds);
 
         product.Categories = categories.ToList();
+        product.StoreId = userId.Value;
 
         if (request.PrimaryProductImage != null)
         {
@@ -58,7 +71,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
 
         if (request.SecondaryProductImages != null && request.SecondaryProductImages.Count > 0)
         {
-            var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(PathConstants.DefaultProductImagesPath, product.Id, request.SecondaryProductImages);
+            var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(null, PathConstants.DefaultProductImagesPath, product.Id, request.SecondaryProductImages);
 
             try
             {

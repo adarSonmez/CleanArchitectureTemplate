@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
@@ -16,12 +17,18 @@ public class ClearBasketCommandHandler : IRequestHandler<ClearBasketCommandReque
     private readonly IMapper _mapper;
     private readonly IBasketReadRepository _basketReadRepository;
     private readonly IBasketItemWriteRepository _basketItemWriteRepository;
+    private readonly IUserContextService _userContextService;
 
-    public ClearBasketCommandHandler(IMapper mapper, IBasketReadRepository basketReadRepository, IBasketItemWriteRepository basketItemWriteRepository)
+    public ClearBasketCommandHandler(
+        IMapper mapper,
+        IBasketReadRepository basketReadRepository,
+        IBasketItemWriteRepository basketItemWriteRepository,
+        IUserContextService userContextService)
     {
         _mapper = mapper;
         _basketReadRepository = basketReadRepository;
         _basketItemWriteRepository = basketItemWriteRepository;
+        _userContextService = userContextService;
     }
 
     public async Task<SingleResponse<BasketDto?>> Handle(ClearBasketCommandRequest request, CancellationToken cancellationToken)
@@ -30,6 +37,9 @@ public class ClearBasketCommandHandler : IRequestHandler<ClearBasketCommandReque
 
         var basket = await _basketReadRepository.GetByIdAsync(request.BasketId)
             ?? throw new NotFoundException(nameof(Basket), request.BasketId);
+
+        if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
+            throw new ForbiddenException();
 
         foreach (var basketItem in basket.BasketItems)
             await _basketItemWriteRepository.SoftDeleteAsync(basketItem);

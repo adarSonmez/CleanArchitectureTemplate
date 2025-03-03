@@ -23,4 +23,4 @@ public record GoogleLoginCommandRequest
     string? FirstName,
     string? LastName,
     string? PhotoUrl
-) : IRequest<SingleResponse<bool>>;
+) : IRequest<ResponseResult>;

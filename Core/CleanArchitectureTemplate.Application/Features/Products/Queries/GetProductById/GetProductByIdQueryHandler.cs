@@ -6,6 +6,7 @@ using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
 using System.Linq.Expressions;
+using CleanArchitectureTemplate.Application.Abstractions.Services;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Queries.GetProductById;
 
@@ -42,7 +43,7 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryReq
         }
 
         var product = await _productReadRepository.GetByIdAsync(request.Id, include: includes)
-            ?? throw new NotFoundException(nameof(Product), request.Id);
+        ?? throw new NotFoundException(nameof(Product), request.Id);
 
         response.SetData(_mapper.Map<ProductDto>(product));
 
