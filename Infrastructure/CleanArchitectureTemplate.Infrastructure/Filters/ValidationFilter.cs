@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CleanArchitectureTemplate.Application.Common.Responses;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CleanArchitectureTemplate.Infrastructure.Filters;
@@ -18,7 +19,14 @@ public class ValidationFilter : IAsyncActionFilter
                 .Select(e => e.ErrorMessage)
                 .ToList();
 
-            context.Result = new BadRequestObjectResult(errors);
+            var response = new ResponseResult();
+
+            foreach (var error in errors)
+            {
+                response.AddError(ResponseConstants.InvalidModelErrorCode, error);
+            }
+
+            context.Result = response;
             return;
         }
 
