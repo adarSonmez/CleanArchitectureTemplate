@@ -2,6 +2,7 @@
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
 using CleanArchitectureTemplate.Infrastructure.Services.Cookie;
 using CleanArchitectureTemplate.Infrastructure.Services.Mailing.MimeKit;
+using CleanArchitectureTemplate.Infrastructure.Services.Redis;
 using CleanArchitectureTemplate.Infrastructure.Services.Storage;
 using CleanArchitectureTemplate.Infrastructure.Services.Token.Jwt;
 using CleanArchitectureTemplate.Infrastructure.Services.UserContext;
@@ -25,6 +26,9 @@ public static class ServiceRegistration
         services.AddScoped<IEmailService, MimeKitEmailService>();
         services.AddScoped<ICookieService, CookieService>();
         services.AddScoped<IUserContextService, UserContextService>();
+
+        services.AddSingleton<RedisConnectorService>();
+        services.AddSingleton<ICacheService, RedisCacheService>();
     }
 
     /// <summary>
