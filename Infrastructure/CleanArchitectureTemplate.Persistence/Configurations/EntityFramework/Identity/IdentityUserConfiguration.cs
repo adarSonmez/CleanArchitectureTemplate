@@ -16,8 +16,22 @@ public class IdentityUserConfiguration : IEntityTypeConfiguration<AppUser>
 
         // Property Configurations
         builder.Property(u => u.RefreshToken)
-               .HasMaxLength(255)
-               .IsRequired(false);
+               .HasMaxLength(191);
+
+        builder.Property(u => u.UserName)
+            .HasMaxLength(191);
+
+        builder.Property(u => u.NormalizedUserName)
+            .HasMaxLength(191);
+
+        builder.Property(u => u.Email)
+            .HasMaxLength(191);
+
+        builder.Property(u => u.NormalizedEmail)
+            .HasMaxLength(191);
+
+        builder.Property(u => u.FullName)
+               .HasMaxLength(255);
 
         // Indexes
         builder.HasIndex(u => u.RefreshToken)

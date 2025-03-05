@@ -1,6 +1,4 @@
-﻿using CleanArchitectureTemplate.Domain.Constants.Enums;
-using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Files;
-using CleanArchitectureTemplate.Domain.Entities.Files;
+﻿using CleanArchitectureTemplate.Domain.Entities.Files;
 using CleanArchitectureTemplate.Persistence.ValueConverters.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -20,14 +18,11 @@ public class FileDetailsConfiguration : IEntityTypeConfiguration<FileDetails>
         // Property Configurations
         builder.Property(f => f.Name)
                .IsRequired()
-               .HasMaxLength(255);
-
-        builder.Property(f => f.Size)
-               .IsRequired();
+               .HasMaxLength(191);
 
         builder.Property(f => f.Folder)
                .IsRequired()
-               .HasMaxLength(500)
+               .HasMaxLength(255)
                .HasDefaultValue(string.Empty);
 
         // Indexes
@@ -36,7 +31,8 @@ public class FileDetailsConfiguration : IEntityTypeConfiguration<FileDetails>
         // Value Converters
         builder.Property(fd => fd.Extension)
             .HasColumnName("FileType")
-            .HasConversion(new FileExtensionConverter());
+            .HasConversion(new FileExtensionConverter())
+            .HasMaxLength(32);
 
         builder.Property(fd => fd.Storage)
             .HasColumnName("StorageType")

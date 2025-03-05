@@ -13,5 +13,12 @@ public class IdentityUserLoginConfiguration : IEntityTypeConfiguration<IdentityU
     {
         // Table Configuration
         builder.ToTable("UserLogins", "Identity");
+
+        // Property Configurations
+        builder.Property(ul => ul.LoginProvider)
+            .HasMaxLength(191);
+
+        builder.Property(ul => ul.ProviderDisplayName)
+            .HasMaxLength(255);
     }
 }

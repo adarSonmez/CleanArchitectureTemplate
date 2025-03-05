@@ -17,19 +17,17 @@ public class StoreConfiguration : IEntityTypeConfiguration<Store>
 
         // Property Configurations
         builder.Property(s => s.Website)
-               .HasMaxLength(200) // Limit URL length to 200 characters
-               .IsRequired(false);
+               .HasMaxLength(255);
 
         builder.Property(s => s.Description)
-               .HasMaxLength(1000) // Limit description to 1000 characters
-               .IsRequired(false);
+               .HasMaxLength(1000);
 
         builder.Ignore(s => s.DomainUser);
 
         // Relationships
         builder.HasOne<AppUser>()
                .WithOne()
-               .HasForeignKey<Store>(s => s.UserId)
+               .HasForeignKey<Store>(s => s.Id)
                .IsRequired();
     }
 }

@@ -17,6 +17,7 @@ public class ReportFileConfiguration : IEntityTypeConfiguration<ReportFile>
         // Value Converters
         builder.Property(fd => fd.ReportType)
             .HasColumnName("ReportType")
-            .HasConversion<string>();
+            .HasConversion<string>()
+            .HasMaxLength(15);
     }
 }

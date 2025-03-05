@@ -15,12 +15,10 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         // Table Configuration
         builder.ToTable("Orders", "Ordering");
 
-        // Property Configurations
-        builder.Ignore(o => o.TotalAmount);
-
         // Value Converters
         builder.Property(o => o.Status)
-            .HasConversion<string>();
+            .HasConversion<string>()
+            .HasMaxLength(15);
 
         // Relationships
         builder.OwnsOne(o => o.ShippingAddress, address =>
@@ -33,15 +31,16 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
             address.Property(a => a.PostalCode)
                    .IsRequired()
-                   .HasMaxLength(255);
+                   .HasMaxLength(15);
 
             address.Property(a => a.City)
                    .IsRequired()
-                   .HasMaxLength(100);
+                   .HasMaxLength(255);
 
             address.Property(a => a.Country)
                    .IsRequired()
-                   .HasConversion(new CountryConverter());
+                   .HasConversion(new CountryConverter())
+                   .HasMaxLength(255);
         });
     }
 }

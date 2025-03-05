@@ -13,5 +13,12 @@ public class IdentityRoleConfiguration : IEntityTypeConfiguration<AppRole>
     {
         // Table Configuration
         builder.ToTable("Roles", "Identity");
+
+        // Property Configurations
+        builder.Property(r => r.Name)
+            .HasMaxLength(191);
+
+        builder.Property(r => r.NormalizedName)
+            .HasMaxLength(191);
     }
 }

@@ -13,5 +13,12 @@ public class IdentityRoleClaimConfiguration : IEntityTypeConfiguration<IdentityR
     {
         // Table Configuration
         builder.ToTable("RoleClaims", "Identity");
+
+        // Property Configurations
+        builder.Property(rc => rc.ClaimType)
+            .HasMaxLength(255);
+
+        builder.Property(rc => rc.ClaimValue)
+            .HasMaxLength(255);
     }
 }

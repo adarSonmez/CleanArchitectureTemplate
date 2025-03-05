@@ -13,5 +13,12 @@ public class IdentityUserTokenConfiguration : IEntityTypeConfiguration<IdentityU
     {
         // Table Configuration
         builder.ToTable("UserTokens", "Identity");
+
+        // Property Configurations
+        builder.Property(ut => ut.LoginProvider)
+            .HasMaxLength(191);
+
+        builder.Property(ut => ut.Name)
+            .HasMaxLength(191);
     }
 }

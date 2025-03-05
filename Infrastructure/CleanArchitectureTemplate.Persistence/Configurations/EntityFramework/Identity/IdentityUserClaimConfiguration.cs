@@ -13,5 +13,12 @@ public class IdentityUserClaimConfiguration : IEntityTypeConfiguration<IdentityU
     {
         // Table Configuration
         builder.ToTable("UserClaims", "Identity");
+
+        // Property Configurations
+        builder.Property(uc => uc.ClaimType)
+            .HasMaxLength(255);
+
+        builder.Property(uc => uc.ClaimValue)
+            .HasMaxLength(255);
     }
 }

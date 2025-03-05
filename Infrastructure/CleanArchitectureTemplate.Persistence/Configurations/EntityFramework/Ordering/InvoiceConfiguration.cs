@@ -16,20 +16,11 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
         builder.ToTable("Invoices", "Ordering");
 
         // Property Configurations
-        builder.Property(i => i.IssuedAt)
-               .IsRequired();
-
-        builder.Property(i => i.DueDate)
-               .IsRequired();
-
         builder.Property(i => i.TransactionId)
-               .HasMaxLength(100);
+               .HasMaxLength(50);
 
         builder.Property(i => i.Notes)
                .HasMaxLength(1000);
-
-        builder.Property(i => i.PaidAt)
-               .IsRequired(false);
 
         // Relationships
         builder.OwnsOne(o => o.BillingAddress, address =>
@@ -42,22 +33,25 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
 
             address.Property(a => a.PostalCode)
                    .IsRequired()
-                   .HasMaxLength(255);
+                   .HasMaxLength(15);
 
             address.Property(a => a.City)
                    .IsRequired()
-                   .HasMaxLength(100);
+                   .HasMaxLength(255);
 
             address.Property(a => a.Country)
                    .IsRequired()
-                   .HasConversion(new CountryConverter());
+                   .HasConversion(new CountryConverter())
+                   .HasMaxLength(255);
         });
 
         // Value Converters
         builder.Property(i => i.Status)
-            .HasConversion<string>();
+            .HasConversion<string>()
+            .HasMaxLength(15);
 
         builder.Property(i => i.PaymentMethod)
-            .HasConversion<string>();
+            .HasConversion<string>()
+            .HasMaxLength(15);
     }
 }

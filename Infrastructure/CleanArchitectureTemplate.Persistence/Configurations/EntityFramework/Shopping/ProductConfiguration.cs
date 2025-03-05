@@ -20,11 +20,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(p => p.Name)
                .IsRequired()
-               .HasMaxLength(200);
-
-        builder.Property(p => p.Stock)
-               .IsRequired()
-               .HasDefaultValue(0);
+               .HasMaxLength(191);
 
         builder.Property(p => p.DiscountRate)
                .HasPrecision(5, 2)
@@ -32,7 +28,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         // Relationships
         builder.Property(p => p.StandardPrice)
-            .HasConversion(new MoneyConverter());
+            .HasConversion(new MoneyConverter())
+            .HasMaxLength(50);
 
         // Indexes
         builder.HasIndex(p => p.Name).HasDatabaseName("IX_Products_Name");

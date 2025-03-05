@@ -1,4 +1,4 @@
-﻿using CleanArchitectureTemplate.Domain.Common;
+﻿using CleanArchitectureTemplate.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -15,21 +15,18 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         // Table Configuration
         builder.ToTable("Customers", "Membership");
 
-        // Property Configurations
-        builder.Property(c => c.Age)
-            .IsRequired()
-            .HasColumnType("smallint");
-
+        // Property
         builder.Ignore(c => c.DomainUser);
 
         // Value Converters
         builder.Property(c => c.Gender)
-               .HasConversion<string>();
+               .HasConversion<string>()
+               .HasMaxLength(15);
 
         // Relationships
         builder.HasOne<AppUser>()
                .WithOne()
-               .HasForeignKey<Customer>(c => c.UserId)
+               .HasForeignKey<Customer>(c => c.Id)
                .IsRequired();
     }
 }

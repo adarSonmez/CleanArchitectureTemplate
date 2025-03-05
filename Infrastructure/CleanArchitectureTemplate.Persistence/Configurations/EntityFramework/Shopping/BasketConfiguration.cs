@@ -12,6 +12,9 @@ public class BasketConfiguration : IEntityTypeConfiguration<Basket>
     public void Configure(EntityTypeBuilder<Basket> builder)
     {
         // Table Configuration
-        builder.ToTable("Categories", "Shopping");
+        builder.ToTable("Baskets", "Shopping");
+
+        // Property Configurations
+        builder.Ignore(o => o.TotalAmount);
     }
 }
