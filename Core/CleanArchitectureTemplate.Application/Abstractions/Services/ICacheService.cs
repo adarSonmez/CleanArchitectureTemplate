@@ -11,9 +11,10 @@ public interface ICacheService
     /// <typeparam name="T">The type of the value to store.</typeparam>
     /// <param name="key">The key under which the value will be stored.</param>
     /// <param name="value">The value to store.</param>
-    /// <param name="expiration">Optional expiration timespan for the cached value.</param>
+    /// <param name="slidingExpiration">Optional sliding expiration timespan for the cached value.</param>
+    /// <param name="absoluteExpiration">Optional absolute expiration timespan for the cached value.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    Task SetAsync<T>(string key, T value, TimeSpan? expiration = null);
+    Task SetAsync<T>(string key, T value, TimeSpan? slidingExpiration = null, TimeSpan? absoluteExpiration = null);
 
     /// <summary>
     /// Retrieves a value from the cache.
@@ -67,9 +68,10 @@ public interface ICacheService
     /// <typeparam name="T">The type of the value.</typeparam>
     /// <param name="key">The key of the cached value.</param>
     /// <param name="acquire">A function that retrieves the value if it is not in the cache.</param>
-    /// <param name="expiration">Optional expiration timespan for the cached value.</param>
+    /// <param name="slidingExpiration">Optional sliding expiration timespan for the cached value.</param>
+    /// <param name="absoluteExpiration">Optional absolute expiration timespan for the cached value.</param>
     /// <returns>A task that represents the asynchronous operation, containing the retrieved or newly acquired value.</returns>
-    Task<T?> GetOrSetAsync<T>(string key, Func<Task<T>> acquire, TimeSpan? expiration = null);
+    Task<T?> GetOrSetAsync<T>(string key, Func<Task<T>> acquire, TimeSpan? slidingExpiration = null, TimeSpan? absoluteExpiration = null);
 
     /// <summary>
     /// Sets the value of a field in a hash stored at the specified key.

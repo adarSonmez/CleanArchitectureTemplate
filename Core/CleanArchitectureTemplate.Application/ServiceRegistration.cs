@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CleanArchitectureTemplate.Application.Behaviours;
+using CleanArchitectureTemplate.Application.Settings;
+using MediatR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace CleanArchitectureTemplate.Application;
 
@@ -11,9 +16,18 @@ public static class ServiceRegistration
     /// Adds the application services to the service collection.
     /// </summary>
     /// <param name="services">The service collection to add the services to.</param>
-    public static void AddApplicationServices(this IServiceCollection services)
+    /// <param name="configuration">The configuration to use for the services.</param>
+    public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceRegistration).Assembly));
         services.AddHttpClient();
+
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
+
+        #region Settings
+
+        services.Configure<RedisSettings>(configuration.GetSection("RedisSettings"));
+
+        #endregion Settings
     }
 }

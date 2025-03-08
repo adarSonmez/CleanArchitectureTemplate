@@ -1,10 +1,13 @@
-﻿namespace CleanArchitectureTemplate.Application.Common.Responses;
+﻿using System.Text.Json.Serialization;
+
+namespace CleanArchitectureTemplate.Application.Common.Responses;
 
 /// <summary>
 /// Response for a single object.
 /// </summary>
 public class SingleResponse<T> : ResponseResult
 {
+    [JsonInclude]
     public T? Data { get; private set; }
 
     public void SetData(T? data, string? successMessage = null)

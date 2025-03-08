@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 
 namespace CleanArchitectureTemplate.Application.Common.Responses;
 
@@ -11,11 +12,13 @@ public class ResponseResult : IActionResult
     /// <summary>
     /// Indicates if the response is successful (no errors).
     /// </summary>
+    [JsonInclude]
     public bool IsSuccessful => !Messages.Any(m => m.MessageType == ResponseMessageType.Error);
 
     /// <summary>
     /// List of response messages (success, warnings, errors).
     /// </summary>
+    [JsonInclude]
     public List<ResponseMessage> Messages { get; } = [];
 
     /// <summary>
