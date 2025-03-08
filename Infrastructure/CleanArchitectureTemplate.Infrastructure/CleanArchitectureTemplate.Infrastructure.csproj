@@ -18,9 +18,4 @@
     <ProjectReference Include="..\..\Core\CleanArchitectureTemplate.Application\CleanArchitectureTemplate.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-    <Folder Include="Services\Caching\" />
-  </ItemGroup>
-
 </Project>

@@ -1,8 +1,8 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
+using CleanArchitectureTemplate.Infrastructure.Services.Caching;
 using CleanArchitectureTemplate.Infrastructure.Services.Cookie;
 using CleanArchitectureTemplate.Infrastructure.Services.Mailing.MimeKit;
-using CleanArchitectureTemplate.Infrastructure.Services.Redis;
 using CleanArchitectureTemplate.Infrastructure.Services.Storage;
 using CleanArchitectureTemplate.Infrastructure.Services.Token.Jwt;
 using CleanArchitectureTemplate.Infrastructure.Services.UserContext;
