@@ -1,4 +1,6 @@
-﻿namespace CleanArchitectureTemplate.Domain.MarkerInterfaces;
+﻿using System.Runtime.Serialization;
+
+namespace CleanArchitectureTemplate.Domain.MarkerInterfaces;
 
 /// <summary>
 /// Represents a marker interface for all DTOs (Data Transfer Objects).

@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Domain.Shared;
+using System.Text.Json.Serialization;
 
 namespace CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 
@@ -16,6 +17,7 @@ public sealed class Currency : Enumeration
 
     #region Constructor
 
+    [JsonConstructor]
     private Currency(int id, string name, string isoCode, string symbol)
         : base(id, name)
     {

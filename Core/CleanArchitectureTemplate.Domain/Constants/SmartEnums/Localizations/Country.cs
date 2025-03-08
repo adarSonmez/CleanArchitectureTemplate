@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Domain.Shared;
+using System.Text.Json.Serialization;
 
 namespace CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 
@@ -17,6 +18,7 @@ public sealed class Country : Enumeration
 
     #region Constructor
 
+    [JsonConstructor]
     private Country(int id, string name, string isoAlpha2, string isoAlpha3, int numericCode)
         : base(id, name)
     {
