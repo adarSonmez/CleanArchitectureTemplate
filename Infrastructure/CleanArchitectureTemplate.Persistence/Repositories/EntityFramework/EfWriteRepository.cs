@@ -1,5 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories;
-using CleanArchitectureTemplate.Domain.Common;
+using CleanArchitectureTemplate.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 

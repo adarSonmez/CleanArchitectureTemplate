@@ -20,13 +20,17 @@ public class IdentityAuthenticationService : IAuthenticationService
 {
     private readonly IConfiguration _configuration;
     private readonly ITokenService _tokenService;
+    private readonly ICookieService _cookieService;
+    private readonly IUserContextService _userContextService;
     private readonly UserManager<AppUser> _userManager;
-    public readonly SignInManager<AppUser> _signInManager;
+    private readonly SignInManager<AppUser> _signInManager;
 
-    public IdentityAuthenticationService(IConfiguration configuration, ITokenService tokenService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    public IdentityAuthenticationService(IConfiguration configuration, ITokenService tokenService, ICookieService cookieService, IUserContextService userContextService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
     {
         _configuration = configuration;
         _tokenService = tokenService;
+        _cookieService = cookieService;
+        _userContextService = userContextService;
         _userManager = userManager;
         _signInManager = signInManager;
     }
@@ -48,7 +52,7 @@ public class IdentityAuthenticationService : IAuthenticationService
         }
 
         if (user == null)
-            throw new UnauthorizedAccessException("Invalid credentials.");
+            throw new UnauthorizedException("Invalid credentials.");
 
         var result = await _signInManager.CheckPasswordSignInAsync(user!, model.Password, false);
 
@@ -57,11 +61,13 @@ public class IdentityAuthenticationService : IAuthenticationService
             var roles = await _userManager.GetRolesAsync(user!);
             var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
             await UpdateRefreshTokenAsync(user!.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
+
+            _cookieService.SetAuthCookies(tokenDto);
             return tokenDto;
         }
         else
         {
-            throw new UnauthorizedAccessException("Invalid credentials.");
+            throw new UnauthorizedException("Invalid credentials.");
         }
     }
 
@@ -120,7 +126,7 @@ public class IdentityAuthenticationService : IAuthenticationService
                 var creationResult = await _userManager.CreateAsync(user);
                 if (!creationResult.Succeeded)
                 {
-                    throw new BadRequestException("Failed to create user: " + string.Join(", ", creationResult.Errors.Select(e => e.Description)));
+                    throw new BadRequestException(creationResult.Errors.Select(e => e.Description).FirstOrDefault());
                 }
             }
 
@@ -130,8 +136,7 @@ public class IdentityAuthenticationService : IAuthenticationService
             {
                 // Rollback user creation if failed to link external login
                 await _userManager.DeleteAsync(user);
-
-                throw new BadRequestException("Failed to add external login: " + string.Join(", ", loginResult.Errors.Select(e => e.Description)));
+                throw new BadRequestException(loginResult.Errors.Select(e => e.Description).FirstOrDefault());
             }
         }
 
@@ -139,6 +144,8 @@ public class IdentityAuthenticationService : IAuthenticationService
         var roles = await _userManager.GetRolesAsync(user);
         var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
         await UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
+        _cookieService.SetAuthCookies(tokenDto);
+
         return tokenDto;
     }
 
@@ -181,7 +188,7 @@ public class IdentityAuthenticationService : IAuthenticationService
                 var result = await _userManager.CreateAsync(user);
                 if (!result.Succeeded)
                 {
-                    throw new BadRequestException("Failed to create user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                    throw new BadRequestException(result.Errors.Select(e => e.Description).FirstOrDefault());
                 }
             }
 
@@ -191,13 +198,15 @@ public class IdentityAuthenticationService : IAuthenticationService
                 // Rollback user creation if failed to link external login
                 await _userManager.DeleteAsync(user);
 
-                throw new BadRequestException("Failed to add external login: " + string.Join(", ", loginResult.Errors.Select(e => e.Description)));
+                throw new BadRequestException(loginResult.Errors.Select(e => e.Description).FirstOrDefault());
             }
         }
 
         var roles = await _userManager.GetRolesAsync(user);
         var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
         await UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
+        _cookieService.SetAuthCookies(tokenDto);
+
         return tokenDto;
     }
 
@@ -206,10 +215,13 @@ public class IdentityAuthenticationService : IAuthenticationService
     #region Logout
 
     /// <inheritdoc />
-    public async Task LogoutAsync(Guid userId)
+    public async Task LogoutAsync()
     {
-        await RevokeRefreshTokenAsync(userId);
-        await _signInManager.SignOutAsync();
+        await RevokeRefreshTokenAsync();
+        _cookieService.ClearAuthCookies();
+
+        // Commented out because it is not necessary to sign out the user because stateless JWT authentication is used
+        // await _signInManager.SignOutAsync();
     }
 
     #endregion Logout
@@ -229,8 +241,28 @@ public class IdentityAuthenticationService : IAuthenticationService
         var roles = await _userManager.GetRolesAsync(user);
         var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
         await UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
+        _cookieService.SetAuthCookies(tokenDto);
 
         return tokenDto;
+    }
+
+    /// <inheritdoc />
+    public async Task RevokeRefreshTokenAsync()
+    {
+        var userId = _userContextService.GetUserId()
+            ?? throw new UnauthorizedException("User not authenticated.");
+
+        var user = await _userManager.FindByIdAsync(userId.ToString())
+            ?? throw new NotFoundException(nameof(AppUser), userId);
+
+        if (string.IsNullOrEmpty(user.RefreshToken))
+            throw new BadRequestException("No refresh token to revoke.");
+
+        user.RefreshToken = null;
+        user.RefreshTokenExpiration = DateTime.UtcNow;
+        await _userManager.UpdateAsync(user);
+
+        _cookieService.ClearRefreshTokenCookie();
     }
 
     /// <summary>
@@ -244,22 +276,11 @@ public class IdentityAuthenticationService : IAuthenticationService
         var refreshTokenExpirationAddition = Convert.ToDouble(_configuration["Jwt:RefreshTokenExpiration"]);
         var refreshTokenExpirationTime = accessTokenCreationTime.AddMinutes(refreshTokenExpirationAddition);
         var user = await _userManager.FindByIdAsync(userId.ToString())
-            ?? throw new NotFoundException($"User with id {userId} not found.");
+            ?? throw new NotFoundException(nameof(AppUser), userId);
 
         user!.RefreshToken = refreshToken;
         user.RefreshTokenExpiration = refreshTokenExpirationTime;
 
-        await _userManager.UpdateAsync(user);
-    }
-
-    /// <inheritdoc />
-    public async Task RevokeRefreshTokenAsync(Guid userId)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString())
-            ?? throw new NotFoundException("User not found.");
-
-        user.RefreshToken = null;
-        user.RefreshTokenExpiration = DateTime.UtcNow;
         await _userManager.UpdateAsync(user);
     }
 
