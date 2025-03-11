@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitectureTemplate.Persistence.Migrations
 {
     [DbContext(typeof(EfDbContext))]
-    [Migration("20250124202335_Full")]
-    partial class Full
+    [Migration("20250228204514_LengthConstraints")]
+    partial class LengthConstraints
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     b.ToTable("CategoryProduct", "Shopping");
                 });
 
-            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Common.BaseEntity", b =>
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Shared.BaseEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -140,8 +140,8 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("RefreshToken")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasMaxLength(191)
+                        .HasColumnType("character varying(191)");
 
                     b.Property<DateTimeOffset?>("RefreshTokenExpiration")
                         .HasColumnType("timestamp with time zone");
@@ -276,7 +276,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Files.CategoryImageFile", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
@@ -293,24 +293,25 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Files.FileDetails", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
                     b.Property<string>("Extension")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("FileType");
 
                     b.Property<string>("Folder")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasDefaultValue("");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasMaxLength(191)
+                        .HasColumnType("character varying(191)");
 
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
@@ -328,7 +329,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Files.InvoiceFile", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
                     b.Property<Guid>("FileDetailsId")
                         .HasColumnType("uuid");
@@ -345,7 +346,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Files.ProductImageFile", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
                     b.Property<Guid>("FileDetailsId")
                         .HasColumnType("uuid");
@@ -365,14 +366,15 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Files.ReportFile", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
                     b.Property<Guid>("FileDetailsId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ReportType")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
                         .HasColumnName("ReportType");
 
                     b.HasIndex("FileDetailsId");
@@ -382,7 +384,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Files.UserAvatarFile", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
                     b.Property<Guid>("FileDetailsId")
                         .HasColumnType("uuid");
@@ -400,14 +402,15 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
-                    b.Property<short>("Age")
-                        .HasColumnType("smallint");
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -420,7 +423,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Membership.Store", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -430,8 +433,8 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Website")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -441,7 +444,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Ordering.Invoice", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("timestamp with time zone");
@@ -460,15 +463,17 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PaymentMethod")
-                        .HasColumnType("text");
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
                     b.Property<string>("TransactionId")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasIndex("OrderId");
 
@@ -477,45 +482,59 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Ordering.Order", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid>("BasketId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("BasketId");
 
                     b.ToTable("Orders", "Ordering");
                 });
 
-            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Ordering.OrderItem", b =>
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Basket", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Ordered")
+                        .HasColumnType("boolean");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Baskets", "Shopping");
+                });
+
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.BasketItem", b =>
+                {
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
+
+                    b.Property<Guid>("BasketId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
+                        .HasColumnType("integer");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("BasketId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", "Ordering");
+                    b.ToTable("BasketItems", "Shopping");
                 });
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Category", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -523,8 +542,8 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(191)
+                        .HasColumnType("character varying(191)");
 
                     b.Property<Guid?>("ParentCategoryId")
                         .HasColumnType("uuid");
@@ -539,7 +558,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", b =>
                 {
-                    b.HasBaseType("CleanArchitectureTemplate.Domain.Common.BaseEntity");
+                    b.HasBaseType("CleanArchitectureTemplate.Domain.Shared.BaseEntity");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -550,17 +569,16 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(191)
+                        .HasColumnType("character varying(191)");
 
                     b.Property<string>("StandardPrice")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("Stock")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(0);
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("StoreId")
                         .HasColumnType("uuid");
@@ -653,7 +671,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Files.CategoryImageFile", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -666,7 +684,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Files.FileDetails", b =>
                 {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Files.FileDetails", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -681,7 +699,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Files.InvoiceFile", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -706,7 +724,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Files.ProductImageFile", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -731,7 +749,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Files.ReportFile", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -748,7 +766,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Files.UserAvatarFile", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -765,7 +783,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", b =>
                 {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -780,7 +798,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Membership.Store", b =>
                 {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Membership.Store", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -795,7 +813,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Ordering.Invoice", b =>
                 {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Ordering.Invoice", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -814,17 +832,18 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)");
+                                .HasMaxLength(255)
+                                .HasColumnType("character varying(255)");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasMaxLength(255)
+                                .HasColumnType("character varying(255)");
 
                             b1.Property<string>("PostalCode")
                                 .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("character varying(255)");
+                                .HasMaxLength(15)
+                                .HasColumnType("character varying(15)");
 
                             b1.HasKey("OrderId");
 
@@ -842,13 +861,13 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Ordering.Order", b =>
                 {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
+                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Shopping.Basket", "Basket")
+                        .WithMany()
+                        .HasForeignKey("BasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Ordering.Order", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -861,17 +880,18 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)");
+                                .HasMaxLength(255)
+                                .HasColumnType("character varying(255)");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasMaxLength(255)
+                                .HasColumnType("character varying(255)");
 
                             b1.Property<string>("PostalCode")
                                 .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("character varying(255)");
+                                .HasMaxLength(15)
+                                .HasColumnType("character varying(15)");
 
                             b1.HasKey("OrderId");
 
@@ -881,40 +901,57 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.Navigation("Customer");
+                    b.Navigation("Basket");
 
                     b.Navigation("ShippingAddress")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Ordering.OrderItem", b =>
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Basket", b =>
                 {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
-                        .WithOne()
-                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Ordering.OrderItem", "Id")
+                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", "Customer")
+                        .WithMany("Baskets")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Ordering.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
+                        .WithOne()
+                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Shopping.Basket", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.BasketItem", b =>
+                {
+                    b.HasOne("CleanArchitectureTemplate.Domain.Entities.Shopping.Basket", "Basket")
+                        .WithMany("BasketItems")
+                        .HasForeignKey("BasketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
+                        .WithOne()
+                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Shopping.BasketItem", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", "Product")
-                        .WithMany("OrderItems")
+                        .WithMany("BasketItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Order");
+                    b.Navigation("Basket");
 
                     b.Navigation("Product");
                 });
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Category", b =>
                 {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Shopping.Category", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -930,7 +967,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", b =>
                 {
-                    b.HasOne("CleanArchitectureTemplate.Domain.Common.BaseEntity", null)
+                    b.HasOne("CleanArchitectureTemplate.Domain.Shared.BaseEntity", null)
                         .WithOne()
                         .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -947,7 +984,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("Baskets");
                 });
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Membership.Store", b =>
@@ -955,14 +992,14 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Ordering.Order", b =>
+            modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Basket", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("BasketItems");
                 });
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Product", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("BasketItems");
 
                     b.Navigation("ProductImageFiles");
                 });

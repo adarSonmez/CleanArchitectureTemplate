@@ -7,16 +7,16 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitectureTemplate.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Full : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "Ordering");
+                name: "Shopping");
 
             migrationBuilder.EnsureSchema(
-                name: "Shopping");
+                name: "Ordering");
 
             migrationBuilder.EnsureSchema(
                 name: "Files");
@@ -167,7 +167,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Age = table.Column<short>(type: "smallint", nullable: false),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     Gender = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -406,25 +406,25 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                schema: "Ordering",
+                name: "Baskets",
+                schema: "Shopping",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false),
-                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false)
+                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Ordered = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_Baskets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_BaseEntity_Id",
+                        name: "FK_Baskets_BaseEntity_Id",
                         column: x => x.Id,
                         principalTable: "BaseEntity",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Orders_Customers_CustomerId",
+                        name: "FK_Baskets_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalSchema: "Membership",
                         principalTable: "Customers",
@@ -440,7 +440,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Stock = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    Stock = table.Column<int>(type: "integer", nullable: false),
                     DiscountRate = table.Column<decimal>(type: "numeric(5,2)", precision: 5, scale: 2, nullable: false),
                     StandardPrice = table.Column<string>(type: "text", nullable: false),
                     StoreId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -459,6 +459,130 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         column: x => x.StoreId,
                         principalSchema: "Membership",
                         principalTable: "Stores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                schema: "Ordering",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    BasketId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_BaseEntity_Id",
+                        column: x => x.Id,
+                        principalTable: "BaseEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Baskets_BasketId",
+                        column: x => x.BasketId,
+                        principalSchema: "Shopping",
+                        principalTable: "Baskets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BasketItems",
+                schema: "Shopping",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    BasketId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BasketItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BasketItems_BaseEntity_Id",
+                        column: x => x.Id,
+                        principalTable: "BaseEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BasketItems_Baskets_BasketId",
+                        column: x => x.BasketId,
+                        principalSchema: "Shopping",
+                        principalTable: "Baskets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BasketItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalSchema: "Shopping",
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategoryProduct",
+                schema: "Shopping",
+                columns: table => new
+                {
+                    CategoriesId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductsId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryProduct", x => new { x.CategoriesId, x.ProductsId });
+                    table.ForeignKey(
+                        name: "FK_CategoryProduct_Categories_CategoriesId",
+                        column: x => x.CategoriesId,
+                        principalSchema: "Shopping",
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategoryProduct_Products_ProductsId",
+                        column: x => x.ProductsId,
+                        principalSchema: "Shopping",
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductImageFiles",
+                schema: "Files",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsPrimary = table.Column<bool>(type: "boolean", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FileDetailsId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductImageFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductImageFiles_BaseEntity_Id",
+                        column: x => x.Id,
+                        principalTable: "BaseEntity",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductImageFiles_FileDetails_FileDetailsId",
+                        column: x => x.FileDetailsId,
+                        principalSchema: "Files",
+                        principalTable: "FileDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductImageFiles_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalSchema: "Shopping",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -519,103 +643,6 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoryProduct",
-                schema: "Shopping",
-                columns: table => new
-                {
-                    CategoriesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductsId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CategoryProduct", x => new { x.CategoriesId, x.ProductsId });
-                    table.ForeignKey(
-                        name: "FK_CategoryProduct_Categories_CategoriesId",
-                        column: x => x.CategoriesId,
-                        principalSchema: "Shopping",
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CategoryProduct_Products_ProductsId",
-                        column: x => x.ProductsId,
-                        principalSchema: "Shopping",
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderItems",
-                schema: "Ordering",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false, defaultValue: 0)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_BaseEntity_Id",
-                        column: x => x.Id,
-                        principalTable: "BaseEntity",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalSchema: "Ordering",
-                        principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalSchema: "Shopping",
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductImageFiles",
-                schema: "Files",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsPrimary = table.Column<bool>(type: "boolean", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FileDetailsId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductImageFiles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductImageFiles_BaseEntity_Id",
-                        column: x => x.Id,
-                        principalTable: "BaseEntity",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductImageFiles_FileDetails_FileDetailsId",
-                        column: x => x.FileDetailsId,
-                        principalSchema: "Files",
-                        principalTable: "FileDetails",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductImageFiles_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalSchema: "Shopping",
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BillingAddress",
                 schema: "Ordering",
                 columns: table => new
@@ -670,6 +697,24 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BasketItems_BasketId",
+                schema: "Shopping",
+                table: "BasketItems",
+                column: "BasketId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BasketItems_ProductId",
+                schema: "Shopping",
+                table: "BasketItems",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Baskets_CustomerId",
+                schema: "Shopping",
+                table: "Baskets",
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_Name",
@@ -733,22 +778,10 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderId",
-                schema: "Ordering",
-                table: "OrderItems",
-                column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ProductId",
-                schema: "Ordering",
-                table: "OrderItems",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_CustomerId",
+                name: "IX_Orders_BasketId",
                 schema: "Ordering",
                 table: "Orders",
-                column: "CustomerId");
+                column: "BasketId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductImageFiles_FileDetailsId",
@@ -856,6 +889,10 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BasketItems",
+                schema: "Shopping");
+
+            migrationBuilder.DropTable(
                 name: "BillingAddress",
                 schema: "Ordering");
 
@@ -870,10 +907,6 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
             migrationBuilder.DropTable(
                 name: "InvoiceFiles",
                 schema: "Files");
-
-            migrationBuilder.DropTable(
-                name: "OrderItems",
-                schema: "Ordering");
 
             migrationBuilder.DropTable(
                 name: "ProductImageFiles",
@@ -938,6 +971,10 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
             migrationBuilder.DropTable(
                 name: "Stores",
                 schema: "Membership");
+
+            migrationBuilder.DropTable(
+                name: "Baskets",
+                schema: "Shopping");
 
             migrationBuilder.DropTable(
                 name: "Customers",

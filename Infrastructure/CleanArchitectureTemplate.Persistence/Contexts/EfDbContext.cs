@@ -1,8 +1,10 @@
-﻿using CleanArchitectureTemplate.Domain.Common;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Domain.Entities.Files;
-using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Membership;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
+using CleanArchitectureTemplate.Domain.Shared;
+using CleanArchitectureTemplate.Persistence.Constants;
 using CleanArchitectureTemplate.Persistence.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,9 +19,19 @@ namespace CleanArchitectureTemplate.Persistence.Contexts;
 /// Using the <see cref="IdentityDbContext{TUser, TRole, TKey}"/> allows us to use
 /// the built-in tables and classes for identity management.
 /// </remarks>
-public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbContext<AppUser, AppRole, Guid>(options)
+public class EfDbContext : IdentityDbContext<AppUser, AppRole, Guid>
 {
+    private readonly IUserContextService _userContextService;
+
+    public EfDbContext(DbContextOptions<EfDbContext> options, IUserContextService userContextService)
+        : base(options)
+    {
+        _userContextService = userContextService;
+    }
+
     #region DbSet Properties
+
+    #region Shopping DbSet Properties
 
     /// <summary>
     /// Gets or sets the categories table.
@@ -41,6 +53,10 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     /// </summary>
     public DbSet<BasketItem> BasketItems { get; set; } = default!;
 
+    #endregion Shopping DbSet Properties
+
+    #region Membership DbSet Properties
+
     /// <summary>
     /// Gets or sets the customers table.
     /// </summary>
@@ -50,6 +66,10 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     /// Gets or sets the stores table.
     /// </summary>
     public DbSet<Store> Stores { get; set; } = default!;
+
+    #endregion Membership DbSet Properties
+
+    #region Ordering DbSet Properties
 
     /// <summary>
     /// Gets or sets the invoices table.
@@ -61,10 +81,9 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     /// </summary>
     public DbSet<Order> Orders { get; set; } = default!;
 
-    /// <summary>
-    /// Gets or sets the order items table.
-    /// </summary>
-    public DbSet<OrderItem> OrderItems { get; set; } = default!;
+    #endregion Ordering DbSet Properties
+
+    #region Files DbSet Properties
 
     /// <summary>
     /// Gets or sets the file details table.
@@ -96,6 +115,8 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     /// </summary>
     public DbSet<UserAvatarFile> UserAvatarFiles { get; set; } = default!;
 
+    #endregion Files DbSet Properties
+
     #endregion DbSet Properties
 
     #region Interceptors
@@ -117,6 +138,13 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
 
         // Automatically apply all configurations in the assembly
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        modelBuilder.Entity<BaseEntity>(builder =>
+        {
+            builder.Property<string>(CommonShadowProperties.CreatedBy).HasMaxLength(191);
+            builder.Property<string>(CommonShadowProperties.UpdatedBy).HasMaxLength(191);
+            builder.Property<string>(CommonShadowProperties.DeletedBy).HasMaxLength(191);
+        });
     }
 
     /// <summary>
@@ -125,22 +153,38 @@ public class EfDbContext(DbContextOptions<EfDbContext> options) : IdentityDbCont
     protected void OnBeforeSaveChanges()
     {
         var entries = ChangeTracker.Entries()
-        .Where(e => e is { Entity: BaseEntity, State: EntityState.Added or EntityState.Modified });
+            .Where(e => e.Entity is BaseEntity && (e.State == EntityState.Added || e.State == EntityState.Modified));
 
         foreach (var entityEntry in entries)
         {
-            // TODO: Add shadow properties
-            //if (entityEntry.State == EntityState.Added)
-            //    entityEntry.Property(CommonShadowProperties.CreatedBy).CurrentValue = DateTime.UtcNow;
+            if (entityEntry.Entity is BaseEntity entity)
+            {
+                var now = DateTime.UtcNow;
+                var currentUser = _userContextService.GetUserName();
 
-            //if (!typeof(FileDetails).IsAssignableFrom(entityEntry.Entity.GetType()))
-            //    entityEntry.Property(CommonShadowProperties.UpdatedBy).CurrentValue = DateTime.UtcNow;
+                switch (entityEntry.State)
+                {
+                    case EntityState.Added:
+                        entityEntry.Property(CommonShadowProperties.CreatedBy).CurrentValue = currentUser;
+                        entity.CreatedAt = now;
+                        break;
 
-            //// Soft delete handling
-            //if (entityEntry.Property("IsDeleted").CurrentValue is not bool isDeleted || !isDeleted)
-            //    continue;
+                    case EntityState.Modified:
+                        if (entityEntry.Metadata.FindProperty("IsDeleted") != null
+                            && entityEntry.Property("IsDeleted")?.CurrentValue is bool isDeleted && isDeleted)
+                        {
+                            entityEntry.Property(CommonShadowProperties.DeletedBy).CurrentValue = currentUser;
+                            entity.DeletedAt = now;
+                        }
+                        else
+                        {
+                            entityEntry.Property(CommonShadowProperties.UpdatedBy).CurrentValue = currentUser;
+                            entity.UpdatedAt = now;
+                        }
 
-            //entityEntry.Property(CommonShadowProperties.DeletedBy).CurrentValue = DateTime.UtcNow;
+                        break;
+                }
+            }
         }
     }
 

@@ -3,6 +3,7 @@ using System;
 using CleanArchitectureTemplate.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitectureTemplate.Persistence.Migrations
 {
     [DbContext(typeof(EfDbContext))]
-    partial class EfDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250228180847_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,21 +43,14 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Shared.BaseEntity", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
-
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -62,13 +58,9 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("BaseEntity", (string)null);
+                    b.ToTable("BaseEntity");
 
                     b.UseTptMappingStrategy();
                 });
@@ -84,12 +76,12 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -114,16 +106,15 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -132,12 +123,12 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
@@ -149,8 +140,8 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("RefreshToken")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTimeOffset?>("RefreshTokenExpiration")
                         .HasColumnType("timestamp with time zone");
@@ -162,8 +153,8 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -189,12 +180,10 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uuid");
@@ -215,12 +204,10 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -235,15 +222,13 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
                         .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -276,12 +261,10 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
@@ -314,21 +297,20 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.Property<string>("Extension")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)")
+                        .HasColumnType("text")
                         .HasColumnName("FileType");
 
                     b.Property<string>("Folder")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasDefaultValue("");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
@@ -390,8 +372,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.Property<string>("ReportType")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)")
+                        .HasColumnType("text")
                         .HasColumnName("ReportType");
 
                     b.HasIndex("FileDetailsId");
@@ -426,8 +407,13 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Customers", "Membership");
                 });
@@ -440,9 +426,15 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Website")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Stores", "Membership");
                 });
@@ -468,17 +460,15 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PaymentMethod")
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
+                        .HasColumnType("text");
 
                     b.Property<string>("TransactionId")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasIndex("OrderId");
 
@@ -494,8 +484,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
+                        .HasColumnType("text");
 
                     b.HasIndex("BasketId");
 
@@ -547,8 +536,8 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<Guid?>("ParentCategoryId")
                         .HasColumnType("uuid");
@@ -574,13 +563,12 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(191)
-                        .HasColumnType("character varying(191)");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("StandardPrice")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Stock")
                         .HasColumnType("integer");
@@ -796,7 +784,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.HasOne("CleanArchitectureTemplate.Persistence.Identity.AppUser", null)
                         .WithOne()
-                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", "Id")
+                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Membership.Customer", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -811,7 +799,7 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.HasOne("CleanArchitectureTemplate.Persistence.Identity.AppUser", null)
                         .WithOne()
-                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Membership.Store", "Id")
+                        .HasForeignKey("CleanArchitectureTemplate.Domain.Entities.Membership.Store", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -837,18 +825,17 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("character varying(255)");
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("character varying(255)");
+                                .HasColumnType("text");
 
                             b1.Property<string>("PostalCode")
                                 .IsRequired()
-                                .HasMaxLength(15)
-                                .HasColumnType("character varying(15)");
+                                .HasMaxLength(255)
+                                .HasColumnType("character varying(255)");
 
                             b1.HasKey("OrderId");
 
@@ -858,7 +845,8 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.Navigation("BillingAddress");
+                    b.Navigation("BillingAddress")
+                        .IsRequired();
 
                     b.Navigation("Order");
                 });
@@ -884,18 +872,17 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("character varying(255)");
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("character varying(255)");
+                                .HasColumnType("text");
 
                             b1.Property<string>("PostalCode")
                                 .IsRequired()
-                                .HasMaxLength(15)
-                                .HasColumnType("character varying(15)");
+                                .HasMaxLength(255)
+                                .HasColumnType("character varying(255)");
 
                             b1.HasKey("OrderId");
 
@@ -907,7 +894,8 @@ namespace CleanArchitectureTemplate.Persistence.Migrations
 
                     b.Navigation("Basket");
 
-                    b.Navigation("ShippingAddress");
+                    b.Navigation("ShippingAddress")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Shopping.Basket", b =>
