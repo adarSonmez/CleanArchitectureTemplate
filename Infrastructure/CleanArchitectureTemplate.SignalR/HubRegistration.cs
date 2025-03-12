@@ -16,5 +16,6 @@ public static class HubRegistration
     public static void MapHubs(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapHub<ProductHub>("/product-hub");
+        endpoints.MapHub<OrderHub>("/order-hub");
     }
 }

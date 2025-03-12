@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 namespace CleanArchitectureTemplate.SignalR.Hubs;
 
 /// <summary>
-/// Hub for managing real-time communication related to products.
+/// Hub for managing real-time communication related to  orders.
 /// </summary>
-public class ProductHub : Hub<IProductClient>
+public class OrderHub : Hub<IOrderClient>
 {
-    private readonly ILogger<ProductHub> _logger;
+    private readonly ILogger<OrderHub> _logger;
 
-    public ProductHub(ILogger<ProductHub> logger)
+    public OrderHub(ILogger<OrderHub> logger)
     {
         _logger = logger;
     }

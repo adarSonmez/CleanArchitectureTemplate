@@ -1,6 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Hubs;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
-using CleanArchitectureTemplate.SignalR.Constants;
+using CleanArchitectureTemplate.SignalR.Clients;
 using CleanArchitectureTemplate.SignalR.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
@@ -11,17 +11,16 @@ namespace CleanArchitectureTemplate.SignalR.HubServices;
 /// </summary>
 public class ProductHubService : IProductHubService
 {
-    private readonly IHubContext<ProductHub> _hubContext;
+    private readonly IHubContext<ProductHub, IProductClient> _hubContext;
 
-    public ProductHubService(IHubContext<ProductHub> hubContext)
+    public ProductHubService(IHubContext<ProductHub, IProductClient> hubContext)
     {
         _hubContext = hubContext;
     }
 
     /// <inheritdoc/>
-    public Task SendProductAddedAsync(ProductDto productDto)
+    public async Task SendProductAddedAsync(ProductDto productDto)
     {
-        var message = $"Product added: {productDto.Name} with ID: {productDto.Id}";
-        return _hubContext.Clients.All.SendAsync(ReceiveFunctionNames.ProductAdded, message);
+        await _hubContext.Clients.All.ProductAddedAsync(productDto);
     }
 }

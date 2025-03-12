@@ -19,5 +19,6 @@ public static class ServiceRegistration
 
         // Add hub services
         services.AddScoped<IProductHubService, ProductHubService>();
+        services.AddScoped<IOrderHubService, OrderHubService>();
     }
 }
