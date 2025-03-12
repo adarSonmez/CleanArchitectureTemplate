@@ -80,6 +80,8 @@ public static class ServiceRegistration
         services.AddScoped<IProductWriteRepository, EfProductWriteRepository>();
         services.AddScoped<IBasketItemReadRepository, EfBasketItemReadRepository>();
         services.AddScoped<IBasketItemWriteRepository, EfBasketItemWriteRepository>();
+        services.AddScoped<IBasketReadRepository, EfBasketReadRepository>();
+        services.AddScoped<IBasketWriteRepository, EfBasketWriteRepository>();
 
         // Membership
         services.AddScoped<ICustomerReadRepository, EfCustomerReadRepository>();
@@ -90,8 +92,6 @@ public static class ServiceRegistration
         // Ordering
         services.AddScoped<IInvoiceReadRepository, EfInvoiceReadRepository>();
         services.AddScoped<IInvoiceWriteRepository, EfInvoiceWriteRepository>();
-        services.AddScoped<IOrderItemReadRepository, EfOrderItemReadRepository>();
-        services.AddScoped<IOrderItemWriteRepository, EfOrderItemWriteRepository>();
         services.AddScoped<IOrderReadRepository, EfOrderReadRepository>();
         services.AddScoped<IOrderWriteRepository, EfOrderWriteRepository>();
 

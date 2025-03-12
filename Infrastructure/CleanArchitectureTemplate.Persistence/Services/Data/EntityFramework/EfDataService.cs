@@ -1,6 +1,7 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Domain.Constants.Enums;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
+using CleanArchitectureTemplate.Domain.Constants.StringConstants;
 using CleanArchitectureTemplate.Domain.Entities.Membership;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
@@ -36,7 +37,7 @@ public class EfDataService : IDataService
 
         #region Seed Roles
 
-        var roles = new[] { "Admin", "Customer", "Store" };
+        var roles = new[] { UserRoles.Admin, UserRoles.Customer, UserRoles.Store };
 
         foreach (var roleName in roles)
         {
@@ -90,8 +91,8 @@ public class EfDataService : IDataService
 
         var customerMember = new Customer
         {
-            UserId = customerAppUser.Id,
-            Age = 25,
+            Id = customerAppUser.Id,
+            DateOfBirth = new DateOnly(1996, 1, 1),
             Gender = Gender.Male,
         };
 
@@ -103,10 +104,11 @@ public class EfDataService : IDataService
 
         var storeMember = new Store
         {
-            UserId = storeAppUser.Id,
+            Id = storeAppUser.Id,
             Website = "www.store.com",
             Description = "Store Description",
         };
+
         _context.Stores.Add(storeMember);
 
         #endregion Seed Stores
@@ -115,6 +117,7 @@ public class EfDataService : IDataService
 
         var electronicsCategory = new Category { Name = "Electronics", Description = "Electronic devices and accessories" };
         var clothingCategory = new Category { Name = "Clothing", Description = "Clothing and accessories" };
+        var hatsCategory = new Category { Name = "Hats", Description = "Hats and caps", ParentCategoryId = clothingCategory.Id };
         var booksCategory = new Category { Name = "Books", Description = "Books and magazines" };
 
         _context.Categories.AddRange(electronicsCategory, clothingCategory, booksCategory);
@@ -167,17 +170,28 @@ public class EfDataService : IDataService
             StoreId = storeMember.Id,
         };
 
-        _context.Products.AddRange(laptopProduct, phoneProduct, shirtProduct, bookProduct);
+        var hatProduct = new Product
+        {
+            Name = "Hat",
+            Description = "A stylish hat",
+            Categories = [hatsCategory, clothingCategory],
+            Stock = 500,
+            StandardPrice = new Money(10, Currency.Try),
+            DiscountRate = 0.1m,
+            StoreId = storeMember.Id,
+        };
+
+        _context.Products.AddRange(laptopProduct, phoneProduct, shirtProduct, bookProduct, hatProduct);
 
         #endregion Seed Products
 
         #region Seed Baskets
 
-        var basket1 = new Basket { CustomerId = customerMember.Id };
+        var basket1 = new Basket { CustomerId = customerMember.Id, Ordered = true };
 
-        var basket2 = new Basket { CustomerId = customerMember.Id };
+        var basket2 = new Basket { CustomerId = customerMember.Id, Ordered = true };
 
-        var basket3 = new Basket { CustomerId = customerMember.Id };
+        var basket3 = new Basket { CustomerId = customerMember.Id, Ordered = true };
 
         var basket4 = new Basket { CustomerId = customerMember.Id };
 
@@ -272,6 +286,7 @@ public class EfDataService : IDataService
             TransactionId = "0001",
             Notes = "Paid by credit card",
             PaidAt = DateTime.UtcNow.AddDays(-1),
+            IssuedAt = DateTime.UtcNow.AddDays(-2),
         };
 
         var deliveredInvoice = new Invoice
@@ -284,6 +299,7 @@ public class EfDataService : IDataService
             TransactionId = "0002",
             Notes = "Paid by credit card",
             PaidAt = DateTime.UtcNow.AddDays(-1),
+            IssuedAt = DateTime.UtcNow.AddDays(-2),
         };
 
         var pendingInvoice = new Invoice
@@ -292,6 +308,7 @@ public class EfDataService : IDataService
             BillingAddress = new Address("67890", "Ankara", Country.Turkey),
             DueDate = DateTime.UtcNow.AddDays(30),
             Status = InvoiceStatus.Pending,
+            IssuedAt = DateTime.UtcNow.AddDays(0),
         };
 
         _context.Invoices.AddRange(shippedInvoice, deliveredInvoice, pendingInvoice);

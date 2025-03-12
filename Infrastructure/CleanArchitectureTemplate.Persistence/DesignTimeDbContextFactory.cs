@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace CleanArchitectureTemplate.Persistence;
 
@@ -15,9 +14,8 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<EfDbContex
     public EfDbContext CreateDbContext(string[] args)
     {
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
+            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../CleanArchitectureTemplate.WebAPI"))
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .AddUserSecrets<DesignTimeDbContextFactory>()
             .Build();
 
         var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -25,6 +23,6 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<EfDbContex
         var optionsBuilder = new DbContextOptionsBuilder<EfDbContext>();
         optionsBuilder.UseNpgsql(connectionString);
 
-        return new EfDbContext(optionsBuilder.Options);
+        return new EfDbContext(optionsBuilder.Options, default!);
     }
 }

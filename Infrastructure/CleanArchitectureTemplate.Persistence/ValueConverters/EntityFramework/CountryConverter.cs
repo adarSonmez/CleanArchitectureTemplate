@@ -1,5 +1,5 @@
-﻿using CleanArchitectureTemplate.Domain.Common;
-using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
+﻿using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
+using CleanArchitectureTemplate.Domain.Shared;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CleanArchitectureTemplate.Persistence.ValueConverters.EntityFramework;
