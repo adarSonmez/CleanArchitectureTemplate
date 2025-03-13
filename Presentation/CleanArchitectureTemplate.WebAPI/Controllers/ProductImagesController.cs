@@ -5,6 +5,8 @@ using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queries.GetProductImageById;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queries.GetProductImagesByFolder;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queries.GetProductImagesByProductId;
+using CleanArchitectureTemplate.Application.RequestParameters;
+using CleanArchitectureTemplate.Domain.Constants.StringConstants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +15,7 @@ namespace CleanArchitectureTemplate.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
 public class ProductImagesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -24,56 +26,61 @@ public class ProductImagesController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any, NoStore = false)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var request = new GetProductImageByIdQueryRequest(id);
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        return await _mediator.Send(request);
     }
 
     [HttpGet("product/{productId}")]
-    public async Task<IActionResult> GetByProductId([FromRoute] Guid productId)
+    [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any, NoStore = false, VaryByQueryKeys = ["*"])]
+    public async Task<IActionResult> GetByProductId([FromQuery] Pagination pagination, [FromRoute] Guid productId)
     {
-        var request = new GetProductImagesByProductIdQueryRequest(productId);
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        var request = new GetProductImagesByProductIdQueryRequest(pagination, productId);
+        return await _mediator.Send(request);
     }
 
     [HttpGet("folder/{folderName}")]
-    public async Task<IActionResult> GetByFolderName([FromRoute] string folderName)
+    [Authorize(Roles = UserRoles.Admin)]
+    public async Task<IActionResult> GetByFolderName([FromQuery] Pagination pagination, [FromRoute] string folderName)
     {
-        var request = new GetProductImagesByFolderQueryRequest(folderName);
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        var request = new GetProductImagesByFolderQueryRequest(pagination, folderName);
+        return await _mediator.Send(request);
     }
 
     [HttpPost("upload-primary")]
+    [Authorize(Roles = UserRoles.StoreOrAdmin)]
     public async Task<IActionResult> UploadPrimaryImage([FromForm] UploadPrimaryProductImageCommandRequest request)
     {
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        return await _mediator.Send(request);
     }
 
-    [HttpPost("upload-secondaries")]
-    public async Task<IActionResult> UploadSecondaryImages([FromForm] UploadSecondaryProductImagesCommandRequest request)
+    [HttpPost("upload-secondary/{productId}")]
+    [Authorize(Roles = UserRoles.StoreOrAdmin)]
+    public async Task<IActionResult> UploadSecondaryImages(
+        [FromQuery] Pagination pagination,
+        [FromBody] string folder,
+        [FromRoute] Guid productId,
+        [FromForm] IFormFileCollection files)
     {
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        var request = new UploadSecondaryProductImagesCommandRequest(pagination, folder, productId, files);
+        return await _mediator.Send(request);
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = UserRoles.StoreOrAdmin)]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var request = new DeleteProductImageByIdCommandRequest(id);
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        return await _mediator.Send(request);
     }
 
     [HttpDelete("product/{productId}")]
+    [Authorize(Roles = UserRoles.StoreOrAdmin)]
     public async Task<IActionResult> DeleteByProductId([FromRoute] Guid productId)
     {
         var request = new DeleteProductImagesByProductIdCommandRequest(productId);
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        return await _mediator.Send(request);
     }
 }

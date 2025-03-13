@@ -3,6 +3,8 @@ using CleanArchitectureTemplate.Application.Features.Products.Commands.DeletePro
 using CleanArchitectureTemplate.Application.Features.Products.Commands.UpdateProduct;
 using CleanArchitectureTemplate.Application.Features.Products.Queries.GetAllProducts;
 using CleanArchitectureTemplate.Application.Features.Products.Queries.GetProductById;
+using CleanArchitectureTemplate.Application.RequestParameters;
+using CleanArchitectureTemplate.Domain.Constants.StringConstants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +13,7 @@ namespace CleanArchitectureTemplate.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
 public class ProductsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -22,39 +24,43 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] GetAllProductsQueryRequest request)
+    [ResponseCache(Duration = 360, Location = ResponseCacheLocation.Client, VaryByQueryKeys = ["*"])]
+    public async Task<IActionResult> GetAll(
+        [FromQuery] Pagination pagination,
+        [FromQuery] bool includeCategories,
+        [FromQuery] bool includeBasketItems,
+        [FromQuery] bool includeProductImageFiles)
     {
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        var request = new GetAllProductsQueryRequest(pagination, includeCategories, includeBasketItems, includeProductImageFiles);
+        return await _mediator.Send(request);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id, [FromQuery] bool includeCategories, [FromQuery] bool includeOrders, [FromQuery] bool includeProductImageFiles)
     {
         var request = new GetProductByIdQueryRequest(id, includeCategories, includeOrders, includeProductImageFiles);
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        return await _mediator.Send(request);
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Store)]
     public async Task<IActionResult> Create([FromBody] CreateProductCommandRequest request)
     {
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        return await _mediator.Send(request);
     }
 
     [HttpPut]
+    [Authorize(Roles = UserRoles.StoreOrAdmin)]
     public async Task<IActionResult> Update([FromBody] UpdateProductCommandRequest request)
     {
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        return await _mediator.Send(request);
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = UserRoles.StoreOrAdmin)]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var request = new DeleteProductCommandRequest(id);
-        var response = await _mediator.Send(request);
-        return Ok(response);
+        return await _mediator.Send(request);
     }
 }
