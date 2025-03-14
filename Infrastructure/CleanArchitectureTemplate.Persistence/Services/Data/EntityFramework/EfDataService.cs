@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
+using CleanArchitectureTemplate.Application.Constants.StringConstants;
 using CleanArchitectureTemplate.Domain.Constants.Enums;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using CleanArchitectureTemplate.Domain.Constants.StringConstants;
@@ -10,6 +11,7 @@ using CleanArchitectureTemplate.Persistence.Contexts;
 using CleanArchitectureTemplate.Persistence.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace CleanArchitectureTemplate.Persistence.Services.Data.EntityFramework;
 
@@ -50,6 +52,93 @@ public class EfDataService : IDataService
 
         #endregion Seed Roles
 
+        #region Seed Role Claims
+
+        var adminRole = await _roleManager.FindByNameAsync(UserRoles.Admin)!;
+        var customerRole = await _roleManager.FindByNameAsync(UserRoles.Customer)!;
+        var storeRole = await _roleManager.FindByNameAsync(UserRoles.Store)!;
+
+        var adminClaims = new[]
+        {
+            new Claim(ClaimNames.Permission, Permissions.UserCreate),
+            new Claim(ClaimNames.Permission, Permissions.UserRead),
+            new Claim(ClaimNames.Permission, Permissions.UserUpdate),
+            new Claim(ClaimNames.Permission, Permissions.UserDelete),
+            new Claim(ClaimNames.Permission, Permissions.ProductCreate),
+            new Claim(ClaimNames.Permission, Permissions.ProductRead),
+            new Claim(ClaimNames.Permission, Permissions.ProductUpdate),
+            new Claim(ClaimNames.Permission, Permissions.ProductDelete),
+            new Claim(ClaimNames.Permission, Permissions.OrderCreate),
+            new Claim(ClaimNames.Permission, Permissions.OrderRead),
+            new Claim(ClaimNames.Permission, Permissions.OrderUpdate),
+            new Claim(ClaimNames.Permission, Permissions.OrderDelete),
+            new Claim(ClaimNames.Permission, Permissions.FileUpload),
+            new Claim(ClaimNames.Permission, Permissions.FileRead),
+            new Claim(ClaimNames.Permission, Permissions.FileDelete),
+            new Claim(ClaimNames.Permission, Permissions.BasketCreate),
+            new Claim(ClaimNames.Permission, Permissions.BasketRead),
+            new Claim(ClaimNames.Permission, Permissions.BasketUpdate),
+            new Claim(ClaimNames.Permission, Permissions.BasketDelete),
+            new Claim(ClaimNames.Permission, Permissions.BasketItemCreate),
+            new Claim(ClaimNames.Permission, Permissions.BasketItemRead),
+            new Claim(ClaimNames.Permission, Permissions.BasketItemUpdate),
+            new Claim(ClaimNames.Permission, Permissions.BasketItemDelete),
+        };
+
+        var customerClaims = new[]
+        {
+            new Claim(ClaimNames.Permission, Permissions.UserRead),
+            new Claim(ClaimNames.Permission, Permissions.ProductRead),
+            new Claim(ClaimNames.Permission, Permissions.FileRead),
+            new Claim(ClaimNames.Permission, Permissions.OrderCreate),
+            new Claim(ClaimNames.Permission, Permissions.OrderRead),
+            new Claim(ClaimNames.Permission, Permissions.BasketCreate),
+            new Claim(ClaimNames.Permission, Permissions.BasketRead),
+            new Claim(ClaimNames.Permission, Permissions.BasketUpdate),
+            new Claim(ClaimNames.Permission, Permissions.BasketDelete),
+            new Claim(ClaimNames.Permission, Permissions.BasketItemCreate),
+            new Claim(ClaimNames.Permission, Permissions.BasketItemRead),
+            new Claim(ClaimNames.Permission, Permissions.BasketItemUpdate),
+            new Claim(ClaimNames.Permission, Permissions.BasketItemDelete),
+        };
+
+        var storeClaims = new[]
+        {
+            new Claim(ClaimNames.Permission, Permissions.UserRead),
+            new Claim(ClaimNames.Permission, Permissions.ProductCreate),
+            new Claim(ClaimNames.Permission, Permissions.ProductRead),
+            new Claim(ClaimNames.Permission, Permissions.ProductUpdate),
+            new Claim(ClaimNames.Permission, Permissions.ProductDelete),
+            new Claim(ClaimNames.Permission, Permissions.OrderRead),
+            new Claim(ClaimNames.Permission, Permissions.OrderDelete),
+            new Claim(ClaimNames.Permission, Permissions.FileUpload),
+            new Claim(ClaimNames.Permission, Permissions.FileRead),
+            new Claim(ClaimNames.Permission, Permissions.FileDelete),
+        };
+
+        var currentAdminClaims = await _roleManager.GetClaimsAsync(adminRole!);
+        foreach (var item in adminClaims)
+        {
+            if (!currentAdminClaims.Any(c => c.Type == item.Type && c.Value == item.Value))
+                await _roleManager.AddClaimAsync(adminRole!, item);
+        }
+
+        var currentCustomerClaims = await _roleManager.GetClaimsAsync(customerRole!);
+        foreach (var item in customerClaims)
+        {
+            if (!currentCustomerClaims.Any(c => c.Type == item.Type && c.Value == item.Value))
+                await _roleManager.AddClaimAsync(customerRole!, item);
+        }
+
+        var currentStoreClaims = await _roleManager.GetClaimsAsync(storeRole!);
+        foreach (var item in storeClaims)
+        {
+            if (!currentStoreClaims.Any(c => c.Type == item.Type && c.Value == item.Value))
+                await _roleManager.AddClaimAsync(storeRole!, item);
+        }
+
+        #endregion Seed Role Claims
+
         #region Seed Users
 
         var adminAppUser = new AppUser
@@ -86,6 +175,36 @@ public class EfDataService : IDataService
         await _userManager.AddToRoleAsync(customerAppUser, "Customer");
 
         #endregion Seed Users
+
+        #region Seed User Claims
+
+        var customerUserClaims = new[]
+        {
+            new Claim(ClaimNames.SubscriptionLevel, "Free"),
+            new Claim(ClaimNames.LoyaltyLevel, "Gold")
+        };
+
+        var storeUserClaims = new[]
+        {
+            new Claim(ClaimNames.TrustLevel, "High"),
+            new Claim(ClaimNames.SubscriptionLevel, "Premium")
+        };
+
+        var currentCustomerUserClaims = await _userManager.GetClaimsAsync(customerAppUser);
+        foreach (var item in customerUserClaims)
+        {
+            if (!currentCustomerUserClaims.Any(c => c.Type == item.Type && c.Value == item.Value))
+                await _userManager.AddClaimAsync(customerAppUser, item);
+        }
+
+        var currentStoreUserClaims = await _userManager.GetClaimsAsync(storeAppUser);
+        foreach (var item in storeUserClaims)
+        {
+            if (!currentStoreUserClaims.Any(c => c.Type == item.Type && c.Value == item.Value))
+                await _userManager.AddClaimAsync(storeAppUser, item);
+        }
+
+        #endregion Seed User Claims
 
         #region Seed Customers
 
