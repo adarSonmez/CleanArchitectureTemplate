@@ -6,7 +6,7 @@ using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadPrimaryProductImage;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;
-using CleanArchitectureTemplate.Domain.Constants.StringContants;
+using CleanArchitectureTemplate.Application.Constants.StringContants;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;

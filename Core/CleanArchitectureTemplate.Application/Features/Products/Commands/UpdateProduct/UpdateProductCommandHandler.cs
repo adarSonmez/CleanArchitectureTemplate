@@ -7,7 +7,7 @@ using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.DeleteProductImagesByProductId;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadPrimaryProductImage;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;
-using CleanArchitectureTemplate.Domain.Constants.StringContants;
+using CleanArchitectureTemplate.Application.Constants.StringContants;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 
