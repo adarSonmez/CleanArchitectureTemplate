@@ -5,105 +5,64 @@ using CleanArchitectureTemplate.Infrastructure.Filters;
 using CleanArchitectureTemplate.Infrastructure.Services.Storage.Local;
 using CleanArchitectureTemplate.Persistence;
 using CleanArchitectureTemplate.SignalR;
-using CleanArchitectureTemplate.WebAPI.Configurations.ColumnWriters;
+using CleanArchitectureTemplate.WebAPI.Configurations;
 using CleanArchitectureTemplate.WebAPI.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using Serilog.Sinks.PostgreSQL.ColumnWriters;
-using System.Security.Claims;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Controllers with Validation Filter
 builder.Services
     .AddControllers(o => o.Filters.Add<ValidationFilter>())
     .ConfigureApiBehaviorOptions(o => o.SuppressModelStateInvalidFilter = true);
 
+// Add Fluent Validation support
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(CleanArchitectureTemplate.Application.ServiceRegistration));
 
 // Register services from other layers
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddSignalRServices();
 
+// Configure caching
+builder.Services.AddResponseCaching(x => x.MaximumBodySize = 1024);
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
+
+// Register storage service (Local Storage)
 builder.Services.AddStorage<LocalStorage>();
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(builder =>
-    {
-        builder.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
-});
+// Configure CORS to allow requests from any origin, method, and header
+builder.Services.AddCors(CorsConfiguration.ConfigureCors);
 
-builder.Host.UseSerilog((context, configuration) =>
-{
-    configuration
-        .ReadFrom.Configuration(context.Configuration)
-        .Enrich.FromLogContext()
-        .WriteTo.Console()
-        .WriteTo.Seq(builder.Configuration["Logging:Seq:ServerUrl"]!)
-        .WriteTo.PostgreSQL(
-            context.Configuration.GetConnectionString("DefaultConnection")!,
-            "Logs",
-            columnOptions: new Dictionary<string, ColumnWriterBase>
-            {
-                { "message", new RenderedMessageColumnWriter() },
-                { "message_template", new MessageTemplateColumnWriter() },
-                { "level", new LevelColumnWriter() },
-                { "timestamp", new TimestampColumnWriter() },
-                { "exception", new ExceptionColumnWriter() },
-                { "log_event", new LogEventSerializedColumnWriter() },
-                { "user_name", new UserNameColumnWriter() },
-                { "user_roles", new UserRolesColumnWriter() }
-            },
-            needAutoCreateTable: true
-        );
-});
-builder.Services.AddHttpLogging(logging =>
-{
-    logging.LoggingFields = HttpLoggingFields.All;
-    logging.RequestHeaders.Add("sec-ch-ua");
-    logging.MediaTypeOptions.AddText("application/javascript");
-    logging.RequestBodyLogLimit = 4096;
-    logging.ResponseBodyLogLimit = 4096;
-    logging.CombineLogs = true;
-});
+// Configure Serilog for logging
+builder.Host.UseSerilog(LoggingConfiguration.ConfigureSerilog);
+builder.Services.AddHttpLogging(LoggingConfiguration.ConfigureHttpLogging);
 
+// Add support for API documentation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            LifetimeValidator = (before, expires, token, param) => expires > DateTime.UtcNow,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
-            ClockSkew = TimeSpan.Zero,
-            NameClaimType = ClaimTypes.NameIdentifier,
-            RoleClaimType = ClaimTypes.Role
-        };
-    });
+// Configure authentication
+builder.Services
+    .AddAuthentication(AuthConfiguration.ConfigureAuthentication)
+    .AddJwtBearer(options => AuthConfiguration.ConfigureJwtBearer(options, builder.Configuration));
+
+// Configure authorization
+builder.Services.AddAuthorization(AuthConfiguration.ConfigureAuthorization);
 
 var app = builder.Build();
 
-app.UseMigrator();
+// Apply any pending migrations automatically
+await app.UseMigratorAsync();
 
+// In development mode, enable Swagger UI and seed the database
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -117,13 +76,17 @@ app.UseStaticFiles();
 
 app.UseHttpLogging();
 
+app.UseHttpsRedirection();
+
 app.UseCors();
 
-app.UseHttpsRedirection();
+app.UseContentSecurityPolicy();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseResponseCaching();
 
 app.MapControllers();
 
