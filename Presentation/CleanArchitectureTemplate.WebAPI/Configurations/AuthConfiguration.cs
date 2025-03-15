@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using CleanArchitectureTemplate.Application.Constants.StringConstants;
+using CleanArchitectureTemplate.Domain.Constants.StringConstants;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -29,23 +31,22 @@ public static class AuthConfiguration
     /// <param name="options">The authorization options.</param>
     public static void ConfigureAuthorization(AuthorizationOptions options)
     {
-        options.AddPolicy("AdminOrManageUsers", policy =>
+        options.AddPolicy("AdminOrCreateUsers", policy =>
             policy.RequireAssertion(context =>
-                context.User.IsInRole("Admin") ||
-                context.User.HasClaim("CanManageUsers", "true")
+                context.User.IsInRole(UserRoles.Admin) ||
+                context.User.HasClaim(ClaimNames.Permission, Permissions.UserCreate)
             ));
 
-        options.AddPolicy("StoreManageOrders", policy =>
+        options.AddPolicy("StoreOrUpdateOrders", policy =>
             policy.RequireAssertion(context =>
-                context.User.IsInRole("Store") &&
-                context.User.HasClaim("CanManageOrders", "true")
+                context.User.IsInRole(UserRoles.Store) &&
+                context.User.HasClaim(ClaimNames.Permission, Permissions.OrderUpdate)
             ));
 
         options.AddPolicy("LoyalCustomer", policy =>
             policy.RequireAssertion(context =>
-                context.User.IsInRole("Customer") &&
-                context.User.Claims.Any(c =>
-                    c.Type == "LoyaltyLevel" && c.Value == "Gold")
+                context.User.IsInRole(UserRoles.Customer) &&
+                context.User.HasClaim(ClaimNames.LoyaltyLevel, "Gold")
             ));
     }
 

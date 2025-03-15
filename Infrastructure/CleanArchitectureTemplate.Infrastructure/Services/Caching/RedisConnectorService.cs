@@ -75,8 +75,13 @@ public sealed class RedisConnectorService : IDisposable
         // Map the discovered master endpoint to a local endpoint using the provided mapping
         var masterEndpointKey = masterEndpoint.ToString()!;
         var masterMappingDict = _settings.MasterMapping.ToDictionary(list => list[0], list => list[1]);
+        string? mappedEndpoint = null;
 
-        if (!masterMappingDict.TryGetValue(masterEndpointKey, out var mappedEndpoint))
+        if (masterMappingDict.Keys.FirstOrDefault() == masterMappingDict.Values.FirstOrDefault()) // Running from docker-compose
+        {
+            mappedEndpoint = masterEndpointKey;
+        }
+        else if (!masterMappingDict.TryGetValue(masterEndpointKey, out mappedEndpoint))
         {
             throw new NotImplementedException($"Mapping for master endpoint {masterEndpointKey} is not configured.");
         }

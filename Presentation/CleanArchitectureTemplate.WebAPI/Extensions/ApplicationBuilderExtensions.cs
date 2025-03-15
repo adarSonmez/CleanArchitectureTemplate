@@ -29,5 +29,10 @@ public static class ApplicationBuilderExtensions
         return builder.UseMiddleware<GlobalExceptionHandlerMiddleware>();
     }
 
+    public static IApplicationBuilder UseContentSecurityPolicy(this IApplicationBuilder builder)
+    {
+        return builder.UseMiddleware<ContentSecurityPolicyMiddleware>();
+    }
+
     #endregion Middleware Extensions
 }

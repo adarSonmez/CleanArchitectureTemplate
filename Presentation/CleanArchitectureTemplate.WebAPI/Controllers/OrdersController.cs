@@ -48,6 +48,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Customer)]
     public async Task<IActionResult> Create([FromBody] CreateOrderFromBasketCommandRequest request)
     {
         return await _mediator.Send(request);
