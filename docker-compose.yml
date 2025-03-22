@@ -11,6 +11,7 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=CleanArchitectureTemplate;Username=postgres;Password=postgres
       - Logging__Seq__ServerUrl=http://clean-seq:5341
+      - AI__Ollama__ServerUrl=http://clean-ollama:11434
       - RedisSettings__SentinelEndpoints__0=clean-redis-sentinel-1:26379
       - RedisSettings__SentinelEndpoints__1=clean-redis-sentinel-2:26379
       - RedisSettings__MasterMapping__0__0=clean-redis-master:6379
@@ -29,6 +30,7 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
     depends_on:
       - postgres
+      - ollama
       - seq
       - redis-master
       - redis-sentinel-1
@@ -49,6 +51,17 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - clean-net
+
+  ollama:
+    container_name: clean-ollama
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - clean-net
+    restart: unless-stopped
 
   seq:
     container_name: clean-seq
@@ -120,6 +133,7 @@ services:
 
 volumes:
   postgres_data:
+  ollama_data:
 
 networks:
   clean-net:

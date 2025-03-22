@@ -19,6 +19,7 @@ COPY ["Core/CleanArchitectureTemplate.Domain/CleanArchitectureTemplate.Domain.cs
 COPY ["Infrastructure/CleanArchitectureTemplate.Infrastructure/CleanArchitectureTemplate.Infrastructure.csproj", "Infrastructure/CleanArchitectureTemplate.Infrastructure/"]
 COPY ["Infrastructure/CleanArchitectureTemplate.Persistence/CleanArchitectureTemplate.Persistence.csproj", "Infrastructure/CleanArchitectureTemplate.Persistence/"]
 COPY ["Infrastructure/CleanArchitectureTemplate.SignalR/CleanArchitectureTemplate.SignalR.csproj", "Infrastructure/CleanArchitectureTemplate.SignalR/"]
+COPY ["Infrastructure/CleanArchitectureTemplate.SignalR/CleanArchitectureTemplate.AI.csproj", "Infrastructure/CleanArchitectureTemplate.AI/"]
 RUN dotnet restore "./Presentation/CleanArchitectureTemplate.WebAPI/CleanArchitectureTemplate.WebAPI.csproj"
 COPY . .
 WORKDIR "/src/Presentation/CleanArchitectureTemplate.WebAPI"
