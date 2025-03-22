@@ -3,7 +3,6 @@ using CleanArchitectureTemplate.Application.Settings;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace CleanArchitectureTemplate.Application;
 

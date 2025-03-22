@@ -18,4 +18,10 @@
     <ProjectReference Include="..\CleanArchitectureTemplate.Domain\CleanArchitectureTemplate.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\AI\Queries\DetectLanguage\" />
+    <Folder Include="Features\AI\Queries\Translate\" />
+    <Folder Include="Features\AI\Queries\Summarize\" />
+  </ItemGroup>
+
 </Project>
