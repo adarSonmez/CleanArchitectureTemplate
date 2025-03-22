@@ -1,0 +1,18 @@
+﻿name: translate
+template: |
+  You are a professional translator. Convert the following text into {{language}}
+  while maintaining its original tone and meaning.
+
+  Text:
+  {{input}}
+
+  Respond with only the translated text.
+description: Translate the input text into the specified language.
+template_format: handlebars
+input_variables:
+  - name: input
+    description: The text to analyze.
+    is_required: true
+  - name: language
+    description: The language to translate the text into.
+    is_required: true

@@ -1,0 +1,14 @@
+﻿name: detect_language
+template: |
+  You are a language expert. Analyze the following text and determine its language.
+
+  Text:
+  {{input}}
+
+  Respond with only the name of the language (e.g., English, Spanish, Turkish).
+description: Detect the language of a given input text.
+template_format: handlebars
+input_variables:
+  - name: input
+    description: The text to analyze.
+    is_required: true

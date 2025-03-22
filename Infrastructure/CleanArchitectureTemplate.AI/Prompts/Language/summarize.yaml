@@ -1,0 +1,14 @@
+﻿name: summarize
+template: |
+  You are a concise summarizer. Read the following text and provide a one-sentence summary that captures its key idea.
+
+  Text:
+  {{input}}
+
+  Respond with only the summary.
+description: Summarize the input text into a single sentence.
+template_format: handlebars
+input_variables:
+  - name: input
+    description: The text to analyze.
+    is_required: true
