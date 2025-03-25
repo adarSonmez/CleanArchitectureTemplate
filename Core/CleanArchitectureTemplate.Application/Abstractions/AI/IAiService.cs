@@ -5,14 +5,17 @@ namespace CleanArchitectureTemplate.Application.Abstractions.AI;
 /// <summary>
 /// Central AI service abstraction.
 /// </summary>
-public interface IAiService
+public interface IAIService
 {
     /// <summary>
     /// Sends a message to the AI service and receives a response.
     /// </summary>
     /// <param name="message">The message to send.</param>
+    /// <param name="connectionId">The connection ID of the client.</param>
+    /// <param name="streaming">Whether to stream the response.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The response from the AI service.</returns>
-    Task<ChatMessageDto?> SendMessageAsync(string message);
+    Task<ChatMessageDto?> SendMessageAsync(string message, string? connectionId, bool streaming, CancellationToken cancellationToken);
 
     /// <summary>
     /// Detects the language of the input text.
