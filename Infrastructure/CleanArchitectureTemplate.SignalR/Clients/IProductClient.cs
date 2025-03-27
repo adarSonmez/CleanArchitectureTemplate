@@ -1,16 +1,16 @@
-﻿using CleanArchitectureTemplate.Application.Dtos.Ordering;
+﻿using CleanArchitectureTemplate.Application.Dtos.Shopping;
 
 namespace CleanArchitectureTemplate.SignalR.Clients;
 
 /// <summary>
-/// Client for managing real-time communication related to orders.
+/// Client for managing real-time communication related to products.
 /// </summary>
-public interface IOrderClient
+public interface IProductClient
 {
     /// <summary>
-    /// Notifies clients that a order has been created.
+    /// Notifies clients that a product has been added.
     /// </summary>
-    Task OrderCreatedAsync(OrderDto message);
+    Task ProductAddedAsync(ProductDto message);
 
     /// <summary>
     /// Notifies clients that a client has connected.

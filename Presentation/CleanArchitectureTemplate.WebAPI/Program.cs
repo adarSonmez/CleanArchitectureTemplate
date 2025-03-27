@@ -1,3 +1,4 @@
+using CleanArchitectureTemplate.AI;
 using CleanArchitectureTemplate.Application;
 using CleanArchitectureTemplate.Application.Extensions;
 using CleanArchitectureTemplate.Infrastructure;
@@ -27,6 +28,7 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddSignalRServices();
+builder.Services.AddAIServices(builder.Configuration);
 
 // Configure caching
 builder.Services.AddResponseCaching(x => x.MaximumBodySize = 1024);
