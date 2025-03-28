@@ -15,7 +15,7 @@ public interface IAIService
     /// <param name="streaming">Whether to stream the response.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The response from the AI service.</returns>
-    Task<ChatMessageDto?> SendMessageAsync(string message, string? connectionId, bool streaming, CancellationToken cancellationToken);
+    Task<ChatMessageDto?> SendMessageAsync(string message, string connectionId, bool streaming, CancellationToken cancellationToken);
 
     /// <summary>
     /// Detects the language of the input text.

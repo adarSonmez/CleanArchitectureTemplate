@@ -37,6 +37,7 @@ public static class ServiceRegistration
         //    ));
 
         services.AddScoped<IAIService, SemanticKernelAIService>();
+        services.AddSingleton<IChatHistoryService, SemanticKernelChatHistoryService>();
 
         return services;
     }

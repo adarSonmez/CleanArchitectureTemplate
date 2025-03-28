@@ -1,4 +1,5 @@
-﻿using CleanArchitectureTemplate.SignalR.Clients;
+﻿using CleanArchitectureTemplate.Application.Abstractions.AI;
+using CleanArchitectureTemplate.SignalR.Clients;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
@@ -10,10 +11,12 @@ namespace CleanArchitectureTemplate.SignalR.Hubs;
 public class AIHub : Hub<IAIClient>
 {
     private readonly ILogger<AIHub> _logger;
+    private readonly IChatHistoryService _chatHistoryService;
 
-    public AIHub(ILogger<AIHub> logger)
+    public AIHub(ILogger<AIHub> logger, IChatHistoryService chatHistoryService)
     {
         _logger = logger;
+        _chatHistoryService = chatHistoryService;
     }
 
     /// <inheritdoc/>
@@ -28,6 +31,7 @@ public class AIHub : Hub<IAIClient>
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         _logger.LogInformation($"Client disconnected: {Context.ConnectionId}");
+        _chatHistoryService.ClearHistory(Context.ConnectionId);
         await Clients.All.ClientDisconnectedAsync(Context.ConnectionId);
         await base.OnDisconnectedAsync(exception);
     }
