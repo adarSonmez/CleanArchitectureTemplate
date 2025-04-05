@@ -104,11 +104,5 @@ public static class ServiceRegistration
         services.AddScoped<IAuthenticationService, IdentityAuthenticationService>();
 
         #endregion Custom services
-
-        #region Mapping services
-
-        services.AddAutoMapper(typeof(IdentityMappingProfile).Assembly, typeof(Application.ServiceRegistration).Assembly);
-
-        #endregion Mapping services
     }
 }

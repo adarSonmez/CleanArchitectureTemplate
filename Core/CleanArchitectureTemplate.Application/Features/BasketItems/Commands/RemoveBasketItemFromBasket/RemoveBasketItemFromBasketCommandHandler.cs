@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
-using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
+using CleanArchitectureTemplate.Application.Mappings.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.BasketItems.Commands.RemoveBasketItemFromBasket;
@@ -14,18 +14,15 @@ namespace CleanArchitectureTemplate.Application.Features.BasketItems.Commands.Re
 /// </summary>
 public class RemoveBasketItemFromBasketCommandHandler : IRequestHandler<RemoveBasketItemFromBasketCommandRequest, SingleResponse<BasketDto?>>
 {
-    private readonly IMapper _mapper;
     private readonly IBasketReadRepository _basketReadRepository;
     private readonly IBasketItemWriteRepository _basketItemWriteRepository;
     private readonly IUserContextService _userContextService;
 
     public RemoveBasketItemFromBasketCommandHandler(
-        IMapper mapper,
         IBasketReadRepository basketReadRepository,
         IBasketItemWriteRepository basketItemWriteRepository,
         IUserContextService userContextService)
     {
-        _mapper = mapper;
         _basketReadRepository = basketReadRepository;
         _basketItemWriteRepository = basketItemWriteRepository;
         _userContextService = userContextService;
@@ -61,7 +58,7 @@ public class RemoveBasketItemFromBasketCommandHandler : IRequestHandler<RemoveBa
             }
         }
 
-        response.SetData(_mapper.Map<BasketDto>(basket));
+        response.SetData(basket.ToDto());
 
         return response;
     }

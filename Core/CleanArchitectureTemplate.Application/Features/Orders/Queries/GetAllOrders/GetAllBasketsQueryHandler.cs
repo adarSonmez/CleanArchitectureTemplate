@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Ordering;
+using CleanArchitectureTemplate.Application.Mappings.Ordering;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
 using MediatR;
 using System.Linq.Expressions;
@@ -13,12 +13,10 @@ namespace CleanArchitectureTemplate.Application.Features.Orders.Queries.GetAllOr
 /// </summary>
 public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQueryRequest, PagedResponse<OrderDto>>
 {
-    private readonly IMapper _mapper;
     private readonly IOrderReadRepository _orderReadRepository;
 
-    public GetAllOrdersQueryHandler(IMapper mapper, IOrderReadRepository OrderReadRepository)
+    public GetAllOrdersQueryHandler(IOrderReadRepository OrderReadRepository)
     {
-        _mapper = mapper;
         _orderReadRepository = OrderReadRepository;
     }
 
@@ -38,7 +36,7 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQueryRequest
         );
 
         response.SetData(
-            _mapper.Map<IEnumerable<OrderDto>>(orders),
+            orders.Select(o => o.ToDto()),
             request.Pagination?.Page,
             request.Pagination?.Size
         );

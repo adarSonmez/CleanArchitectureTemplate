@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Files;
 using CleanArchitectureTemplate.Domain.Entities.Files;
 using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
+using CleanArchitectureTemplate.Application.Mappings.Files;
 
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queries.GetProductImageById;
 
@@ -13,12 +13,10 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queri
 /// </summary>
 public class GetProductImageByIdQueryHandler : IRequestHandler<GetProductImageByIdQueryRequest, SingleResponse<ProductImageFileDto?>>
 {
-    private readonly IMapper _mapper;
     private readonly IProductImageFileReadRepository _productImageFileReadRepository;
 
-    public GetProductImageByIdQueryHandler(IMapper mapper, IProductImageFileReadRepository productImageFileReadRepository)
+    public GetProductImageByIdQueryHandler(IProductImageFileReadRepository productImageFileReadRepository)
     {
-        _mapper = mapper;
         _productImageFileReadRepository = productImageFileReadRepository;
     }
 
@@ -29,7 +27,7 @@ public class GetProductImageByIdQueryHandler : IRequestHandler<GetProductImageBy
         var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.Id)
             ?? throw new NotFoundException(nameof(ProductImageFile), request.Id);
 
-        response.SetData(_mapper.Map<ProductImageFileDto>(productImageFile));
+        response.SetData(productImageFile.ToDto());
 
         return response;
     }

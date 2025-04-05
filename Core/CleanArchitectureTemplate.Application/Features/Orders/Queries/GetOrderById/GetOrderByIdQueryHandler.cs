@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Ordering;
 using CleanArchitectureTemplate.Application.Exceptions;
+using CleanArchitectureTemplate.Application.Mappings.Ordering;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
 using MediatR;
 using System.Linq.Expressions;
@@ -15,16 +15,13 @@ namespace CleanArchitectureTemplate.Application.Features.Orders.Queries.GetOrder
 /// </summary>
 public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQueryRequest, SingleResponse<OrderDto?>>
 {
-    private readonly IMapper _mapper;
     private readonly IOrderReadRepository _orderReadRepository;
     private readonly IUserContextService _userContextService;
 
     public GetOrderByIdQueryHandler(
-        IMapper mapper,
         IOrderReadRepository orderReadRepository,
         IUserContextService userContextService)
     {
-        _mapper = mapper;
         _orderReadRepository = orderReadRepository;
         _userContextService = userContextService;
     }
@@ -47,7 +44,7 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQueryRequest
         if (!request.IncludeBasket)
             order.Basket = null;
 
-        response.SetData(_mapper.Map<OrderDto>(order));
+        response.SetData(order.ToDto());
 
         return response;
     }

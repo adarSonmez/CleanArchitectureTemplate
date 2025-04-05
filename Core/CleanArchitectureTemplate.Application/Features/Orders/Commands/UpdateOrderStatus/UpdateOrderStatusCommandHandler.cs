@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Ordering;
 using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Features.Orders.Commands.CreateOrderFromBasket;
+using CleanArchitectureTemplate.Application.Mappings.Ordering;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
 using MediatR;
 
@@ -14,13 +14,11 @@ namespace CleanArchitectureTemplate.Application.Features.Orders.Commands.UpdateO
 /// </summary>
 public class UpdateOrderStatusCommandHandler : IRequestHandler<UpdateOrderStatusCommandRequest, SingleResponse<OrderDto?>>
 {
-    private readonly IMapper _mapper;
     private readonly IOrderReadRepository _orderReadRepository;
     private readonly IOrderWriteRepository _orderWriteRepository;
 
-    public UpdateOrderStatusCommandHandler(IMapper mapper, IOrderReadRepository orderReadRepository, IOrderWriteRepository orderWriteRepository)
+    public UpdateOrderStatusCommandHandler(IOrderReadRepository orderReadRepository, IOrderWriteRepository orderWriteRepository)
     {
-        _mapper = mapper;
         _orderReadRepository = orderReadRepository;
         _orderWriteRepository = orderWriteRepository;
     }
@@ -35,7 +33,7 @@ public class UpdateOrderStatusCommandHandler : IRequestHandler<UpdateOrderStatus
         order.Status = request.Status;
         await _orderWriteRepository.UpdateAsync(order);
 
-        response.SetData(_mapper.Map<OrderDto>(order));
+        response.SetData(order.ToDto());
 
         return response;
     }

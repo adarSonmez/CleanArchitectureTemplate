@@ -1,14 +1,14 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Files;
+using CleanArchitectureTemplate.Application.Exceptions;
+using CleanArchitectureTemplate.Application.Mappings.Files;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Files;
 using CleanArchitectureTemplate.Domain.Entities.Files;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
-using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadPrimaryProductImage;
@@ -18,7 +18,6 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Comma
 /// </summary>
 public class UploadPrimaryProductImageCommandHandler : IRequestHandler<UploadPrimaryProductImageCommandRequest, SingleResponse<ProductImageFileDto>>
 {
-    private readonly IMapper _mapper;
     private readonly IProductImageFileReadRepository _productImageFileReadRepository;
     private readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
     private readonly IProductReadRepository _productReadRepository;
@@ -26,14 +25,12 @@ public class UploadPrimaryProductImageCommandHandler : IRequestHandler<UploadPri
     private readonly IUserContextService _userContextService;
 
     public UploadPrimaryProductImageCommandHandler(
-        IMapper mapper,
         IProductImageFileReadRepository productImageFileReadRepository,
         IProductImageFileWriteRepository productImageFileWriteRepository,
         IProductReadRepository productReadRepository,
         IStorageService storageService,
         IUserContextService userContextService)
     {
-        _mapper = mapper;
         _productImageFileReadRepository = productImageFileReadRepository;
         _productImageFileWriteRepository = productImageFileWriteRepository;
         _productReadRepository = productReadRepository;
@@ -79,7 +76,7 @@ public class UploadPrimaryProductImageCommandHandler : IRequestHandler<UploadPri
         };
 
         await _productImageFileWriteRepository.AddAsync(productImageFile);
-        response.SetData(_mapper.Map<ProductImageFileDto>(productImageFile));
+        response.SetData(productImageFile.ToDto());
 
         return response;
     }

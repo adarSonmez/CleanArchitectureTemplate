@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Hubs;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Hubs;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
@@ -10,6 +9,7 @@ using CleanArchitectureTemplate.Application.Constants.StringContants;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
+using CleanArchitectureTemplate.Application.Mappings.Shopping;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.CreateProduct;
 
@@ -19,7 +19,6 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Commands.Creat
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandRequest, SingleResponse<ProductDto?>>
 {
     private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
     private readonly IProductReadRepository _productReadRepository;
     private readonly IProductWriteRepository _productWriteRepository;
     private readonly ICategoryReadRepository _categoryReadRepository;
@@ -28,7 +27,6 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
 
     public CreateProductCommandHandler(
         IMediator mediator,
-        IMapper mapper,
         IProductReadRepository productReadRepository,
         IProductWriteRepository productWriteRepository,
         ICategoryReadRepository categoryReadRepository,
@@ -36,7 +34,6 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
         IUserContextService userContextService)
     {
         _mediator = mediator;
-        _mapper = mapper;
         _productReadRepository = productReadRepository;
         _productWriteRepository = productWriteRepository;
         _categoryReadRepository = categoryReadRepository;
@@ -50,7 +47,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
 
         var userId = _userContextService.GetUserId()!;
 
-        var product = _mapper.Map<Product>(request);
+        var product = request.ToEntity();
         var categories = await _categoryReadRepository.GetByIdRangeAsync(request.CategoryIds);
 
         product.Categories = categories.ToList();
@@ -87,7 +84,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
         var detailedProduct = await _productReadRepository.GetByIdAsync(addedProduct.Id, include: [product => product.Categories, product => product.ProductImageFiles])
             ?? throw new NotFoundException(nameof(Product), addedProduct.Id);
 
-        var productDto = _mapper.Map<ProductDto>(detailedProduct);
+        var productDto = detailedProduct.ToDto();
 
         response.SetData(productDto);
         await _productHubService.SendProductAddedAsync(productDto);

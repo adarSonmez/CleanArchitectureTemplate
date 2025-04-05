@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
-using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
+using CleanArchitectureTemplate.Application.Mappings.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 using System.Linq.Expressions;
 
@@ -15,7 +15,6 @@ namespace CleanArchitectureTemplate.Application.Features.BasketItems.Commands.Ad
 /// </summary>
 public class AddBasketItemToBasketCommandHandler : IRequestHandler<AddBasketItemToBasketCommandRequest, SingleResponse<BasketDto?>>
 {
-    private readonly IMapper _mapper;
     private readonly IBasketReadRepository _basketReadRepository;
     private readonly IBasketWriteRepository _basketWriteRepository;
     private readonly IBasketItemWriteRepository _basketItemWriteRepository;
@@ -24,7 +23,6 @@ public class AddBasketItemToBasketCommandHandler : IRequestHandler<AddBasketItem
     private readonly IUserContextService _userContextService;
 
     public AddBasketItemToBasketCommandHandler(
-        IMapper mapper,
         IBasketReadRepository basketReadRepository,
         IBasketWriteRepository basketWriteRepository,
         IBasketItemWriteRepository basketItemWriteRepository,
@@ -32,7 +30,6 @@ public class AddBasketItemToBasketCommandHandler : IRequestHandler<AddBasketItem
         IProductReadRepository productReadRepository,
         IUserContextService userContextService)
     {
-        _mapper = mapper;
         _basketReadRepository = basketReadRepository;
         _basketWriteRepository = basketWriteRepository;
         _basketItemWriteRepository = basketItemWriteRepository;
@@ -62,7 +59,7 @@ public class AddBasketItemToBasketCommandHandler : IRequestHandler<AddBasketItem
         var basketItem = basket.BasketItems.FirstOrDefault(x => x.ProductId == request.ProductId);
         if (basketItem == null)
         {
-            basketItem = _mapper.Map<BasketItem>(request);
+            basketItem = request.ToEntity();
             await _basketItemWriteRepository.AddAsync(basketItem);
         }
         else
@@ -71,7 +68,7 @@ public class AddBasketItemToBasketCommandHandler : IRequestHandler<AddBasketItem
             await _basketItemWriteRepository.UpdateAsync(basketItem);
         }
 
-        response.SetData(_mapper.Map<BasketDto>(basket));
+        response.SetData(basket.ToDto());
 
         return response;
     }

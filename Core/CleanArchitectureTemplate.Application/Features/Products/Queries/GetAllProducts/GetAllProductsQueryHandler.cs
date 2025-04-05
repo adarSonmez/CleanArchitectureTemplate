@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
+using CleanArchitectureTemplate.Application.Mappings.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 using System.Linq.Expressions;
@@ -13,12 +13,10 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Queries.GetAll
 /// </summary>
 public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQueryRequest, PagedResponse<ProductDto?>>
 {
-    private readonly IMapper _mapper;
     private readonly IProductReadRepository _productReadRepository;
 
-    public GetAllProductsQueryHandler(IMapper mapper, IProductReadRepository productReadRepository)
+    public GetAllProductsQueryHandler(IProductReadRepository productReadRepository)
     {
-        _mapper = mapper;
         _productReadRepository = productReadRepository;
     }
 
@@ -45,7 +43,7 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQueryReq
             pagination: request.Pagination,
             include: includes);
 
-        response.SetData(_mapper.Map<IEnumerable<ProductDto>>(products), request.Pagination?.Page, request.Pagination?.Size);
+        response.SetData(products.Select(p => p.ToDto()), request.Pagination?.Page, request.Pagination?.Size);
 
         return response;
     }

@@ -1,12 +1,11 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
-using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
+using CleanArchitectureTemplate.Application.Mappings.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 using System.Linq.Expressions;
-using CleanArchitectureTemplate.Application.Abstractions.Services;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Queries.GetProductById;
 
@@ -15,12 +14,10 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Queries.GetPro
 /// </summary>
 public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryRequest, SingleResponse<ProductDto?>>
 {
-    private readonly IMapper _mapper;
     private readonly IProductReadRepository _productReadRepository;
 
-    public GetProductByIdQueryHandler(IMapper mapper, IProductReadRepository productReadRepository)
+    public GetProductByIdQueryHandler(IProductReadRepository productReadRepository)
     {
-        _mapper = mapper;
         _productReadRepository = productReadRepository;
     }
 
@@ -45,7 +42,7 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryReq
         var product = await _productReadRepository.GetByIdAsync(request.Id, include: includes)
         ?? throw new NotFoundException(nameof(Product), request.Id);
 
-        response.SetData(_mapper.Map<ProductDto>(product));
+        response.SetData(product.ToDto());
 
         return response;
     }

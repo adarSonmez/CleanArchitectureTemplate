@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Files;
 using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
@@ -10,6 +9,7 @@ using CleanArchitectureTemplate.Domain.Entities.Files;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
+using CleanArchitectureTemplate.Application.Mappings.Files;
 
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;
 
@@ -18,20 +18,17 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Comma
 /// </summary>
 public class UploadSecondaryProductImagesCommandHandler : IRequestHandler<UploadSecondaryProductImagesCommandRequest, PagedResponse<ProductImageFileDto?>>
 {
-    private readonly IMapper _mapper;
     private readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
     private readonly IProductReadRepository _productReadRepository;
     private readonly IStorageService _storageService;
     private readonly IUserContextService _userContextService;
 
     public UploadSecondaryProductImagesCommandHandler(
-        IMapper mapper,
         IProductImageFileWriteRepository productImageFileWriteRepository,
         IProductReadRepository productReadRepository,
         IStorageService storageService,
         IUserContextService userContextService)
     {
-        _mapper = mapper;
         _productImageFileWriteRepository = productImageFileWriteRepository;
         _productReadRepository = productReadRepository;
         _storageService = storageService;
@@ -74,7 +71,7 @@ public class UploadSecondaryProductImagesCommandHandler : IRequestHandler<Upload
         }
 
         await _productImageFileWriteRepository.AddRangeAsync(productImageFiles);
-        response.SetData(_mapper.Map<List<ProductImageFileDto>>(productImageFiles), request.Pagination?.Page, request.Pagination?.Size);
+        response.SetData(productImageFiles.Select(pi => pi.ToDto()), request.Pagination?.Page, request.Pagination?.Size);
 
         return response;
     }

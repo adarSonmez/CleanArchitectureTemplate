@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
-using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
+using CleanArchitectureTemplate.Application.Mappings.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.BasketItems.Queries.GetBasketItemById;
@@ -14,18 +14,15 @@ namespace CleanArchitectureTemplate.Application.Features.BasketItems.Queries.Get
 /// </summary>
 public class GetBasketItemByIdQueryHandler : IRequestHandler<GetBasketItemByIdQueryRequest, SingleResponse<BasketItemDto?>>
 {
-    private readonly IMapper _mapper;
     private readonly IBasketItemReadRepository _basketItemReadRepository;
     private readonly IBasketReadRepository _basketReadRepository;
     private readonly IUserContextService _userContextService;
 
     public GetBasketItemByIdQueryHandler(
-        IMapper mapper,
         IBasketItemReadRepository basketItemReadRepository,
         IBasketReadRepository basketReadRepository,
         IUserContextService userContextService)
     {
-        _mapper = mapper;
         _basketItemReadRepository = basketItemReadRepository;
         _basketReadRepository = basketReadRepository;
         _userContextService = userContextService;
@@ -44,7 +41,7 @@ public class GetBasketItemByIdQueryHandler : IRequestHandler<GetBasketItemByIdQu
         if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
             throw new ForbiddenException();
 
-        response.SetData(_mapper.Map<BasketItemDto>(basketItem));
+        response.SetData(basketItem.ToDto());
 
         return response;
     }

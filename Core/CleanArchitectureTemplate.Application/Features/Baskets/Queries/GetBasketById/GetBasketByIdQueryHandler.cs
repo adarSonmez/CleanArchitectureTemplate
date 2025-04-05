@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
-using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
+using CleanArchitectureTemplate.Application.Mappings.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 using System.Linq.Expressions;
 
@@ -15,16 +15,13 @@ namespace CleanArchitectureTemplate.Application.Features.Baskets.Queries.GetBask
 /// </summary>
 public class GetBasketByIdQueryHandler : IRequestHandler<GetBasketByIdQueryRequest, SingleResponse<BasketDto?>>
 {
-    private readonly IMapper _mapper;
     private readonly IBasketReadRepository _basketReadRepository;
     private readonly IUserContextService _userContextService;
 
     public GetBasketByIdQueryHandler(
-        IMapper mapper,
         IBasketReadRepository basketReadRepository,
         IUserContextService userContextService)
     {
-        _mapper = mapper;
         _basketReadRepository = basketReadRepository;
         _userContextService = userContextService;
     }
@@ -45,7 +42,7 @@ public class GetBasketByIdQueryHandler : IRequestHandler<GetBasketByIdQueryReque
         if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
             throw new ForbiddenException();
 
-        response.SetData(_mapper.Map<BasketDto>(basket));
+        response.SetData(basket.ToDto());
 
         return response;
     }

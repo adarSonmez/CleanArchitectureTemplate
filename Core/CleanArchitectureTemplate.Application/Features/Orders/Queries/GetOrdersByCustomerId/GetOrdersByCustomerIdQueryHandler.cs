@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Ordering;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Ordering;
 using CleanArchitectureTemplate.Application.Features.Orders.Queries.GetOrderById;
+using CleanArchitectureTemplate.Application.Mappings.Ordering;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
 using MediatR;
 using System.Linq.Expressions;
@@ -15,13 +15,11 @@ namespace CleanArchitectureTemplate.Application.Features.Orders.Queries.GetOrder
 /// </summary>
 public class GetOrdersByCustomerIdQueryHandler : IRequestHandler<GetOrdersByCustomerIdQueryRequest, PagedResponse<OrderDto>>
 {
-    private readonly IMapper _mapper;
     private readonly IOrderReadRepository _orderReadRepository;
     private readonly IUserContextService _userContextService;
 
-    public GetOrdersByCustomerIdQueryHandler(IMapper mapper, IOrderReadRepository OrderReadRepository, IUserContextService userContextService)
+    public GetOrdersByCustomerIdQueryHandler(IOrderReadRepository OrderReadRepository, IUserContextService userContextService)
     {
-        _mapper = mapper;
         _orderReadRepository = OrderReadRepository;
         _userContextService = userContextService;
     }
@@ -52,7 +50,7 @@ public class GetOrdersByCustomerIdQueryHandler : IRequestHandler<GetOrdersByCust
         }
 
         response.SetData(
-            _mapper.Map<IEnumerable<OrderDto>>(orders),
+            orders.Select(o => o.ToDto()),
             request.Pagination?.Page,
             request.Pagination?.Size
         );

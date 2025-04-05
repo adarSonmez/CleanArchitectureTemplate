@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
+using CleanArchitectureTemplate.Application.Mappings.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 using System.Linq.Expressions;
@@ -13,12 +13,10 @@ namespace CleanArchitectureTemplate.Application.Features.Baskets.Queries.GetAllB
 /// </summary>
 public class GetAllBasketsQueryHandler : IRequestHandler<GetAllBasketsQueryRequest, PagedResponse<BasketDto>>
 {
-    private readonly IMapper _mapper;
     private readonly IBasketReadRepository _basketReadRepository;
 
-    public GetAllBasketsQueryHandler(IMapper mapper, IBasketReadRepository basketReadRepository)
+    public GetAllBasketsQueryHandler(IBasketReadRepository basketReadRepository)
     {
-        _mapper = mapper;
         _basketReadRepository = basketReadRepository;
     }
 
@@ -39,7 +37,7 @@ public class GetAllBasketsQueryHandler : IRequestHandler<GetAllBasketsQueryReque
         );
 
         response.SetData(
-            _mapper.Map<IEnumerable<BasketDto>>(baskets),
+            baskets.Select(b => b.ToDto()),
             request.Pagination?.Page,
             request.Pagination?.Size
         );

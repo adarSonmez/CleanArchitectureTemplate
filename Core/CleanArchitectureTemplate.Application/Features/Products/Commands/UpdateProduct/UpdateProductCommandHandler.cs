@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
@@ -10,6 +9,7 @@ using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.
 using CleanArchitectureTemplate.Application.Constants.StringContants;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
+using CleanArchitectureTemplate.Application.Mappings.Shopping;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.UpdateProduct;
 
@@ -19,16 +19,14 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Commands.Updat
 public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandRequest, SingleResponse<ProductDto?>>
 {
     private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
     private readonly IProductReadRepository _productReadRepository;
     private readonly IProductWriteRepository _productWriteRepository;
     private readonly ICategoryReadRepository _categoryReadRepository;
     private readonly IUserContextService _userContextService;
 
-    public UpdateProductCommandHandler(IMediator mediator, IMapper mapper, IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, ICategoryReadRepository categoryReadRepository, IUserContextService userContextService)
+    public UpdateProductCommandHandler(IMediator mediator, IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, ICategoryReadRepository categoryReadRepository, IUserContextService userContextService)
     {
         _mediator = mediator;
-        _mapper = mapper;
         _productReadRepository = productReadRepository;
         _productWriteRepository = productWriteRepository;
         _categoryReadRepository = categoryReadRepository;
@@ -89,7 +87,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
         var uodatedProduct = await _productWriteRepository.UpdateAsync(product!);
         var detailedProduct = await _productReadRepository.GetByIdAsync(uodatedProduct.Id, include: [product => product.Categories, product => product.ProductImageFiles]);
 
-        response.SetData(_mapper.Map<ProductDto>(detailedProduct));
+        response.SetData(detailedProduct?.ToDto());
 
         return response;
     }

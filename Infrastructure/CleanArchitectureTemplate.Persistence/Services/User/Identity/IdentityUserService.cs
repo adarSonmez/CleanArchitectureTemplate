@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CleanArchitectureTemplate.Application.Abstractions.Services;
+﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Dtos.Identity;
 using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
@@ -16,14 +15,12 @@ namespace CleanArchitectureTemplate.Persistence.Services.User.Identity;
 /// </summary>
 public class IdentityUserService : IUserService
 {
-    private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
     private readonly UserManager<AppUser> _userManager;
 
-    public IdentityUserService(IMapper mapper, IConfiguration configuration, IEmailService emailService, UserManager<AppUser> userManager)
+    public IdentityUserService(IConfiguration configuration, IEmailService emailService, UserManager<AppUser> userManager)
     {
-        _mapper = mapper;
         _configuration = configuration;
         _emailService = emailService;
         _userManager = userManager;
@@ -34,12 +31,12 @@ public class IdentityUserService : IUserService
     /// <inheritdoc />
     public async Task<UserDto?> CreateAsync(RegisterUserCommandRequest model)
     {
-        var user = _mapper.Map<AppUser>(model);
+        var user = model.ToAppUser();
         var result = await _userManager.CreateAsync(user, model.Password);
 
         if (result.Succeeded)
         {
-            return _mapper.Map<UserDto>(user);
+            return user.ToDto();
         }
 
         throw new BadRequestException(result.Errors.Select(e => e.Description).FirstOrDefault());
@@ -55,7 +52,7 @@ public class IdentityUserService : IUserService
         var user = await _userManager.FindByIdAsync(id.ToString())
             ?? throw new NotFoundException(nameof(AppUser), id);
 
-        return _mapper.Map<UserDto>(user);
+        return user.ToDto();
     }
 
     /// <inheritdoc />
@@ -71,7 +68,7 @@ public class IdentityUserService : IUserService
         }
 
         var users = await query.ToListAsync();
-        return _mapper.Map<IEnumerable<UserDto>>(users);
+        return users.Select(u => u.ToDto());
     }
 
     #endregion User Retrieval
