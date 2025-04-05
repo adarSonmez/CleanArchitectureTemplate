@@ -14,7 +14,7 @@ CleanArchitectureTemplate is a **modern, robust starting point** for building sc
 - 🛢️ **Entity Framework Core with PostgreSQL**: Simplifies database operations using EF Core with PostgreSQL provider.
 - 🔄 **CQRS with MediatR**: Implements the Command Query Responsibility Segregation pattern using MediatR.
 - ✅ **Fluent Validation**: Ensures robust validation for input models.
-- ✂️ **AutoMapper**: Simplifies object-to-object mapping.
+- 🛠️ **Custom Mapping Extensions**: Clean, handcrafted mappings for full control—no AutoMapper or third-party mapping libraries used.
 - ☁️ **Azure Blob Storage Integration**: Supports file storage with Azure Storage Blobs.
 - 🔑 **JWT Authentication**: Provides secure authentication using JWT bearer tokens.
 - 🔐 **ASP.NET Core Identity Mechanism**: Offers a comprehensive identity management system for user authentication and role-based authorization.
