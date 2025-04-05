@@ -15,6 +15,6 @@ public record ChatMessageDto
     string Role,
     string? Think,
     string? Content,
-    string ModelId,
+    string? ModelId,
     bool Streaming
 ) : IDto;

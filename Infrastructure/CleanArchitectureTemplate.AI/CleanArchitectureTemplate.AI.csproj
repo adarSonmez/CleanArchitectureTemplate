@@ -22,4 +22,10 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Filters\FunctionInvocationFilters\" />
+      <Folder Include="Filters\AutoFunctionInvocationFilters\" />
+      <Folder Include="Filters\PromptRenderFilters\" />
+    </ItemGroup>
 </Project>

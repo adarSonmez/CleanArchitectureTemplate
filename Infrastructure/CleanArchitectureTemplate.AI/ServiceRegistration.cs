@@ -1,6 +1,6 @@
-﻿using CleanArchitectureTemplate.AI.Services;
+﻿using CleanArchitectureTemplate.AI.Plugins;
+using CleanArchitectureTemplate.AI.Services;
 using CleanArchitectureTemplate.Application.Abstractions.AI;
-using Codeblaze.SemanticKernel.Connectors.Ollama;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
@@ -21,20 +21,20 @@ public static class ServiceRegistration
     /// <param name="configuration">The configuration to use for the services.</param>
     public static IServiceCollection AddAIServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddKernel()
-            .AddOllamaChatCompletion(
-                modelId: configuration["AI:Ollama:Model"]!,
-                baseUrl: configuration["AI:Ollama:ServerUrl"]!);
-        //.AddOpenAIChatCompletion(
-        //    modelId: configuration["AI:OpenAI:Model"]!,
-        //    openAIClient: new OpenAIClient
-        //    (
-        //        credential: new ApiKeyCredential(configuration["AI:OpenAI:ApiKey"]!),
-        //        options: new OpenAIClientOptions()
-        //        {
-        //            Endpoint = new Uri(configuration["AI:OpenAI:ServerUrl"]!)
-        //        }
-        //    ));
+        var kernel = services.AddKernel()
+        .AddOpenAIChatCompletion(
+            modelId: configuration["AI:OpenAI:Model"]!,
+            openAIClient: new OpenAIClient
+            (
+                credential: new ApiKeyCredential(configuration["AI:OpenAI:ApiKey"]!),
+                options: new OpenAIClientOptions()
+                {
+                    Endpoint = new Uri(configuration["AI:OpenAI:ServerUrl"]!)
+                }
+            ));
+
+        kernel.Plugins.AddFromType<TextPlugin>();
+        kernel.Plugins.AddFromType<DateTimePlugin>();
 
         services.AddScoped<IAIService, SemanticKernelAIService>();
         services.AddSingleton<IChatHistoryService, SemanticKernelChatHistoryService>();

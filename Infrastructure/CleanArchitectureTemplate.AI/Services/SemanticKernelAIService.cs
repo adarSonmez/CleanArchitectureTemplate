@@ -28,9 +28,6 @@ namespace CleanArchitectureTemplate.AI.Services
         private readonly KernelFunction _summarizeFn;
         private readonly PromptExecutionSettings _promptExecutionSettings;
 
-        private static readonly string ThinkStartTag = "<think>";
-        private static readonly string ThinkEndTag = "</think>";
-
         public SemanticKernelAIService(
             Kernel kernel,
             ILogger<SemanticKernelAIService> logger,
@@ -110,7 +107,6 @@ namespace CleanArchitectureTemplate.AI.Services
 
             var messageBuilder = new StringBuilder();
             var thinkBuilder = new StringBuilder();
-            bool thinkCompleted = false;
             string? role = null;
             string? modelId = null;
 
@@ -118,30 +114,13 @@ namespace CleanArchitectureTemplate.AI.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var currentMessage = chunk.Items.FirstOrDefault() as dynamic;
-                if (currentMessage == null) continue;
+                messageBuilder.Append(chunk.Content);
 
-                if (!thinkCompleted)
+                if (role is null || modelId is null)
                 {
-                    string thinkPart = currentMessage.Text?.ToString() ?? string.Empty;
-                    thinkBuilder.Append(thinkPart);
-                    if (thinkPart.Contains(ThinkEndTag))
-                    {
-                        thinkCompleted = true;
-                        if (thinkBuilder.Length >= ThinkStartTag.Length + ThinkEndTag.Length)
-                        {
-                            // Remove think tags from the builder.
-                            thinkBuilder.Remove(thinkBuilder.Length - ThinkEndTag.Length, ThinkEndTag.Length);
-                            thinkBuilder.Remove(0, ThinkStartTag.Length);
-                        }
-                        role = chunk.Role?.ToString();
-                        modelId = currentMessage.ModelId?.ToString();
-                        continue;
-                    }
+                    role = chunk.Role.ToString();
+                    modelId = chunk.ModelId;
                 }
-
-                string currentText = currentMessage.Text?.ToString() ?? string.Empty;
-                messageBuilder.Append(currentText);
 
                 if (!string.IsNullOrEmpty(connectionId))
                 {
@@ -170,17 +149,12 @@ namespace CleanArchitectureTemplate.AI.Services
                               ?? throw new ForbiddenException("Chat history not found.");
 
             var result = await _chatCompletionService.GetChatMessageContentAsync(chatHistory, _promptExecutionSettings, _kernel, cancellationToken);
-            var firstMessage = result.Items.FirstOrDefault() as dynamic
-                ?? throw new OperationFailedException("No message content was returned.");
-
-            string fullMessage = firstMessage.Text?.ToString() ?? string.Empty;
-            var (thinkContent, processedMessage) = ExtractThinkContent(fullMessage);
 
             var chatMessageDto = new ChatMessageDto(
                 result.Role.ToString(),
-                thinkContent,
-                processedMessage,
-                firstMessage.ModelId?.ToString() ?? string.Empty,
+                string.Empty,
+                result.Content,
+                result.ModelId,
                 false);
 
             if (!string.IsNullOrEmpty(connectionId))
@@ -189,34 +163,6 @@ namespace CleanArchitectureTemplate.AI.Services
             }
 
             return chatMessageDto;
-        }
-
-        /// <summary>
-        /// Extracts and removes think tags from the message.
-        /// </summary>
-        /// <param name="message">The message containing potential think tags.</param>
-        /// <returns>
-        /// A tuple containing the think content (or null if not present)
-        /// and the processed message with think content removed.
-        /// </returns>
-        private static (string? thinkContent, string processedMessage) ExtractThinkContent(string message)
-        {
-            int startIndex = message.IndexOf(ThinkStartTag, StringComparison.Ordinal);
-            int endIndex = message.IndexOf(ThinkEndTag, StringComparison.Ordinal);
-
-            if (startIndex != -1 && endIndex != -1 && endIndex > startIndex)
-            {
-                startIndex += ThinkStartTag.Length;
-                string thinkContent = message.Substring(startIndex, endIndex - startIndex);
-
-                int removalStart = message.IndexOf(ThinkStartTag, StringComparison.Ordinal);
-                int removalLength = (endIndex - removalStart) + ThinkEndTag.Length;
-                string processedMessage = message.Remove(removalStart, removalLength);
-
-                return (thinkContent, processedMessage);
-            }
-
-            return (null, message);
         }
 
         #endregion Private Methods
