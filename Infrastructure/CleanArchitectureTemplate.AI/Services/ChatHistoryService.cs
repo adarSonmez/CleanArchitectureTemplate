@@ -1,5 +1,4 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.AI;
-using CleanArchitectureTemplate.Application.Dtos.AI;
 using Microsoft.SemanticKernel.ChatCompletion;
 using System.Collections.Concurrent;
 

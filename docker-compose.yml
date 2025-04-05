@@ -6,25 +6,25 @@ services:
       context: .
       dockerfile: Presentation/CleanArchitectureTemplate.WebAPI/Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=CleanArchitectureTemplate;Username=postgres;Password=postgres
-      - Logging__Seq__ServerUrl=http://clean-seq:5341
-      - AI__Ollama__ServerUrl=http://clean-ollama:11434
-      - RedisSettings__SentinelEndpoints__0=clean-redis-sentinel-1:26379
-      - RedisSettings__SentinelEndpoints__1=clean-redis-sentinel-2:26379
-      - RedisSettings__MasterMapping__0__0=clean-redis-master:6379
-      - RedisSettings__MasterMapping__0__1=clean-redis-master:6379      
-      - RedisSettings__MasterMapping__1__0=clean-redis-master:6380
-      - RedisSettings__MasterMapping__1__1=clean-redis-master:6380      
-      - RedisSettings__MasterMapping__2__0=clean-redis-master:6381
-      - RedisSettings__MasterMapping__2__1=clean-redis-master:6381
-      - RedisSettings__MasterMapping__3__0=clean-redis-master:6382
-      - RedisSettings__MasterMapping__3__1=clean-redis-master:6382
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_HTTP_PORTS=${ASPNETCORE_HTTP_PORTS}
+      - ASPNETCORE_HTTPS_PORTS=${ASPNETCORE_HTTPS_PORTS}
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
+      - Logging__Seq__ServerUrl=${Logging__Seq__ServerUrl}
+      - AI__Ollama__ServerUrl=${AI__Ollama__ServerUrl}
+      - RedisSettings__SentinelEndpoints__0=${RedisSettings__SentinelEndpoints__0}
+      - RedisSettings__SentinelEndpoints__1=${RedisSettings__SentinelEndpoints__1}
+      - RedisSettings__MasterMapping__0__0=${RedisSettings__MasterMapping__0__0}
+      - RedisSettings__MasterMapping__0__1=${RedisSettings__MasterMapping__0__1}
+      - RedisSettings__MasterMapping__1__0=${RedisSettings__MasterMapping__1__0}
+      - RedisSettings__MasterMapping__1__1=${RedisSettings__MasterMapping__1__1}
+      - RedisSettings__MasterMapping__2__0=${RedisSettings__MasterMapping__2__0}
+      - RedisSettings__MasterMapping__2__1=${RedisSettings__MasterMapping__2__1}
+      - RedisSettings__MasterMapping__3__0=${RedisSettings__MasterMapping__3__0}
+      - RedisSettings__MasterMapping__3__1=${RedisSettings__MasterMapping__3__1}
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - "${ASPNETCORE_HTTP_PORTS}:${ASPNETCORE_HTTP_PORTS}"
+      - "${ASPNETCORE_HTTPS_PORTS}:${ASPNETCORE_HTTPS_PORTS}"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
@@ -42,9 +42,9 @@ services:
     container_name: clean-postgres
     image: postgres:15-alpine
     environment:
-      - POSTGRES_DB=CleanArchitectureTemplate
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -67,7 +67,7 @@ services:
     container_name: clean-seq
     image: datalust/seq:latest
     environment:
-      - ACCEPT_EULA=Y
+      - ACCEPT_EULA=${ACCEPT_EULA}
     ports:
       - "5341:80"
     networks:
