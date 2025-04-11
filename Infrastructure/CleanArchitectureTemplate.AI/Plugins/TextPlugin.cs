@@ -10,6 +10,7 @@ public class TextPlugin
 {
     [KernelFunction("count_words")]
     [Description("Counts the number of words in a string")]
+    [return: Description("Number of words in the input string")]
     public int CountWords(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -21,6 +22,7 @@ public class TextPlugin
 
     [KernelFunction("reverse_string")]
     [Description("Reverses a string")]
+    [return: Description("Reversed string")]
     public string ReverseString(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -34,6 +36,7 @@ public class TextPlugin
 
     [KernelFunction("to_uppercase")]
     [Description("Converts a string to uppercase")]
+    [return: Description("Uppercase string")]
     public string ToUpperCase(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -45,6 +48,7 @@ public class TextPlugin
 
     [KernelFunction("to_lowercase")]
     [Description("Converts a string to lowercase")]
+    [return: Description("Lowercase string")]
     public string ToLowerCase(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
