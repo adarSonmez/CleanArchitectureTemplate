@@ -1,8 +1,8 @@
-﻿using CleanArchitectureTemplate.SignalR.Hubs;
+﻿using CleanArchitectureTemplate.RealtimeCommunication.Hubs.SignalR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 
-namespace CleanArchitectureTemplate.SignalR;
+namespace CleanArchitectureTemplate.RealtimeCommunication;
 
 /// <summary>
 /// Provides extension methods for registering SignalR hubs.
@@ -15,7 +15,7 @@ public static class HubRegistration
     /// <param name="endpoints">The endpoint route builder.</param>
     public static void MapHubs(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapHub<ProductHub>("/product-hub");
-        endpoints.MapHub<OrderHub>("/order-hub");
+        endpoints.MapHub<SignalRProductHub>("/product-hub");
+        endpoints.MapHub<SignalROrderHub>("/order-hub");
     }
 }

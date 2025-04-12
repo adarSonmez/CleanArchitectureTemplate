@@ -1,6 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Dtos.Ordering;
 
-namespace CleanArchitectureTemplate.SignalR.Clients;
+namespace CleanArchitectureTemplate.RealtimeCommunication.Clients;
 
 /// <summary>
 /// Client for managing real-time communication related to orders.

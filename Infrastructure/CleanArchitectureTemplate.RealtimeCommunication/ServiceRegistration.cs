@@ -1,8 +1,8 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Hubs;
-using CleanArchitectureTemplate.SignalR.HubServices;
+using CleanArchitectureTemplate.RealtimeCommunication.HubServices.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CleanArchitectureTemplate.SignalR;
+namespace CleanArchitectureTemplate.RealtimeCommunication;
 
 /// <summary>
 /// Represents the service registration for the SignalR project.
@@ -18,8 +18,8 @@ public static class ServiceRegistration
         services.AddSignalR();
 
         // Add hub services
-        services.AddScoped<IProductHubService, ProductHubService>();
-        services.AddScoped<IOrderHubService, OrderHubService>();
-        services.AddScoped<IAIHubService, AIHubService>();
+        services.AddScoped<IProductHubService, SignalRProductHubService>();
+        services.AddScoped<IOrderHubService, SignalROrderHubService>();
+        services.AddScoped<IAIHubService, SignalRAIHubService>();
     }
 }

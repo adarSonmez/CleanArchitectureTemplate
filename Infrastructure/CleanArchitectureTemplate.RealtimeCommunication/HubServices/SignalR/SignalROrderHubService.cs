@@ -1,19 +1,19 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Hubs;
 using CleanArchitectureTemplate.Application.Dtos.Ordering;
-using CleanArchitectureTemplate.SignalR.Clients;
-using CleanArchitectureTemplate.SignalR.Hubs;
+using CleanArchitectureTemplate.RealtimeCommunication.Clients;
+using CleanArchitectureTemplate.RealtimeCommunication.Hubs.SignalR;
 using Microsoft.AspNetCore.SignalR;
 
-namespace CleanArchitectureTemplate.SignalR.HubServices;
+namespace CleanArchitectureTemplate.RealtimeCommunication.HubServices.SignalR;
 
 /// <summary>
 /// Service implementation for managing real-time order-related operations via SignalR.
 /// </summary>
-public class OrderHubService : IOrderHubService
+public class SignalROrderHubService : IOrderHubService
 {
-    private readonly IHubContext<OrderHub, IOrderClient> _hubContext;
+    private readonly IHubContext<SignalROrderHub, IOrderClient> _hubContext;
 
-    public OrderHubService(IHubContext<OrderHub, IOrderClient> hubContext)
+    public SignalROrderHubService(IHubContext<SignalROrderHub, IOrderClient> hubContext)
     {
         _hubContext = hubContext;
     }

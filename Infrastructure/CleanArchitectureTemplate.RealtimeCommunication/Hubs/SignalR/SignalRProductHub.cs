@@ -1,17 +1,17 @@
-﻿using CleanArchitectureTemplate.SignalR.Clients;
+﻿using CleanArchitectureTemplate.RealtimeCommunication.Clients;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
-namespace CleanArchitectureTemplate.SignalR.Hubs;
+namespace CleanArchitectureTemplate.RealtimeCommunication.Hubs.SignalR;
 
 /// <summary>
-/// Hub for managing real-time communication related to  orders.
+/// Hub for managing real-time communication related to products.
 /// </summary>
-public class OrderHub : Hub<IOrderClient>
+public class SignalRProductHub : Hub<IProductClient>
 {
-    private readonly ILogger<OrderHub> _logger;
+    private readonly ILogger<SignalRProductHub> _logger;
 
-    public OrderHub(ILogger<OrderHub> logger)
+    public SignalRProductHub(ILogger<SignalRProductHub> logger)
     {
         _logger = logger;
     }

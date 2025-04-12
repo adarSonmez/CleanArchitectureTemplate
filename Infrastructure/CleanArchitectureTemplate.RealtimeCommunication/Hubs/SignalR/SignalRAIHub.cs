@@ -1,19 +1,19 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.AI;
-using CleanArchitectureTemplate.SignalR.Clients;
+using CleanArchitectureTemplate.RealtimeCommunication.Clients;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
-namespace CleanArchitectureTemplate.SignalR.Hubs;
+namespace CleanArchitectureTemplate.RealtimeCommunication.Hubs.SignalR;
 
 /// <summary>
 /// Hub for managing real-time chat operations.
 /// </summary>
-public class AIHub : Hub<IAIClient>
+public class SignalRAIHub : Hub<IAIClient>
 {
-    private readonly ILogger<AIHub> _logger;
+    private readonly ILogger<SignalRAIHub> _logger;
     private readonly IChatHistoryService _chatHistoryService;
 
-    public AIHub(ILogger<AIHub> logger, IChatHistoryService chatHistoryService)
+    public SignalRAIHub(ILogger<SignalRAIHub> logger, IChatHistoryService chatHistoryService)
     {
         _logger = logger;
         _chatHistoryService = chatHistoryService;

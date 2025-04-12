@@ -1,6 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Dtos.AI;
 
-namespace CleanArchitectureTemplate.SignalR.Clients;
+namespace CleanArchitectureTemplate.RealtimeCommunication.Clients;
 
 /// <summary>
 /// Client for managing real-time chat operations.

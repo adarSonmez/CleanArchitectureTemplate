@@ -5,7 +5,7 @@ using CleanArchitectureTemplate.Infrastructure;
 using CleanArchitectureTemplate.Infrastructure.Filters;
 using CleanArchitectureTemplate.Infrastructure.Services.Storage.Local;
 using CleanArchitectureTemplate.Persistence;
-using CleanArchitectureTemplate.SignalR;
+using CleanArchitectureTemplate.RealtimeCommunication;
 using CleanArchitectureTemplate.WebAPI.Configurations;
 using CleanArchitectureTemplate.WebAPI.Extensions;
 using FluentValidation;

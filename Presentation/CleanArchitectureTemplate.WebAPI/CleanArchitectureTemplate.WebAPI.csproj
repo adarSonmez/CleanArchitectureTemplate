@@ -29,7 +29,7 @@
     <ProjectReference Include="..\..\Infrastructure\CleanArchitectureTemplate.AI\CleanArchitectureTemplate.AI.csproj" />
     <ProjectReference Include="..\..\Infrastructure\CleanArchitectureTemplate.Infrastructure\CleanArchitectureTemplate.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\CleanArchitectureTemplate.Persistence\CleanArchitectureTemplate.Persistence.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\CleanArchitectureTemplate.SignalR\CleanArchitectureTemplate.SignalR.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\CleanArchitectureTemplate.RealtimeCommunication\CleanArchitectureTemplate.RealtimeCommunication.csproj" />
   </ItemGroup>
 
   <ItemGroup>

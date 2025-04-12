@@ -1,19 +1,19 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Hubs;
 using CleanArchitectureTemplate.Application.Dtos.AI;
-using CleanArchitectureTemplate.SignalR.Clients;
-using CleanArchitectureTemplate.SignalR.Hubs;
+using CleanArchitectureTemplate.RealtimeCommunication.Clients;
+using CleanArchitectureTemplate.RealtimeCommunication.Hubs.SignalR;
 using Microsoft.AspNetCore.SignalR;
 
-namespace CleanArchitectureTemplate.SignalR.HubServices;
+namespace CleanArchitectureTemplate.RealtimeCommunication.HubServices.SignalR;
 
 /// <summary>
 /// Service implementation for managing real-time order-related operations via SignalR.
 /// </summary>
-public class AIHubService : IAIHubService
+public class SignalRAIHubService : IAIHubService
 {
-    private readonly IHubContext<AIHub, IAIClient> _hubContext;
+    private readonly IHubContext<SignalRAIHub, IAIClient> _hubContext;
 
-    public AIHubService(IHubContext<AIHub, IAIClient> hubContext)
+    public SignalRAIHubService(IHubContext<SignalRAIHub, IAIClient> hubContext)
     {
         _hubContext = hubContext;
     }
