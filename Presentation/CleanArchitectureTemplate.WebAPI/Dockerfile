@@ -19,6 +19,8 @@ COPY ["Core/CleanArchitectureTemplate.Domain/CleanArchitectureTemplate.Domain.cs
 COPY ["Infrastructure/CleanArchitectureTemplate.Infrastructure/CleanArchitectureTemplate.Infrastructure.csproj", "Infrastructure/CleanArchitectureTemplate.Infrastructure/"]
 COPY ["Infrastructure/CleanArchitectureTemplate.Persistence/CleanArchitectureTemplate.Persistence.csproj", "Infrastructure/CleanArchitectureTemplate.Persistence/"]
 COPY ["Infrastructure/CleanArchitectureTemplate.RealtimeCommunication/CleanArchitectureTemplate.RealtimeCommunication.csproj", "Infrastructure/CleanArchitectureTemplate.RealtimeCommunication/"]
+COPY ["Infrastructure/CleanArchitectureTemplate.Notification/CleanArchitectureTemplate.Notification.csproj", "Infrastructure/CleanArchitectureTemplate.Notification/"]
+COPY ["Infrastructure/CleanArchitectureTemplate.Messaging/CleanArchitectureTemplate.Messaging.csproj", "Infrastructure/CleanArchitectureTemplate.Messaging/"]
 COPY ["Infrastructure/CleanArchitectureTemplate.AI/CleanArchitectureTemplate.AI.csproj", "Infrastructure/CleanArchitectureTemplate.AI/"]
 RUN dotnet restore "./Presentation/CleanArchitectureTemplate.WebAPI/CleanArchitectureTemplate.WebAPI.csproj"
 COPY . .

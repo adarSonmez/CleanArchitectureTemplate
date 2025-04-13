@@ -12,16 +12,22 @@ services:
       - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
       - Logging__Seq__ServerUrl=${Logging__Seq__ServerUrl}
       - AI__Ollama__ServerUrl=${AI__Ollama__ServerUrl}
-      - RedisSettings__SentinelEndpoints__0=${RedisSettings__SentinelEndpoints__0}
-      - RedisSettings__SentinelEndpoints__1=${RedisSettings__SentinelEndpoints__1}
-      - RedisSettings__MasterMapping__0__0=${RedisSettings__MasterMapping__0__0}
-      - RedisSettings__MasterMapping__0__1=${RedisSettings__MasterMapping__0__1}
-      - RedisSettings__MasterMapping__1__0=${RedisSettings__MasterMapping__1__0}
-      - RedisSettings__MasterMapping__1__1=${RedisSettings__MasterMapping__1__1}
-      - RedisSettings__MasterMapping__2__0=${RedisSettings__MasterMapping__2__0}
-      - RedisSettings__MasterMapping__2__1=${RedisSettings__MasterMapping__2__1}
-      - RedisSettings__MasterMapping__3__0=${RedisSettings__MasterMapping__3__0}
-      - RedisSettings__MasterMapping__3__1=${RedisSettings__MasterMapping__3__1}
+      - RabbitMQ__HostName=${RabbitMQ__HostName}
+      - RabbitMQ__UserName=${RabbitMQ__UserName}
+      - RabbitMQ__Password=${RabbitMQ__Password}
+      - RabbitMQ__VirtualHost=${RabbitMQ__VirtualHost}
+      - RabbitMQ__Port=${RabbitMQ__Port}
+      - RabbitMQ__ExchangeName=${RabbitMQ__ExchangeName}
+      - Redis__SentinelEndpoints__0=${Redis__SentinelEndpoints__0}
+      - Redis__SentinelEndpoints__1=${Redis__SentinelEndpoints__1}
+      - Redis__MasterMapping__0__0=${Redis__MasterMapping__0__0}
+      - Redis__MasterMapping__0__1=${Redis__MasterMapping__0__1}
+      - Redis__MasterMapping__1__0=${Redis__MasterMapping__1__0}
+      - Redis__MasterMapping__1__1=${Redis__MasterMapping__1__1}
+      - Redis__MasterMapping__2__0=${Redis__MasterMapping__2__0}
+      - Redis__MasterMapping__2__1=${Redis__MasterMapping__2__1}
+      - Redis__MasterMapping__3__0=${Redis__MasterMapping__3__0}
+      - Redis__MasterMapping__3__1=${Redis__MasterMapping__3__1}
     ports:
       - "${ASPNETCORE_HTTP_PORTS}:${ASPNETCORE_HTTP_PORTS}"
       - "${ASPNETCORE_HTTPS_PORTS}:${ASPNETCORE_HTTPS_PORTS}"
@@ -32,6 +38,7 @@ services:
       - postgres
       - ollama
       - seq
+      - rabbitmq
       - redis-master
       - redis-sentinel-1
       - redis-sentinel-2
@@ -70,6 +77,18 @@ services:
       - ACCEPT_EULA=${ACCEPT_EULA}
     ports:
       - "5341:80"
+    networks:
+      - clean-net
+
+  rabbitmq:
+    container_name: clean-rabbitmq
+    image: rabbitmq:4.0-management
+    ports:
+      - "5672:5672"       # AMQP port
+      - "15672:15672"     # Management UI
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
     networks:
       - clean-net
 
