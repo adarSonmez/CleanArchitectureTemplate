@@ -1,9 +1,9 @@
-﻿namespace CleanArchitectureTemplate.Application.Settings;
+﻿namespace CleanArchitectureTemplate.Application.Options;
 
 /// <summary>
-/// Configuration settings for Redis Sentinel and master mapping.
+/// Options used to configure Redis connection and Sentinel settings.
 /// </summary>
-public class RedisSettings
+public class RedisOptions
 {
     /// <summary>
     /// Gets or sets the list of Sentinel endpoints (e.g., "localhost:6383").

@@ -1,5 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Behaviours;
-using CleanArchitectureTemplate.Application.Settings;
+using CleanArchitectureTemplate.Application.Options;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CleanArchitectureTemplate.Application;
 
 /// <summary>
-/// Represents the service registration for the application layer.
+/// Registers the services for the application project.
 /// </summary>
 public static class ServiceRegistration
 {
@@ -23,10 +23,13 @@ public static class ServiceRegistration
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
 
-        #region Settings
+        #region Options
 
-        services.Configure<RedisSettings>(configuration.GetSection("RedisSettings"));
+        services.Configure<JwtOptions>(configuration.GetSection("JWT"));
+        services.Configure<RabbitMqOptions>(configuration.GetSection("RabbitMQ"));
+        services.Configure<RedisOptions>(configuration.GetSection("Redis"));
+        services.Configure<SmtpOptions>(configuration.GetSection("SMTP"));
 
-        #endregion Settings
+        #endregion Options
     }
 }
