@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CleanArchitectureTemplate.Infrastructure;
 
 /// <summary>
-/// Represents the service registration for the infrastructure layer.
+/// Registers the services for the infrastructure project.
 /// </summary>
 public static class ServiceRegistration
 {

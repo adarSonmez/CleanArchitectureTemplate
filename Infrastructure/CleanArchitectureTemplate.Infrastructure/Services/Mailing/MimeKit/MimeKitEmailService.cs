@@ -1,8 +1,9 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
+using CleanArchitectureTemplate.Application.Options;
 using MailKit.Net.Smtp;
 using MailKit.Security;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace CleanArchitectureTemplate.Infrastructure.Services.Mailing.MimeKit;
@@ -12,12 +13,12 @@ namespace CleanArchitectureTemplate.Infrastructure.Services.Mailing.MimeKit;
 /// </summary>
 public class MimeKitEmailService : IEmailService
 {
-    private readonly IConfiguration _configuration;
     private readonly ILogger<MimeKitEmailService> _logger;
+    private readonly SmtpOptions _smtpOptions;
 
-    public MimeKitEmailService(IConfiguration configuration, ILogger<MimeKitEmailService> logger)
+    public MimeKitEmailService(IOptions<SmtpOptions> smtpOptions, ILogger<MimeKitEmailService> logger)
     {
-        _configuration = configuration;
+        _smtpOptions = smtpOptions.Value;
         _logger = logger;
     }
 
@@ -34,7 +35,7 @@ public class MimeKitEmailService : IEmailService
         try
         {
             var email = new MimeMessage();
-            email.From.Add(new MailboxAddress(_configuration["EmailSettings:SenderName"], _configuration["EmailSettings:SenderEmail"]));
+            email.From.Add(new MailboxAddress(_smtpOptions.FromName, _smtpOptions.FromEmail));
 
             if (toAddresses != null && toAddresses.Length > 0)
             {
@@ -91,10 +92,10 @@ public class MimeKitEmailService : IEmailService
 
             // Send email
             using var smtp = new SmtpClient();
-            await smtp.ConnectAsync(_configuration["EmailSettings:SmtpServer"],
-                                    int.Parse(_configuration["EmailSettings:SmtpPort"]!),
-                                    SecureSocketOptions.StartTls);
-            await smtp.AuthenticateAsync(_configuration["EmailSettings:Username"], _configuration["EmailSettings:Password"]);
+            await smtp.ConnectAsync(_smtpOptions.Host,
+                                    _smtpOptions.Port,
+                                    _smtpOptions.EnableSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.None);
+            await smtp.AuthenticateAsync(_smtpOptions.UserName, _smtpOptions.Password);
             await smtp.SendAsync(email);
             await smtp.DisconnectAsync(true);
 

@@ -1,5 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
-using Microsoft.Extensions.Configuration;
+using CleanArchitectureTemplate.Application.Options;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,22 +15,22 @@ namespace CleanArchitectureTemplate.Infrastructure.Services.Token.Jwt;
 /// </summary>
 public class JwtTokenService : ITokenService
 {
-    private readonly IConfiguration _configuration;
+    private readonly JwtOptions _jwtOptions;
 
-    public JwtTokenService(IConfiguration configuration)
+    public JwtTokenService(IOptions<JwtOptions> jwtOptions)
     {
-        _configuration = configuration;
+        _jwtOptions = jwtOptions.Value;
     }
 
     /// </inheritdoc>
     public DTO::TokenDto GenerateToken(string userName, IList<string> roles, bool? infiniteExpiration = false)
     {
-        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
+        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey!));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
         var expirationDate = infiniteExpiration == true
             ? DateTime.UtcNow.AddYears(500)
-            : DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:AccessTokenExpiration"]));
+            : DateTime.UtcNow.AddMinutes(Convert.ToDouble(_jwtOptions.AccessTokenExpiration));
 
         var claims = new List<Claim>
         {
@@ -39,8 +40,8 @@ public class JwtTokenService : ITokenService
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var jwtSecurityToken = new JwtSecurityToken(
-            _configuration["Jwt:Issuer"],
-            _configuration["Jwt:Audience"],
+            issuer: _jwtOptions.Issuer,
+            audience: _jwtOptions.Audience,
             expires: expirationDate,
             notBefore: DateTime.UtcNow,
             signingCredentials: signingCredentials,

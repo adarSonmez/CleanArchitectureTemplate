@@ -10,7 +10,7 @@ using System.ClientModel;
 namespace CleanArchitectureTemplate.AI;
 
 /// <summary>
-/// Represents the service registration for the artificial intelligence (AI) layer.
+/// Registers the services for the AI project.
 /// </summary>
 public static class ServiceRegistration
 {

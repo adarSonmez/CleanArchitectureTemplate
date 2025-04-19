@@ -1,5 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Exceptions;
-using CleanArchitectureTemplate.Application.Settings;
+using CleanArchitectureTemplate.Application.Options;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System.Text.Json;
@@ -12,7 +12,7 @@ namespace CleanArchitectureTemplate.Infrastructure.Services.Caching;
 public sealed class RedisConnectorService : IDisposable
 {
     private readonly Lazy<ConnectionMultiplexer> _lazyConnection;
-    private readonly RedisSettings _settings;
+    private readonly RedisOptions _settings;
 
     /// <summary>
     /// Gets the Redis ConnectionMultiplexer instance.
@@ -24,7 +24,7 @@ public sealed class RedisConnectorService : IDisposable
     /// </summary>
     /// <param name="options">The Redis settings options.</param>
     /// <exception cref="ArgumentNullException">Thrown if options are null.</exception>
-    public RedisConnectorService(IOptions<RedisSettings> options)
+    public RedisConnectorService(IOptions<RedisOptions> options)
     {
         _settings = options?.Value
             ?? throw new ArgumentNullException(nameof(options));
