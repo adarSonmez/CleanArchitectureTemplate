@@ -26,11 +26,6 @@ public class RabbitMqOptions
     public string Password { get; set; } = "guest";
 
     /// <summary>
-    /// The name of the exchange to publish messages to.
-    /// </summary>
-    public string ExchangeName { get; set; } = "(AMQP default)";
-
-    /// <summary>
     /// The virtual host to use for RabbitMQ connections.
     /// </summary>
     public string VirtualHost { get; set; } = "/";

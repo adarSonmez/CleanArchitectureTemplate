@@ -34,7 +34,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Notification", "Infrastructure\CleanArchitectureTemplate.Notification\CleanArchitectureTemplate.Notification.csproj", "{EF4B3A78-CA4A-4E5B-A893-F2C130731B40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Messaging", "CleanArchitectureTemplate.Messaging\CleanArchitectureTemplate.Messaging.csproj", "{879D70CE-C31B-4144-8DF3-4A832AB0B824}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureTemplate.Messaging", "Infrastructure\CleanArchitectureTemplate.Messaging\CleanArchitectureTemplate.Messaging.csproj", "{879D70CE-C31B-4144-8DF3-4A832AB0B824}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
