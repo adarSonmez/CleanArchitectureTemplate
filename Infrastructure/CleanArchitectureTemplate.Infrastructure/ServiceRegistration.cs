@@ -19,7 +19,7 @@ public static class ServiceRegistration
     /// Adds the infrastructure services to the service collection.
     /// </summary>
     /// <param name="services">The service collection to add the services to.</param>
-    public static void AddInfrastructureServices(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
         services.AddScoped<IStorageService, StorageService>();
         services.AddScoped<ITokenService, JwtTokenService>();
@@ -29,6 +29,8 @@ public static class ServiceRegistration
 
         services.AddSingleton<RedisConnectorService>();
         services.AddSingleton<ICacheService, RedisCacheService>();
+
+        return services;
     }
 
     /// <summary>

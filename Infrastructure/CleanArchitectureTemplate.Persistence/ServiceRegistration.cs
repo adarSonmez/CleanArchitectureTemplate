@@ -20,7 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CleanArchitectureTemplate.Persistence;
 
 /// <summary>
-/// Represents the service registration for the persistence layer.
+/// Registers the services for the persistence project.
 /// </summary>
 public static class ServiceRegistration
 {
@@ -28,7 +28,7 @@ public static class ServiceRegistration
     /// Adds the persistence services to the service collection.
     /// </summary>
     /// <param name="services">The service collection to add the services to.</param>
-    public static void AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
         #region Database provider
 
@@ -104,5 +104,7 @@ public static class ServiceRegistration
         services.AddScoped<IAuthenticationService, IdentityAuthenticationService>();
 
         #endregion Custom services
+
+        return services;
     }
 }

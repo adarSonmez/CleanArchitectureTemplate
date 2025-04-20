@@ -14,10 +14,12 @@ public static class ServiceRegistration
     /// Adds the messaging services to the service collection.
     /// </summary>
     /// <param name="services">The service collection to add the services to.</param>
-    public static void AddMessagingServices(this IServiceCollection services)
+    public static IServiceCollection AddMessagingServices(this IServiceCollection services)
     {
         services.AddSingleton<RabbitMqConnectionFactory>();
         services.AddSingleton<IMessagePublisher, RabbitMqMessagePublisher>();
         services.AddSingleton<IMessageSubscriber, RabbitMqMessageSubscriber>();
+
+        return services;
     }
 }

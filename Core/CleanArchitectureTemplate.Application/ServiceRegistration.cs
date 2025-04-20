@@ -16,7 +16,7 @@ public static class ServiceRegistration
     /// </summary>
     /// <param name="services">The service collection to add the services to.</param>
     /// <param name="configuration">The configuration to use for the services.</param>
-    public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceRegistration).Assembly));
         services.AddHttpClient();
@@ -31,5 +31,7 @@ public static class ServiceRegistration
         services.Configure<SmtpOptions>(configuration.GetSection("SMTP"));
 
         #endregion Options
+
+        return services;
     }
 }

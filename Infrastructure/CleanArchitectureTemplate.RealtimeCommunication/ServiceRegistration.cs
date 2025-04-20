@@ -5,15 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CleanArchitectureTemplate.RealtimeCommunication;
 
 /// <summary>
-/// Represents the service registration for the SignalR project.
+/// Registers the services for the RealtimeCommunication project.
 /// </summary>
 public static class ServiceRegistration
 {
     /// <summary>
-    /// Adds the application services to the service collection.
+    /// Adds the realtime communication services to the service collection.
     /// </summary>
     /// <param name="services">The service collection to add the services to.</param>
-    public static void AddSignalRServices(this IServiceCollection services)
+    public static IServiceCollection AddRealTimeCommunicationServices(this IServiceCollection services)
     {
         services.AddSignalR();
 
@@ -21,5 +21,7 @@ public static class ServiceRegistration
         services.AddScoped<IProductHubService, SignalRProductHubService>();
         services.AddScoped<IOrderHubService, SignalROrderHubService>();
         services.AddScoped<IAIHubService, SignalRAIHubService>();
+
+        return services;
     }
 }
