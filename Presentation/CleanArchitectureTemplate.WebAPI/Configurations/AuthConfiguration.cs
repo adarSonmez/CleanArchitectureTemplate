@@ -1,8 +1,10 @@
 ﻿using CleanArchitectureTemplate.Application.Constants.StringConstants;
+using CleanArchitectureTemplate.Application.Options;
 using CleanArchitectureTemplate.Domain.Constants.StringConstants;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
@@ -55,8 +57,11 @@ public static class AuthConfiguration
     /// </summary>
     /// <param name="options">The JWT bearer options.</param>
     /// <param name="configuration">The configuration.</param>
-    public static void ConfigureJwtBearer(JwtBearerOptions options, IConfiguration configuration)
+    public static void ConfigureJwtBearer(JwtBearerOptions options, IServiceCollection services)
     {
+        using var scope = services.BuildServiceProvider().CreateScope();
+        var jwtOptions = scope.ServiceProvider.GetRequiredService<IOptions<JwtOptions>>().Value;
+
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
@@ -76,10 +81,10 @@ public static class AuthConfiguration
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = configuration["Jwt:Issuer"],
-            ValidAudience = configuration["Jwt:Audience"],
+            ValidIssuer = jwtOptions.Issuer,
+            ValidAudience = jwtOptions.Audience,
             LifetimeValidator = (before, expires, token, param) => expires > DateTime.UtcNow,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
             ClockSkew = TimeSpan.Zero,
             NameClaimType = ClaimTypes.Name,
             RoleClaimType = ClaimTypes.Role

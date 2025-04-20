@@ -4,6 +4,7 @@ using CleanArchitectureTemplate.Application.Extensions;
 using CleanArchitectureTemplate.Infrastructure;
 using CleanArchitectureTemplate.Infrastructure.Filters;
 using CleanArchitectureTemplate.Infrastructure.Services.Storage.Local;
+using CleanArchitectureTemplate.Messaging;
 using CleanArchitectureTemplate.Persistence;
 using CleanArchitectureTemplate.RealtimeCommunication;
 using CleanArchitectureTemplate.WebAPI.Configurations;
@@ -20,22 +21,26 @@ builder.Services
     .ConfigureApiBehaviorOptions(o => o.SuppressModelStateInvalidFilter = true);
 
 // Add Fluent Validation support
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining(typeof(CleanArchitectureTemplate.Application.ServiceRegistration));
+builder.Services
+    .AddFluentValidationAutoValidation()
+    .AddValidatorsFromAssemblyContaining(typeof(CleanArchitectureTemplate.Application.ServiceRegistration));
 
 // Register services from other layers
-builder.Services.AddApplicationServices(builder.Configuration);
-builder.Services.AddInfrastructureServices();
-builder.Services.AddPersistenceServices(builder.Configuration);
-builder.Services.AddSignalRServices();
-builder.Services.AddAIServices(builder.Configuration);
+builder.Services
+    .AddApplicationServices(builder.Configuration)
+    .AddPersistenceServices(builder.Configuration)
+    .AddInfrastructureServices()
+    .AddMessagingServices()
+    .AddRealTimeCommunicationServices()
+    .AddAIServices(builder.Configuration);
 
 // Configure caching
-builder.Services.AddResponseCaching(x => x.MaximumBodySize = 1024);
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
-});
+builder.Services
+    .AddResponseCaching(x => x.MaximumBodySize = 1024)
+    .AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    });
 
 // Register storage service (Local Storage)
 builder.Services.AddStorage<LocalStorage>();
@@ -54,7 +59,7 @@ builder.Services.AddSwaggerGen();
 // Configure authentication
 builder.Services
     .AddAuthentication(AuthConfiguration.ConfigureAuthentication)
-    .AddJwtBearer(options => AuthConfiguration.ConfigureJwtBearer(options, builder.Configuration));
+    .AddJwtBearer(options => AuthConfiguration.ConfigureJwtBearer(options, builder.Services));
 
 // Configure authorization
 builder.Services.AddAuthorization(AuthConfiguration.ConfigureAuthorization);
