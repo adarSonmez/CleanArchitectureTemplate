@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Domain.MarkerInterfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace CleanArchitectureTemplate.Domain.Shared;
 
@@ -37,8 +38,21 @@ public abstract class BaseEntity : IEntity
     /// </summary>
     public DateTime? DeletedAt { get; set; }
 
-    // TODO: Add RowVersion property if you need it.
-    //[Timestamp]
-    //[ConcurrencyCheck]
-    //public byte[] RowVersion { get; set; } = default!;
+    /// <summary>
+    /// Gets or sets the row version for concurrency checks.
+    /// </summary>
+    /// <remarks>
+    /// For SQL Server: RowVersion system → byte[]
+    /// </remarks>
+    [Timestamp]
+    public byte[]? RowVersion { get; set; }
+
+    /// <summary>
+    /// Gets or sets the version for concurrency checks.
+    /// </summary>
+    /// <remarks>
+    /// For PostgreSQL: xmin system → uint[]
+    /// </remarks>
+    [Timestamp]
+    public uint? Version { get; set; }
 }

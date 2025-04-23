@@ -144,6 +144,28 @@ public class EfDbContext : IdentityDbContext<AppUser, AppRole, Guid>
             builder.Property<string>(CommonShadowProperties.CreatedBy).HasMaxLength(191);
             builder.Property<string>(CommonShadowProperties.UpdatedBy).HasMaxLength(191);
             builder.Property<string>(CommonShadowProperties.DeletedBy).HasMaxLength(191);
+
+            switch (Database.ProviderName)
+            {
+                case "Microsoft.EntityFrameworkCore.SqlServer":
+                    builder.Property(e => e.RowVersion)
+                            .IsRowVersion()
+                            .HasColumnName("RowVersion");
+                    builder.Ignore(e => e.Version);
+                    break;
+
+                case "Npgsql.EntityFrameworkCore.PostgreSQL":
+                    builder.Property(e => e.Version)
+                            .IsRowVersion()
+                            .HasColumnName("Version");
+                    builder.Ignore(e => e.RowVersion);
+                    break;
+
+                default:
+                    builder.Ignore(e => e.RowVersion);
+                    builder.Ignore(e => e.Version);
+                    break;
+            }
         });
     }
 
