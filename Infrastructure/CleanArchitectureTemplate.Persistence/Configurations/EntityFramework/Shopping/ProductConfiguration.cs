@@ -2,6 +2,7 @@
 using CleanArchitectureTemplate.Persistence.ValueConverters.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace CleanArchitectureTemplate.Persistence.Configurations.EntityFramework.Shopping;
 
@@ -14,6 +15,18 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         // Table Configuration
         builder.ToTable("Products", "Shopping");
+
+        builder.HasMany(p => p.Categories)
+            .WithMany(c => c.Products)
+            .UsingEntity<Dictionary<string, object>>(
+                "ProductCategory",
+                j => j.HasOne<Category>().WithMany().HasForeignKey("CategoryId"),
+                j => j.HasOne<Product>().WithMany().HasForeignKey("ProductId"),
+                j =>
+                {
+                    j.HasKey("ProductId", "CategoryId");
+                    j.ToTable("ProductCategories", "Shopping");
+                });
 
         // Property Configurations
         builder.Ignore(p => p.DiscountedPrice);
