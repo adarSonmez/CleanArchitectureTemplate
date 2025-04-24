@@ -59,7 +59,7 @@ public class IdentityAuthenticationService : IAuthenticationService
         if (result.Succeeded)
         {
             var roles = await _userManager.GetRolesAsync(user!);
-            var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
+            var tokenDto = _tokenService.GenerateToken(user!.ToDomainUser(), roles);
             await UpdateRefreshTokenAsync(user!.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
 
             _cookieService.SetAuthCookies(tokenDto);
@@ -142,7 +142,7 @@ public class IdentityAuthenticationService : IAuthenticationService
 
         // Generate JWT token
         var roles = await _userManager.GetRolesAsync(user);
-        var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
+        var tokenDto = _tokenService.GenerateToken(user!.ToDomainUser(), roles);
         await UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
         _cookieService.SetAuthCookies(tokenDto);
 
@@ -203,7 +203,7 @@ public class IdentityAuthenticationService : IAuthenticationService
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-        var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
+        var tokenDto = _tokenService.GenerateToken(user!.ToDomainUser(), roles);
         await UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
         _cookieService.SetAuthCookies(tokenDto);
 
@@ -239,7 +239,7 @@ public class IdentityAuthenticationService : IAuthenticationService
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-        var tokenDto = _tokenService.GenerateToken(user.UserName!, roles);
+        var tokenDto = _tokenService.GenerateToken(user!.ToDomainUser(), roles);
         await UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken!, tokenDto.ExpirationTime);
         _cookieService.SetAuthCookies(tokenDto);
 

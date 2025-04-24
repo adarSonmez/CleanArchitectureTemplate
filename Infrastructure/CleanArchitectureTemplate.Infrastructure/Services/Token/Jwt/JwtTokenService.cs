@@ -1,5 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Options;
+using CleanArchitectureTemplate.Domain.Entities.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,7 +24,7 @@ public class JwtTokenService : ITokenService
     }
 
     /// </inheritdoc>
-    public DTO::TokenDto GenerateToken(string userName, IList<string> roles, bool? infiniteExpiration = false)
+    public DTO::TokenDto GenerateToken(DomainUser user, IList<string> roles, bool? infiniteExpiration = false)
     {
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey!));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
@@ -34,7 +35,9 @@ public class JwtTokenService : ITokenService
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, userName)
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.Name, user.UserName),
+            new(ClaimTypes.Email, user.Email)
         };
 
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
