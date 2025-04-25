@@ -37,7 +37,7 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
                 .WithMessage("Password confirmation does not match the password.");
 
         RuleFor(x => x.PhoneNumber)
-            .Matches(@"^\d{10}$")
-            .WithMessage("Phone number is not valid.");
+            .Matches(@"^\+\d{10,15}$")
+            .WithMessage("Phone number is not valid. It should include the country code and contain only digits without spaces.");
     }
 }
