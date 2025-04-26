@@ -2,6 +2,7 @@
 using CleanArchitectureTemplate.Application.Features.Users.Commands.ForgotPassword;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.ResetPassword;
+using CleanArchitectureTemplate.Application.Features.Users.Commands.UpdateUser;
 using CleanArchitectureTemplate.Application.Features.Users.Queries.GetAllUsers;
 using CleanArchitectureTemplate.Application.Features.Users.Queries.GetUserById;
 using CleanArchitectureTemplate.Application.RequestParameters;
@@ -42,8 +43,15 @@ public class UsersController : ControllerBase
         return await _mediator.Send(request);
     }
 
-    [HttpPost("[action]")]
+    [HttpPost]
     public async Task<IActionResult> Register([FromBody] RegisterUserCommandRequest request)
+    {
+        return await _mediator.Send(request);
+    }
+
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommandRequest request)
     {
         return await _mediator.Send(request);
     }

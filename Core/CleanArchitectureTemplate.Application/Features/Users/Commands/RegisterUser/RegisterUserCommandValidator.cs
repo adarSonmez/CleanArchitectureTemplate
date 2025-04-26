@@ -14,7 +14,7 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
                 .WithMessage("Full name is required.")
                 .MaximumLength(100)
                 .MinimumLength(3)
-                .WithMessage("Full name must be between 5 and 100 characters.");
+                .WithMessage("Full name must be between 3 and 100 characters.");
 
         RuleFor(x => x.Email)
             .NotEmpty()

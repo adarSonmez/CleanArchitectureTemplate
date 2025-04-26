@@ -19,9 +19,9 @@ namespace CleanArchitectureTemplate.Application.Features.Users.Commands.ResetPas
 
             RuleFor(x => x.NewPassword)
                 .NotEmpty()
-                .WithMessage("New password is required.")
+                    .WithMessage("New password is required.")
                 .MinimumLength(6)
-                .WithMessage("Password must be at least 6 characters long.");
+                    .WithMessage("Password must be at least 6 characters long.");
         }
     }
 }

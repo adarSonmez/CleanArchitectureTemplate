@@ -2,6 +2,7 @@
 using CleanArchitectureTemplate.Application.Dtos.Identity;
 using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
+using CleanArchitectureTemplate.Application.Features.Users.Commands.UpdateUser;
 using CleanArchitectureTemplate.Application.RequestParameters;
 using CleanArchitectureTemplate.Persistence.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -34,6 +35,30 @@ public class IdentityUserService : IUserService
         var user = model.ToAppUser();
         var result = await _userManager.CreateAsync(user, model.Password);
 
+        if (result.Succeeded)
+        {
+            return user.ToDto();
+        }
+
+        throw new BadRequestException(result.Errors.Select(e => e.Description).FirstOrDefault());
+    }
+
+    /// <inheritdoc />
+    public async Task<UserDto?> UpdateAsync(UpdateUserCommandRequest model)
+    {
+        var user = await _userManager.FindByIdAsync(model.Id.ToString())
+            ?? throw new NotFoundException(nameof(AppUser), model.Id);
+
+        if (model.FullName != null)
+            user.FullName = model.FullName;
+        if (model.Email != null)
+            user.Email = model.Email;
+        if (model.UserName != null)
+            user.UserName = model.UserName;
+        if (model.PhoneNumber != null)
+            user.PhoneNumber = model.PhoneNumber;
+
+        var result = await _userManager.UpdateAsync(user);
         if (result.Succeeded)
         {
             return user.ToDto();

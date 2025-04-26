@@ -1,5 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Dtos.Identity;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
+using CleanArchitectureTemplate.Application.Features.Users.Commands.UpdateUser;
 using CleanArchitectureTemplate.Application.RequestParameters;
 using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 
@@ -18,6 +19,13 @@ public interface IUserService : IService
     /// <param name="model">The model.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the user data transfer object.</returns>
     Task<UserDto?> CreateAsync(RegisterUserCommandRequest model);
+
+    /// <summary>
+    /// Updates an existing application user.
+    /// </summary>
+    /// <param name="model">The model.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the user data transfer object.</returns>
+    Task<UserDto?> UpdateAsync(UpdateUserCommandRequest model);
 
     #endregion User Management
 

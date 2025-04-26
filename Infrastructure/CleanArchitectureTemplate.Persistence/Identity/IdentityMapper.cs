@@ -9,6 +9,7 @@
 
 using CleanArchitectureTemplate.Application.Dtos.Identity;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
+using CleanArchitectureTemplate.Application.Features.Users.Commands.UpdateUser;
 using CleanArchitectureTemplate.Domain.Entities.Identity;
 
 namespace CleanArchitectureTemplate.Persistence.Identity;

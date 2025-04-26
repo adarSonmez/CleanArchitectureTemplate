@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Features.Users.Commands.RegisterUser;
+using CleanArchitectureTemplate.Application.Features.Users.Commands.UpdateUser;
 using FluentValidation;
 
 namespace CleanArchitectureTemplate.Application.Features.Auth.Commands.InternalLogin;
