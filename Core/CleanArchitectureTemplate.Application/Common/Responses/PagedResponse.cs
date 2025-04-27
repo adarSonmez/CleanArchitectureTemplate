@@ -45,7 +45,7 @@ public class PagedResponse<T> : ResponseResult
         Data = data ?? [];
         TotalCount = totalCount;
         CurrentPage = page ?? 1;
-        PageSize = pageSize ?? 10;
+        PageSize = pageSize ?? TotalCount;
 
         if (TotalCount == 0)
         {
