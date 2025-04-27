@@ -20,6 +20,7 @@ services:
       - RabbitMQ__ExchangeName=${RabbitMQ__ExchangeName}
       - Redis__SentinelEndpoints__0=${Redis__SentinelEndpoints__0}
       - Redis__SentinelEndpoints__1=${Redis__SentinelEndpoints__1}
+      - Redis__SentinelEndpoints__2=${Redis__SentinelEndpoints__2}
       - Redis__MasterMapping__0__0=${Redis__MasterMapping__0__0}
       - Redis__MasterMapping__0__1=${Redis__MasterMapping__0__1}
       - Redis__MasterMapping__1__0=${Redis__MasterMapping__1__0}
@@ -42,6 +43,7 @@ services:
       - redis-master
       - redis-sentinel-1
       - redis-sentinel-2
+      - redis-sentinel-3
     networks:
       - clean-net
 
@@ -145,6 +147,17 @@ services:
     command: redis-sentinel /usr/local/etc/redis/sentinel.conf
     ports:
       - "6384:26379"
+    volumes:
+      - ./redis-sentinel.conf:/usr/local/etc/redis/sentinel.conf
+    networks:
+      - clean-net
+
+  redis-sentinel-3:
+    container_name: clean-redis-sentinel-3
+    image: redis:alpine
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    ports:
+      - "6385:26379"
     volumes:
       - ./redis-sentinel.conf:/usr/local/etc/redis/sentinel.conf
     networks:
