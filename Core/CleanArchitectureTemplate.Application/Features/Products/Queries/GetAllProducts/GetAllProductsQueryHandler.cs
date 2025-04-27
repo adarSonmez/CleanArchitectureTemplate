@@ -39,11 +39,11 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQueryReq
             includes.Add(p => p.ProductImageFiles);
         }
 
-        var products = await _productReadRepository.GetAllPaginatedAsync(
+        var (data, totalCount) = await _productReadRepository.GetAllPaginatedAsync(
             pagination: request.Pagination,
             include: includes);
 
-        response.SetData(products.Select(p => p.ToDto()), request.Pagination?.Page, request.Pagination?.Size);
+        response.SetData(data.Select(p => p.ToDto()), totalCount, request.Pagination?.Page, request.Pagination?.Size);
 
         return response;
     }

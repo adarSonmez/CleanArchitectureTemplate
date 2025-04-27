@@ -21,8 +21,8 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
     /// <param name="pagination">Optional pagination parameters.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the list of entities.</returns>
-    Task<IEnumerable<TEntity>> GetAllPaginatedAsync(
+    /// <returns>A task that represents the asynchronous operation. The task result contains the list of entities and the total count.</returns>
+    Task<(IEnumerable<TEntity> Data, int TotalCount)> GetAllPaginatedAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
         IEnumerable<Expression<Func<TEntity, object>>>? include = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,

@@ -42,8 +42,9 @@ public class DeleteProductImagesByProductIdCommandHandler : IRequestHandler<Dele
         if (!_userContextService.IsAdminOrSelf(product.StoreId))
             throw new ForbiddenException();
 
-        var productImageFiles = await _productImageFileReadRepository.GetAllPaginatedAsync(x => x.ProductId == request.ProductId, include: [pi => pi.FileDetails!])
-            ?? throw new NotFoundException($"No product images found for the product with ID: {request.ProductId}");
+        var (productImageFiles, _) = await _productImageFileReadRepository.GetAllPaginatedAsync(x => x.ProductId == request.ProductId, include: [pi => pi.FileDetails!]);
+
+        if (productImageFiles == null || !productImageFiles.Any()) throw new NotFoundException($"No product images found for the product with ID: {request.ProductId}");
 
         foreach (var productImageFile in productImageFiles)
         {

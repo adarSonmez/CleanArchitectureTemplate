@@ -29,35 +29,48 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     public IListSource ListSource { get; set; }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<TEntity>> GetAllPaginatedAsync(
+    public async Task<(IEnumerable<TEntity> Data, int TotalCount)> GetAllPaginatedAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
         IEnumerable<Expression<Func<TEntity, object>>>? include = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null)
+        bool enableTracking = false,
+        bool getDeleted = false,
+        Pagination? pagination = null)
     {
         var table = _qTable;
 
-        if (_qTable == null)
-            return [];
+        if (table == null)
+            return ([], 0);
 
         if (!enableTracking)
             table = table.AsNoTrackingWithIdentityResolution();
 
-        if (predicate != null) table = table.Where(predicate);
+        if (predicate != null)
+            table = table.Where(predicate);
 
         if (include != null)
+        {
             foreach (var inEntity in include)
                 table = table.Include(inEntity);
+        }
 
-        if (orderBy != null) table = orderBy(table);
+        if (orderBy != null)
+            table = orderBy(table);
 
         if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
             table = table.Where(e => !(e as BaseEntity)!.IsDeleted);
 
-        if (pagination == null)
-            return await table.ToListAsync();
+        var totalCount = await table.CountAsync();
 
-        return await table.Skip((pagination.Page - 1) * pagination.Size).Take(pagination.Size).ToListAsync();
+        if (pagination != null)
+        {
+            table = table.Skip((pagination.Page - 1) * pagination.Size)
+                         .Take(pagination.Size);
+        }
+
+        var data = await table.ToListAsync();
+
+        return (data, totalCount);
     }
 
     /// <inheritdoc/>

@@ -68,7 +68,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
 
         if (request.SecondaryProductImages != null && request.SecondaryProductImages.Count > 0)
         {
-            var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(null, PathConstants.DefaultProductImagesPath, product.Id, request.SecondaryProductImages);
+            var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(PathConstants.DefaultProductImagesPath, product.Id, request.SecondaryProductImages);
 
             try
             {

@@ -71,7 +71,7 @@ public class UploadSecondaryProductImagesCommandHandler : IRequestHandler<Upload
         }
 
         await _productImageFileWriteRepository.AddRangeAsync(productImageFiles);
-        response.SetData(productImageFiles.Select(pi => pi.ToDto()), request.Pagination?.Page, request.Pagination?.Size);
+        response.SetData(productImageFiles.Select(pi => pi.ToDto()), productImageFiles.Count);
 
         return response;
     }

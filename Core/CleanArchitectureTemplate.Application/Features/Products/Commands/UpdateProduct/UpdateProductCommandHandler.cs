@@ -72,7 +72,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
 
             if (request.SecondaryProductImages.Count > 0)
             {
-                var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(null, PathConstants.DefaultProductImagesPath, product!.Id, request.SecondaryProductImages);
+                var uploadFilesCommand = new UploadSecondaryProductImagesCommandRequest(PathConstants.DefaultProductImagesPath, product!.Id, request.SecondaryProductImages);
                 try
                 {
                     await _mediator.Send(uploadFilesCommand, cancellationToken);

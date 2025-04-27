@@ -41,7 +41,9 @@ public interface IUserService : IService
     /// <summary>
     /// Retrieves all users in the system with pagination.
     /// </summary>
-    Task<IEnumerable<UserDto>> GetAllPaginatedAsync(Pagination? pagination = null);
+    /// <param name="pagination">The pagination parameters.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a list of user data transfer objects and the total count.</returns>
+    Task<(IEnumerable<UserDto> Data, int TotalCount)> GetAllPaginatedAsync(Pagination? pagination = null);
 
     #endregion User Retrieval
 

@@ -40,12 +40,12 @@ public class PagedResponse<T> : ResponseResult
     /// <summary>
     /// Sets the data.
     /// </summary>
-    public void SetData(IEnumerable<T> data, int? page = null, int? pageSize = null, string? successMessage = null)
+    public void SetData(IEnumerable<T> data, int totalCount, int? page = null, int? pageSize = null, string? successMessage = null)
     {
         Data = data ?? [];
-        TotalCount = Data.Count();
+        TotalCount = totalCount;
         CurrentPage = page ?? 1;
-        PageSize = pageSize ?? TotalCount;
+        PageSize = pageSize ?? 10;
 
         if (TotalCount == 0)
         {

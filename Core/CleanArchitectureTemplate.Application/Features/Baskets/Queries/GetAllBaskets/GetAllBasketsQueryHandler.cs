@@ -31,13 +31,14 @@ public class GetAllBasketsQueryHandler : IRequestHandler<GetAllBasketsQueryReque
         }
 
         // Fetch paginated baskets from the repository
-        var baskets = await _basketReadRepository.GetAllPaginatedAsync(
+        var (data, totalCount) = await _basketReadRepository.GetAllPaginatedAsync(
             pagination: request.Pagination,
             include: includes
         );
 
         response.SetData(
-            baskets.Select(b => b.ToDto()),
+            data.Select(b => b.ToDto()),
+            totalCount,
             request.Pagination?.Page,
             request.Pagination?.Size
         );

@@ -81,9 +81,12 @@ public class IdentityUserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<UserDto>> GetAllPaginatedAsync(Pagination? pagination = null)
+    public async Task<(IEnumerable<UserDto> Data, int TotalCount)> GetAllPaginatedAsync(Pagination? pagination = null)
     {
         var query = _userManager.Users.AsNoTracking();
+
+        var totalCount = await query.CountAsync();
+
         if (pagination != null)
         {
             var page = pagination.Page;
@@ -93,7 +96,9 @@ public class IdentityUserService : IUserService
         }
 
         var users = await query.ToListAsync();
-        return users.Select(u => u.ToDto());
+        var userDtos = users.Select(u => u.ToDto());
+
+        return (userDtos, totalCount);
     }
 
     #endregion User Retrieval

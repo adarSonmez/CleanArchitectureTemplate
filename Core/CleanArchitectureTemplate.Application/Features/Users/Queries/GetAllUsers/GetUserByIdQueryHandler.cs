@@ -21,8 +21,8 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetAllUsersQueryRequest, 
     {
         var response = new PagedResponse<UserDto>();
 
-        var users = await _userService.GetAllPaginatedAsync(request.Pagination);
-        response.SetData(users, request.Pagination?.Page, request.Pagination?.Size);
+        var (data, totalCount) = await _userService.GetAllPaginatedAsync(request.Pagination);
+        response.SetData(data, totalCount, request.Pagination?.Page, request.Pagination?.Size);
 
         return response;
     }

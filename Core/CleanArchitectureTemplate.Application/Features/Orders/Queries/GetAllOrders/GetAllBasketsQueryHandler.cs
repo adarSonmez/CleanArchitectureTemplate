@@ -30,13 +30,14 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQueryRequest
             includes.Add(p => p.Basket!);
         }
 
-        var orders = await _orderReadRepository.GetAllPaginatedAsync(
+        var (data, totalCount) = await _orderReadRepository.GetAllPaginatedAsync(
             pagination: request.Pagination,
             include: includes
         );
 
         response.SetData(
-            orders.Select(o => o.ToDto()),
+            data.Select(o => o.ToDto()),
+            totalCount,
             request.Pagination?.Page,
             request.Pagination?.Size
         );

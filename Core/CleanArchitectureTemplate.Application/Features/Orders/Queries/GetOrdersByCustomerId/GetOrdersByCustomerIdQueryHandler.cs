@@ -35,7 +35,7 @@ public class GetOrdersByCustomerIdQueryHandler : IRequestHandler<GetOrdersByCust
 
         var customerId = _userContextService.GetUserId();
 
-        var orders = await _orderReadRepository.GetAllPaginatedAsync(
+        var (data, totalCount) = await _orderReadRepository.GetAllPaginatedAsync(
             predicate: p => p.Basket!.CustomerId == customerId,
             pagination: request.Pagination,
             include: includes
@@ -43,14 +43,15 @@ public class GetOrdersByCustomerIdQueryHandler : IRequestHandler<GetOrdersByCust
 
         if (!request.IncludeBasket)
         {
-            foreach (var order in orders)
+            foreach (var order in data)
             {
                 order.Basket = null;
             }
         }
 
         response.SetData(
-            orders.Select(o => o.ToDto()),
+            data.Select(o => o.ToDto()),
+            totalCount,
             request.Pagination?.Page,
             request.Pagination?.Size
         );
