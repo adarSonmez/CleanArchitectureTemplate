@@ -1,7 +1,7 @@
 ﻿using CleanArchitectureTemplate.Application.Dtos.Ordering;
 using CleanArchitectureTemplate.Application.Features.Orders.Commands.CreateOrderFromBasket;
+using CleanArchitectureTemplate.Application.Mappings.Shopping;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
-using CleanArchitectureTemplate.Domain.ValueObjects;
 
 namespace CleanArchitectureTemplate.Application.Mappings.Ordering;
 
@@ -31,22 +31,15 @@ public static class OrderMapper
     /// Maps an <see cref="Order"/> entity to an <see cref="OrderDto"/>.
     /// </summary>
     /// <param name="order">The order entity to map.</param>
-    /// <param name="totalAmount">The calculated total amount of the order.</param>
-    /// <param name="customerId">The ID of the customer who placed the order.</param>
-    /// <param name="orderItems">The collection of order items for the order.</param>
     /// <returns>The mapped <see cref="OrderDto"/>.</returns>
-    public static OrderDto ToDto(this Order order, Money? totalAmount = null, Guid customerId = default, ICollection<OrderItemDto>? orderItems = null)
+    public static OrderDto ToDto(this Order order)
     {
         if (order == null) return null!;
 
         return new OrderDto(
             Id: order.Id,
             Status: order.Status,
-            TotalAmount: totalAmount,
-            ShippingAddress: order.ShippingAddress!,
-            CustomerId: customerId,
-            BasketId: order.BasketId,
-            OrderItems: orderItems
+            Basket: order.Basket?.ToDto()
         );
     }
 }
