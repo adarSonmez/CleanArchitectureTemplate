@@ -215,7 +215,7 @@ public class EfDataService : IDataService
             Gender = Gender.Male,
         };
 
-        _context.Customers.Add(customerMember);
+        await _context.Customers.AddAsync(customerMember);
 
         #endregion Seed Customers
 
@@ -228,7 +228,7 @@ public class EfDataService : IDataService
             Description = "Store Description",
         };
 
-        _context.Stores.Add(storeMember);
+        await _context.Stores.AddAsync(storeMember);
 
         #endregion Seed Stores
 
@@ -239,7 +239,7 @@ public class EfDataService : IDataService
         var hatsCategory = new Category { Name = "Hats", Description = "Hats and caps", ParentCategoryId = clothingCategory.Id };
         var booksCategory = new Category { Name = "Books", Description = "Books and magazines" };
 
-        _context.Categories.AddRange(electronicsCategory, clothingCategory, booksCategory);
+        await _context.Categories.AddRangeAsync(electronicsCategory, clothingCategory, booksCategory);
 
         #endregion Seed Categories
 
@@ -300,7 +300,7 @@ public class EfDataService : IDataService
             StoreId = storeMember.Id,
         };
 
-        _context.Products.AddRange(laptopProduct, phoneProduct, shirtProduct, bookProduct, hatProduct);
+        await _context.Products.AddRangeAsync(laptopProduct, phoneProduct, shirtProduct, bookProduct, hatProduct);
 
         #endregion Seed Products
 
@@ -314,7 +314,7 @@ public class EfDataService : IDataService
 
         var basket4 = new Basket { CustomerId = customerMember.Id };
 
-        _context.Baskets.AddRange(basket1, basket2, basket3, basket4);
+        await _context.Baskets.AddRangeAsync(basket1, basket2, basket3, basket4);
 
         #endregion Seed Baskets
 
@@ -362,7 +362,7 @@ public class EfDataService : IDataService
             Basket = basket1,
         };
 
-        _context.BasketItems.AddRange(laptopBasketItem, phoneBasketItem, shirtBasketItem, bookBasketItem1, bookBasketItem2, bookBasketItem3);
+        await _context.BasketItems.AddRangeAsync(laptopBasketItem, phoneBasketItem, shirtBasketItem, bookBasketItem1, bookBasketItem2, bookBasketItem3);
 
         #endregion Seed Basket Items
 
@@ -389,7 +389,7 @@ public class EfDataService : IDataService
             Status = OrderStatus.Pending,
         };
 
-        _context.Orders.AddRange(shippedOrder, deliveredOrder, pendingOrder);
+        await _context.Orders.AddRangeAsync(shippedOrder, deliveredOrder, pendingOrder);
 
         #endregion Seed Orders
 
@@ -430,7 +430,7 @@ public class EfDataService : IDataService
             IssuedAt = DateTime.UtcNow.AddDays(0),
         };
 
-        _context.Invoices.AddRange(shippedInvoice, deliveredInvoice, pendingInvoice);
+        await _context.Invoices.AddRangeAsync(shippedInvoice, deliveredInvoice, pendingInvoice);
 
         #endregion Seed Invoices
 
