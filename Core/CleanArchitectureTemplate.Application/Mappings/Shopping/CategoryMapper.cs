@@ -13,16 +13,15 @@ public static class CategoryMapper
     /// </summary>
     /// <param name="category">The <see cref="Category"/> entity to map.</param>
     /// <returns>The mapped <see cref="CategoryDto"/>.</returns>
-    public static CategoryDto ToDto(this Category category)
+    public static CategoryDto ToDto(this Category category, bool includeProducts = false)
     {
         if (category == null) return null!;
-
         return new CategoryDto(
             Id: category.Id,
             Name: category.Name,
             Description: category.Description,
             ParentCategoryId: category.ParentCategoryId,
-            Products: category.Products?.Select(p => p.ToDto()).ToList()
+            Products: includeProducts ? category.Products?.Select(p => p.ToDto(includeCategories: false)).ToList() : null
         );
     }
 }

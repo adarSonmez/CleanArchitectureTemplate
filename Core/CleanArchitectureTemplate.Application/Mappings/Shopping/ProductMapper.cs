@@ -37,7 +37,7 @@ public static class ProductMapper
     /// <param name="product">The <see cref="Product"/> entity to map.</param>
     /// <param name="orderItems">Optional: The orders in which the product is included.</param>
     /// <returns>The mapped <see cref="ProductDto"/>.</returns>
-    public static ProductDto ToDto(this Product product, ICollection<OrderDto>? orderItems = null)
+    public static ProductDto ToDto(this Product product, ICollection<OrderDto>? orderItems = null, bool includeCategories = false)
     {
         if (product == null) return null!;
 
@@ -52,7 +52,7 @@ public static class ProductMapper
             StoreId: product.StoreId,
             ProductImageFiles: product.ProductImageFiles?.Select(p => p.ToDto()).ToList(),
             OrderItems: orderItems,
-            Categories: product.Categories?.Select(c => c.ToDto()).ToList()
+            Categories: includeCategories ? product.Categories?.Select(c => c.ToDto(includeProducts: false)).ToList() : null
         );
     }
 }
