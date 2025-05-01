@@ -2,6 +2,7 @@
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Application.Mappings.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Files;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 using System.Linq.Expressions;
@@ -24,24 +25,22 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQueryReq
     {
         var response = new PagedResponse<ProductDto?>();
 
-        var includes = new List<Expression<Func<Product, object>>>();
+        var includes = new List<string>();
 
         if (request.IncludeCategories)
         {
-            includes.Add(p => p.Categories);
+            includes.Add(nameof(Product.Categories));
         }
-        if (request.IncludeBasketItems)
-        {
-            includes.Add(p => p.BasketItems);
-        }
+
         if (request.IncludeProductImageFiles)
         {
-            includes.Add(p => p.ProductImageFiles);
+            includes.Add(nameof(Product.ProductImageFiles));
+            includes.Add($"{nameof(Product.ProductImageFiles)}.{nameof(ProductImageFile.FileDetails)}");
         }
 
         var (data, totalCount) = await _productReadRepository.GetAllPaginatedAsync(
             pagination: request.Pagination,
-            include: includes);
+            includePaths: includes);
 
         response.SetData(data.Select(p => p.ToDto()), totalCount, request.Pagination?.Page, request.Pagination?.Size);
 

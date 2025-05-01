@@ -4,6 +4,7 @@ using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Abstractions.Services.Storage;
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Exceptions;
+using CleanArchitectureTemplate.Domain.Entities.Files;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 
@@ -42,7 +43,12 @@ public class DeleteProductImagesByProductIdCommandHandler : IRequestHandler<Dele
         if (!_userContextService.IsAdminOrSelf(product.StoreId))
             throw new ForbiddenException();
 
-        var (productImageFiles, _) = await _productImageFileReadRepository.GetAllPaginatedAsync(x => x.ProductId == request.ProductId, include: [pi => pi.FileDetails!]);
+        var includes = new List<string>
+        {
+            nameof(ProductImageFile.FileDetails)
+        };
+
+        var (productImageFiles, _) = await _productImageFileReadRepository.GetAllPaginatedAsync(x => x.ProductId == request.ProductId, includePaths: includes);
 
         if (productImageFiles == null || !productImageFiles.Any()) throw new NotFoundException($"No product images found for the product with ID: {request.ProductId}");
 

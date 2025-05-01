@@ -36,12 +36,12 @@ public class CreateOrderFromBasketCommandHandler : IRequestHandler<CreateOrderFr
     public async Task<SingleResponse<OrderDto?>> Handle(CreateOrderFromBasketCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<OrderDto?>();
-        var includes = new List<Expression<Func<Basket, object>>>
+        var includes = new List<string>
         {
-            p => p.BasketItems
+            nameof(Basket.BasketItems),
         };
 
-        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, include: includes)
+        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, includePaths: includes)
             ?? throw new NotFoundException(nameof(Basket), request.BasketId);
 
         if (!_userContextService.IsAdminOrSelf(basket.CustomerId))

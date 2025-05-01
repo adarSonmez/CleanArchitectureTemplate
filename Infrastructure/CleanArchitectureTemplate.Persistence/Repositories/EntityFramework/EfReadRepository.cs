@@ -31,7 +31,7 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     /// <inheritdoc/>
     public async Task<(IEnumerable<TEntity> Data, int TotalCount)> GetAllPaginatedAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
-        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        IEnumerable<string>? includePaths = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool enableTracking = false,
         bool getDeleted = false,
@@ -48,10 +48,12 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         if (predicate != null)
             table = table.Where(predicate);
 
-        if (include != null)
+        if (includePaths != null)
         {
-            foreach (var inEntity in include)
-                table = table.Include(inEntity);
+            foreach (var includePath in includePaths)
+            {
+                table = table.Include(includePath);
+            }
         }
 
         if (orderBy != null)
@@ -76,7 +78,7 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     /// <inheritdoc/>
     public async Task<TEntity?> GetAsync(
         Expression<Func<TEntity, bool>> predicate,
-        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        IEnumerable<string>? includePaths = null,
         bool enableTracking = false,
         bool getDeleted = false)
     {
@@ -85,9 +87,13 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         if (!enableTracking)
             table = table.AsNoTracking();
 
-        if (include != null)
-            foreach (var inEntity in include)
-                table = table.Include(inEntity);
+        if (includePaths != null)
+        {
+            foreach (var includePath in includePaths)
+            {
+                table = table.Include(includePath);
+            }
+        }
 
         if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
             table = table.Where(e => !(e as BaseEntity)!.IsDeleted);
@@ -98,7 +104,7 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     /// <inheritdoc/>
     public async Task<TEntity?> GetByIdAsync(
         Guid id,
-        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        IEnumerable<string>? includePaths = null,
         bool enableTracking = false,
         bool getDeleted = false)
     {
@@ -107,9 +113,13 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         if (!enableTracking)
             table = table.AsNoTrackingWithIdentityResolution();
 
-        if (include != null)
-            foreach (var inEntity in include)
-                table = table.Include(inEntity);
+        if (includePaths != null)
+        {
+            foreach (var includePath in includePaths)
+            {
+                table = table.Include(includePath);
+            }
+        }
 
         if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
             table = table.Where(e => !(e as BaseEntity)!.IsDeleted);
@@ -121,7 +131,7 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     /// <inheritdoc/>
     public async Task<IEnumerable<TEntity>> GetByIdRangeAsync(
         IEnumerable<Guid> ids,
-        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        IEnumerable<string>? includePaths = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool enableTracking = false,
         bool getDeleted = false,
@@ -141,9 +151,13 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         if (!enableTracking)
             table = table.AsNoTrackingWithIdentityResolution();
 
-        if (include != null)
-            foreach (var inEntity in include)
-                table = table.Include(inEntity);
+        if (includePaths != null)
+        {
+            foreach (var includePath in includePaths)
+            {
+                table = table.Include(includePath);
+            }
+        }
 
         if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
             table = table.Where(e => !(e as BaseEntity)!.IsDeleted);

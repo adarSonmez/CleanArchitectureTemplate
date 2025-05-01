@@ -29,14 +29,14 @@ public class GetBasketByIdQueryHandler : IRequestHandler<GetBasketByIdQueryReque
     public async Task<SingleResponse<BasketDto?>> Handle(GetBasketByIdQueryRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<BasketDto?>();
-        var includes = new List<Expression<Func<Basket, object>>>();
+        var includes = new List<string>();
 
         if (request.IncludeBasketItems)
         {
-            includes.Add(p => p.BasketItems);
+            includes.Add(nameof(Basket.BasketItems));
         }
 
-        var basket = await _basketReadRepository.GetByIdAsync(request.Id, include: includes)
+        var basket = await _basketReadRepository.GetByIdAsync(request.Id, includePaths: includes)
             ?? throw new NotFoundException(nameof(Basket), request.Id);
 
         if (!_userContextService.IsAdminOrSelf(basket.CustomerId))

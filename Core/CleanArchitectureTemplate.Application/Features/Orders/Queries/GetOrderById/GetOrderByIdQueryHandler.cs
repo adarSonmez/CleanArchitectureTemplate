@@ -30,12 +30,12 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQueryRequest
     {
         var response = new SingleResponse<OrderDto?>();
 
-        var includes = new List<Expression<Func<Order, object>>>
+        var includes = new List<string>
         {
-            p => p.Basket!
+            nameof(Order.Basket),
         };
 
-        var order = await _orderReadRepository.GetByIdAsync(request.Id, include: includes)
+        var order = await _orderReadRepository.GetByIdAsync(request.Id, includePaths: includes)
             ?? throw new NotFoundException(nameof(Order), request.Id);
 
         if (!_userContextService.IsAdminOrSelf(order.Basket!.CustomerId))

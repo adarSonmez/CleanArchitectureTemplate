@@ -1,8 +1,10 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Constants.StringConstants;
 using CleanArchitectureTemplate.Domain.Constants.Enums;
+using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Files;
 using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using CleanArchitectureTemplate.Domain.Constants.StringConstants;
+using CleanArchitectureTemplate.Domain.Entities.Files;
 using CleanArchitectureTemplate.Domain.Entities.Membership;
 using CleanArchitectureTemplate.Domain.Entities.Ordering;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
@@ -433,6 +435,336 @@ public class EfDataService : IDataService
         await _context.Invoices.AddRangeAsync(shippedInvoice, deliveredInvoice, pendingInvoice);
 
         #endregion Seed Invoices
+
+        #region Seed File Details
+
+        var jpg1 = new FileDetails
+        {
+            Name = "jpg1.jpg",
+            Extension = FileExtension.Jpg,
+            Size = 1024,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var jpg2 = new FileDetails
+        {
+            Name = "jpg2.jpg",
+            Extension = FileExtension.Jpg,
+            Size = 2048,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var jpg3 = new FileDetails
+        {
+            Name = "jpg3.jpg",
+            Extension = FileExtension.Jpg,
+            Size = 4096,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var jpg4 = new FileDetails
+        {
+            Name = "jpg4.jpg",
+            Extension = FileExtension.Jpg,
+            Size = 8192,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png1 = new FileDetails
+        {
+            Name = "png1.png",
+            Extension = FileExtension.Png,
+            Size = 1024,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png2 = new FileDetails
+        {
+            Name = "png2.png",
+            Extension = FileExtension.Png,
+            Size = 2048,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png3 = new FileDetails
+        {
+            Name = "png3.png",
+            Extension = FileExtension.Png,
+            Size = 4096,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png4 = new FileDetails
+        {
+            Name = "png4.png",
+            Extension = FileExtension.Png,
+            Size = 8192,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png5 = new FileDetails
+        {
+            Name = "png5.png",
+            Extension = FileExtension.Png,
+            Size = 1024,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png6 = new FileDetails
+        {
+            Name = "png6.png",
+            Extension = FileExtension.Png,
+            Size = 2048,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png7 = new FileDetails
+        {
+            Name = "png7.png",
+            Extension = FileExtension.Png,
+            Size = 4096,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png8 = new FileDetails
+        {
+            Name = "png8.png",
+            Extension = FileExtension.Png,
+            Size = 8192,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png9 = new FileDetails
+        {
+            Name = "png9.png",
+            Extension = FileExtension.Png,
+            Size = 8192,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png10 = new FileDetails
+        {
+            Name = "png10.png",
+            Extension = FileExtension.Png,
+            Size = 8192,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png11 = new FileDetails
+        {
+            Name = "png11.png",
+            Extension = FileExtension.Png,
+            Size = 8192,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png12 = new FileDetails
+        {
+            Name = "png12.png",
+            Extension = FileExtension.Png,
+            Size = 8192,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png13 = new FileDetails
+        {
+            Name = "png13.png",
+            Extension = FileExtension.Png,
+            Size = 8192,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png14 = new FileDetails
+        {
+            Name = "png14.png",
+            Extension = FileExtension.Png,
+            Size = 8192,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        var png15 = new FileDetails
+        {
+            Name = "png15.png",
+            Extension = FileExtension.Png,
+            Size = 8192,
+            Folder = "images",
+            Storage = StorageType.Local,
+        };
+
+        await _context.FileDetails.AddRangeAsync(
+            jpg1, jpg2, jpg3, jpg4,
+            png1, png2, png3, png4,
+            png5, png6, png7, png8,
+            png9, png10, png11, png12,
+            png13, png14, png15
+        );
+
+        #endregion Seed File Details
+
+        #region Seed Category Image Files
+
+        var categoryImageFile1 = new CategoryImageFile
+        {
+            FileDetails = jpg1,
+            Category = electronicsCategory,
+        };
+
+        var categoryImageFile2 = new CategoryImageFile
+        {
+            FileDetails = jpg2,
+            Category = clothingCategory,
+        };
+
+        var categoryImageFile3 = new CategoryImageFile
+        {
+            FileDetails = jpg3,
+            Category = booksCategory,
+        };
+
+        var categoryImageFile4 = new CategoryImageFile
+        {
+            FileDetails = jpg4,
+            Category = hatsCategory,
+        };
+
+        await _context.CategoryImageFiles.AddRangeAsync(categoryImageFile1, categoryImageFile2, categoryImageFile3, categoryImageFile4);
+
+        #endregion Seed Category Image Files
+
+        #region Seed Product Image Files
+
+        var productImageFile1 = new ProductImageFile
+        {
+            FileDetails = png1,
+            Product = laptopProduct,
+            IsPrimary = true,
+        };
+
+        var productImageFile2 = new ProductImageFile
+        {
+            FileDetails = png2,
+            Product = laptopProduct,
+            IsPrimary = false,
+        };
+
+        var productImageFile3 = new ProductImageFile
+        {
+            FileDetails = png3,
+            Product = laptopProduct,
+            IsPrimary = false,
+        };
+
+        var productImageFile4 = new ProductImageFile
+        {
+            FileDetails = png4,
+            Product = phoneProduct,
+            IsPrimary = true,
+        };
+
+        var productImageFile5 = new ProductImageFile
+        {
+            FileDetails = png5,
+            Product = phoneProduct,
+            IsPrimary = false,
+        };
+
+        var productImageFile6 = new ProductImageFile
+        {
+            FileDetails = png6,
+            Product = phoneProduct,
+            IsPrimary = false,
+        };
+
+        var productImageFile7 = new ProductImageFile
+        {
+            FileDetails = png7,
+            Product = shirtProduct,
+            IsPrimary = true,
+        };
+
+        var productImageFile8 = new ProductImageFile
+        {
+            FileDetails = png8,
+            Product = shirtProduct,
+            IsPrimary = false,
+        };
+
+        var productImageFile9 = new ProductImageFile
+        {
+            FileDetails = png9,
+            Product = shirtProduct,
+            IsPrimary = false,
+        };
+
+        var productImageFile10 = new ProductImageFile
+        {
+            FileDetails = png10,
+            Product = bookProduct,
+            IsPrimary = true,
+        };
+
+        var productImageFile11 = new ProductImageFile
+        {
+            FileDetails = png11,
+            Product = bookProduct,
+            IsPrimary = false,
+        };
+
+        var productImageFile12 = new ProductImageFile
+        {
+            FileDetails = png12,
+            Product = bookProduct,
+            IsPrimary = false,
+        };
+
+        var productImageFile13 = new ProductImageFile
+        {
+            FileDetails = png13,
+            Product = hatProduct,
+            IsPrimary = true,
+        };
+
+        var productImageFile14 = new ProductImageFile
+        {
+            FileDetails = png14,
+            Product = hatProduct,
+            IsPrimary = false,
+        };
+
+        var productImageFile15 = new ProductImageFile
+        {
+            FileDetails = png15,
+            Product = hatProduct,
+            IsPrimary = false,
+        };
+
+        await _context.ProductImageFiles.AddRangeAsync(
+            productImageFile1, productImageFile2, productImageFile3,
+            productImageFile4, productImageFile5, productImageFile6,
+            productImageFile7, productImageFile8, productImageFile9,
+            productImageFile10, productImageFile11, productImageFile12,
+            productImageFile13, productImageFile14, productImageFile15
+        );
+
+        #endregion Seed Product Image Files
 
         await _context.SaveChangesAsync();
     }

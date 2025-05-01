@@ -24,16 +24,16 @@ public class GetAllBasketsQueryHandler : IRequestHandler<GetAllBasketsQueryReque
     {
         var response = new PagedResponse<BasketDto>();
 
-        var includes = new List<Expression<Func<Basket, object>>>();
+        var includes = new List<string>();
         if (request.IncludeBasketItems)
         {
-            includes.Add(p => p.BasketItems);
+            includes.Add(nameof(Basket.BasketItems));
         }
 
         // Fetch paginated baskets from the repository
         var (data, totalCount) = await _basketReadRepository.GetAllPaginatedAsync(
             pagination: request.Pagination,
-            include: includes
+            includePaths: includes
         );
 
         response.SetData(

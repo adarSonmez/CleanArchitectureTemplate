@@ -10,6 +10,7 @@ using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
 using CleanArchitectureTemplate.Application.Mappings.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Files;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.CreateProduct;
 
@@ -80,8 +81,15 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
             }
         }
 
+        var includes = new List<string>
+        {
+            nameof(Product.Categories),
+            nameof(Product.ProductImageFiles),
+            $"{nameof(Product.ProductImageFiles)}.{nameof(ProductImageFile.FileDetails)}"
+        };
+
         var addedProduct = await _productWriteRepository.AddAsync(product);
-        var detailedProduct = await _productReadRepository.GetByIdAsync(addedProduct.Id, include: [product => product.Categories, product => product.ProductImageFiles])
+        var detailedProduct = await _productReadRepository.GetByIdAsync(addedProduct.Id, includePaths: includes)
             ?? throw new NotFoundException(nameof(Product), addedProduct.Id);
 
         var productDto = detailedProduct.ToDto();

@@ -38,13 +38,13 @@ public class DeleteProductImageByIdCommandHandler : IRequestHandler<DeleteProduc
 
     public async Task<ResponseResult> Handle(DeleteProductImageByIdCommandRequest request, CancellationToken cancellationToken)
     {
-        var includes = new List<Expression<Func<ProductImageFile, object>>>
+        var includes = new List<string>
         {
-            pi => pi.Product!,
-            pi => pi.FileDetails!
+            nameof(ProductImageFile.Product),
+            nameof(ProductImageFile.FileDetails)
         };
 
-        var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.ProductId, include: includes)
+        var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.ProductId, includePaths: includes)
             ?? throw new NotFoundException(nameof(ProductImageFile), request.ProductId);
 
         var product = await _productReadRepository.GetByIdAsync(productImageFile.Product!.Id)

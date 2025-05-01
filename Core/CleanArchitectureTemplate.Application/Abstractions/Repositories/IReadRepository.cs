@@ -16,7 +16,7 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// Retrieves all entities asynchronously with pagination.
     /// </summary>
     /// <param name="predicate">The predicate to filter entities.</param>
-    /// <param name="include">The list of functions to include related entities.</param>
+    /// <param name="includePaths">The list of strings representing the paths to include related entities. Use dot notation for nested properties.</param>
     /// <param name="orderBy">The function to order entities.</param>
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
@@ -24,7 +24,7 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <returns>A task that represents the asynchronous operation. The task result contains the list of entities and the total count.</returns>
     Task<(IEnumerable<TEntity> Data, int TotalCount)> GetAllPaginatedAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
-        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        IEnumerable<string>? includePaths = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null);
 
@@ -32,13 +32,13 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// Retrieves a single entity asynchronously based on the predicate.
     /// </summary>
     /// <param name="predicate">The predicate to filter the entity.</param>
-    /// <param name="include">The list of functions to include related entities.</param>
+    /// <param name="includePaths">The list of strings representing the paths to include related entities. Use dot notation for nested properties.</param>
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity.</returns>
     Task<TEntity?> GetAsync(
         Expression<Func<TEntity, bool>> predicate,
-        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        IEnumerable<string>? includePaths = null,
         bool enableTracking = false,
         bool getDeleted = false);
 
@@ -46,7 +46,7 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// Retrieves a single entity asynchronously based on the ID.
     /// </summary>
     /// <param name="id">The unique identifier of the entity to retrieve.</param>
-    /// <param name="include">The list of functions to include related entities.</param>
+    /// <param name="includePaths">The list of strings representing the paths to include related entities. Use dot notation for nested properties.</param>
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity.</returns>
@@ -54,7 +54,7 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <exception cref="KeyNotFoundException">Thrown when the entity with the specified ID is not found.</exception>
     Task<TEntity?> GetByIdAsync(
     Guid id,
-    IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        IEnumerable<string>? includePaths = null,
     bool enableTracking = false,
     bool getDeleted = false);
 
@@ -62,7 +62,7 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// Retrieves all entities asynchronously with provided IDs.
     /// </summary>
     /// <param name="ids">The list of entity IDs to retrieve.</param>
-    /// <param name="include">The list of functions to include related entities.</param>
+    /// <param name="includePaths">The list of strings representing the paths to include related entities. Use dot notation for nested properties.</param>
     /// <param name="orderBy">The function to order entities.</param>
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
@@ -71,7 +71,7 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <returns>A task that represents the asynchronous operation. The task result contains the list of entities.</returns>
     Task<IEnumerable<TEntity>> GetByIdRangeAsync(
         IEnumerable<Guid> ids,
-        IEnumerable<Expression<Func<TEntity, object>>>? include = null,
+        IEnumerable<string>? includePaths = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null,
         bool throwIfNotFound = true);

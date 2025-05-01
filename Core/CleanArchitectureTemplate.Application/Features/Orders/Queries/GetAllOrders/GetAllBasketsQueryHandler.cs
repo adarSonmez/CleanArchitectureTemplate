@@ -24,15 +24,15 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQueryRequest
     {
         var response = new PagedResponse<OrderDto>();
 
-        var includes = new List<Expression<Func<Order, object>>>();
+        var includes = new List<string>();
         if (request.IncludeBasket)
         {
-            includes.Add(p => p.Basket!);
+            includes.Add(nameof(Order.Basket));
         }
 
         var (data, totalCount) = await _orderReadRepository.GetAllPaginatedAsync(
             pagination: request.Pagination,
-            include: includes
+            includePaths: includes
         );
 
         response.SetData(

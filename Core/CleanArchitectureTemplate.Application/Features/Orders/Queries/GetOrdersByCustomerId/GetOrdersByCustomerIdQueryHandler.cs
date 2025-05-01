@@ -28,9 +28,9 @@ public class GetOrdersByCustomerIdQueryHandler : IRequestHandler<GetOrdersByCust
     {
         var response = new PagedResponse<OrderDto>();
 
-        var includes = new List<Expression<Func<Order, object>>>
+        var includes = new List<string>
         {
-            p => p.Basket!
+            nameof(Order.Basket)
         };
 
         var customerId = _userContextService.GetUserId();
@@ -38,7 +38,7 @@ public class GetOrdersByCustomerIdQueryHandler : IRequestHandler<GetOrdersByCust
         var (data, totalCount) = await _orderReadRepository.GetAllPaginatedAsync(
             predicate: p => p.Basket!.CustomerId == customerId,
             pagination: request.Pagination,
-            include: includes
+            includePaths: includes
         );
 
         if (!request.IncludeBasket)

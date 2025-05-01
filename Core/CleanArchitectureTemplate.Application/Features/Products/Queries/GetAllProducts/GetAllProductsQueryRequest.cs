@@ -11,13 +11,10 @@ namespace CleanArchitectureTemplate.Application.Features.Products.Queries.GetAll
 /// </summary>
 /// <param name="Pagination">The pagination parameters.</param>
 /// <param name="IncludeCategories">A flag to include categories.</param>
-/// <param name="IncludeBasketItems">A flag to include basket items.</param>
 /// <param name="IncludeProductImageFiles">A flag to include product image files.</param>
-[Cache(20, 60)]
 public record GetAllProductsQueryRequest
 (
     Pagination? Pagination,
     bool IncludeCategories,
-    bool IncludeBasketItems,
     bool IncludeProductImageFiles
 ) : IRequest<PagedResponse<ProductDto?>>;

@@ -10,6 +10,7 @@ using CleanArchitectureTemplate.Application.Constants.StringContants;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 using CleanArchitectureTemplate.Application.Mappings.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Files;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.UpdateProduct;
 
@@ -84,8 +85,15 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
             }
         }
 
+        var includes = new List<string>
+        {
+            nameof(Product.Categories),
+            nameof(Product.ProductImageFiles),
+            $"{nameof(Product.ProductImageFiles)}.{nameof(ProductImageFile.FileDetails)}"
+        };
+
         var uodatedProduct = await _productWriteRepository.UpdateAsync(product!);
-        var detailedProduct = await _productReadRepository.GetByIdAsync(uodatedProduct.Id, include: [product => product.Categories, product => product.ProductImageFiles]);
+        var detailedProduct = await _productReadRepository.GetByIdAsync(uodatedProduct.Id, includePaths: includes);
 
         response.SetData(detailedProduct?.ToDto());
 

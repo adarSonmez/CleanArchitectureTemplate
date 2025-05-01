@@ -3,6 +3,7 @@ using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Mappings.Shopping;
+using CleanArchitectureTemplate.Domain.Entities.Files;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using MediatR;
 using System.Linq.Expressions;
@@ -24,22 +25,19 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryReq
     public async Task<SingleResponse<ProductDto?>> Handle(GetProductByIdQueryRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<ProductDto?>();
-        var includes = new List<Expression<Func<Product, object>>>();
+        var includes = new List<string>();
 
         if (request.IncludeCategories)
         {
-            includes.Add(p => p.Categories);
-        }
-        if (request.IncludeBasketItems)
-        {
-            includes.Add(p => p.BasketItems);
+            includes.Add(nameof(Product.Categories));
         }
         if (request.IncludeProductImageFiles)
         {
-            includes.Add(p => p.ProductImageFiles);
+            includes.Add(nameof(Product.ProductImageFiles));
+            includes.Add($"{nameof(Product.ProductImageFiles)}.{nameof(ProductImageFile.FileDetails)}");
         }
 
-        var product = await _productReadRepository.GetByIdAsync(request.Id, include: includes)
+        var product = await _productReadRepository.GetByIdAsync(request.Id, includePaths: includes)
         ?? throw new NotFoundException(nameof(Product), request.Id);
 
         response.SetData(product.ToDto());

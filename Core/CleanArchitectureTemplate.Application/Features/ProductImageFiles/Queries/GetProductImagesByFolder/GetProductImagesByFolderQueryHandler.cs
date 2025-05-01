@@ -2,6 +2,7 @@
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Files;
 using CleanArchitectureTemplate.Application.Mappings.Files;
+using CleanArchitectureTemplate.Domain.Entities.Files;
 using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queries.GetProductImagesByFolder;
@@ -22,7 +23,12 @@ public class GetProductImageByProductIdQueryHandler : IRequestHandler<GetProduct
     {
         var response = new PagedResponse<ProductImageFileDto?>();
 
-        var (data, totalCount) = await _productImageFileReadRepository.GetAllPaginatedAsync(pi => pi.FileDetails!.Folder == request.Folder, include: [pi => pi.FileDetails!]);
+        var includes = new List<string>
+        {
+            nameof(ProductImageFile.FileDetails)
+        };
+
+        var (data, totalCount) = await _productImageFileReadRepository.GetAllPaginatedAsync(pi => pi.FileDetails!.Folder == request.Folder, includePaths: includes);
         response.SetData(data.Select(pi => pi.ToDto()), totalCount, request.Pagination?.Page, request.Pagination?.Size);
 
         return response;
