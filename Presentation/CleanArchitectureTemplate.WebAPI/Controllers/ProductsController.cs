@@ -28,17 +28,16 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> GetAll(
         [FromQuery] Pagination pagination,
         [FromQuery] bool includeCategories,
-        [FromQuery] bool includeBasketItems,
         [FromQuery] bool includeProductImageFiles)
     {
-        var request = new GetAllProductsQueryRequest(pagination, includeCategories, includeBasketItems, includeProductImageFiles);
+        var request = new GetAllProductsQueryRequest(pagination, includeCategories, includeProductImageFiles);
         return await _mediator.Send(request);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] Guid id, [FromQuery] bool includeCategories, [FromQuery] bool includeOrders, [FromQuery] bool includeProductImageFiles)
+    public async Task<IActionResult> GetById([FromRoute] Guid id, [FromQuery] bool includeCategories, [FromQuery] bool includeProductImageFiles)
     {
-        var request = new GetProductByIdQueryRequest(id, includeCategories, includeOrders, includeProductImageFiles);
+        var request = new GetProductByIdQueryRequest(id, includeCategories, includeProductImageFiles);
         return await _mediator.Send(request);
     }
 

@@ -1,5 +1,4 @@
 ﻿using CleanArchitectureTemplate.Application.Dtos.Files;
-using CleanArchitectureTemplate.Application.Dtos.Ordering;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Domain.MarkerInterfaces;
 using CleanArchitectureTemplate.Domain.ValueObjects;
@@ -18,7 +17,6 @@ namespace CleanArchitectureTemplate.Application.Dtos.Shopping;
 /// <param name="StoreId">The store that the product belongs to.</param>
 /// <param name="DiscountedPrice">The discounted price of the product.</param>
 /// <param name="ProductImageFiles">The product images of the product.</param>
-/// <param name="OrderItems">The orders in which the product is included.</param>
 /// <param name="Categories">The categories of the product.</param>
 public record ProductDto
 (
@@ -31,6 +29,5 @@ public record ProductDto
     Money DiscountedPrice = default!,
     Guid StoreId = default,
     ICollection<ProductImageFileDto>? ProductImageFiles = default,
-    ICollection<OrderDto>? OrderItems = default,
     ICollection<CategoryDto>? Categories = default
 ) : IDto;
