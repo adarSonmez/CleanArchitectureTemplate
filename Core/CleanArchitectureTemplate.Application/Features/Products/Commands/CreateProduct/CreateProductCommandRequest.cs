@@ -1,7 +1,7 @@
 ﻿using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
+using CleanArchitectureTemplate.Application.Dtos.ValueObjects;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
-using CleanArchitectureTemplate.Domain.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,8 +25,8 @@ public record CreateProductCommandRequest
     string? Description,
     int? Stock,
     decimal? DiscountRate,
-    Money StandardPrice,
-    [FromForm] IFormFile PrimaryProductImage,
-    [FromForm] IFormFileCollection? SecondaryProductImages,
+    MoneyDto StandardPrice,
+    IFormFile PrimaryProductImage,
+    IFormFileCollection? SecondaryProductImages,
     IList<Guid> CategoryIds
 ) : IRequest<SingleResponse<ProductDto?>>;

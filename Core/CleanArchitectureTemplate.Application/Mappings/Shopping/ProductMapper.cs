@@ -2,7 +2,9 @@
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Application.Features.Products.Commands.CreateProduct;
 using CleanArchitectureTemplate.Application.Mappings.Files;
+using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using CleanArchitectureTemplate.Domain.Entities.Shopping;
+using CleanArchitectureTemplate.Domain.ValueObjects;
 
 namespace CleanArchitectureTemplate.Application.Mappings.Shopping;
 
@@ -21,13 +23,16 @@ public static class ProductMapper
     {
         if (request == null) return null!;
 
+        var currency = Currency.FromIsoCode(request.StandardPrice.CurrencyIsoCode);
+        var standardPrice = new Money(request.StandardPrice.Amount, currency);
+
         return new Product
         {
             Name = request.Name,
             Description = request.Description,
             Stock = request.Stock ?? 0,
             DiscountRate = request.DiscountRate ?? 0,
-            StandardPrice = request.StandardPrice,
+            StandardPrice = standardPrice,
         };
     }
 

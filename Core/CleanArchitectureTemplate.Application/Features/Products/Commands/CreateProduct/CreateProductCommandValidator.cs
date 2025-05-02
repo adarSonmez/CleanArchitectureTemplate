@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Common.Validators;
+using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using FluentValidation;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.CreateProduct;
@@ -30,10 +31,26 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .LessThanOrEqualTo(1)
                 .WithMessage("Discount rate must be between 0 and 1.");
 
-        RuleFor(x => x.StandardPrice)
-            .NotNull()
-                .WithMessage("Standard price is required.")
-            .SetValidator(new MoneyValidator());
+        RuleFor(x => x.StandardPrice.CurrencyIsoCode)
+            .NotEmpty()
+                .WithMessage("Currency ISO code is required.")
+            .Must(x =>
+            {
+                try
+                {
+                    _ = Currency.FromIsoCode(x);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            })
+            .WithMessage("Invalid currency ISO code.");
+
+        RuleFor(x => x.StandardPrice.Amount)
+            .GreaterThan(0)
+                .WithMessage("Standard price must be greater than 0.");
 
         RuleFor(x => x.CategoryIds)
             .NotNull()

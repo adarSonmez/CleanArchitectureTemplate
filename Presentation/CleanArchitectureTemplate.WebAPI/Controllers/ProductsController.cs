@@ -43,7 +43,7 @@ public class ProductsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = UserRoles.Store)]
-    public async Task<IActionResult> Create([FromBody] CreateProductCommandRequest request)
+    public async Task<IActionResult> Create([FromForm] CreateProductCommandRequest request)
     {
         return await _mediator.Send(request);
     }
