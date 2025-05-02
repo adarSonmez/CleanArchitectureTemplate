@@ -1,16 +1,19 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories.Shopping;
 using CleanArchitectureTemplate.Application.Abstractions.Services;
 using CleanArchitectureTemplate.Application.Common.Responses;
+using CleanArchitectureTemplate.Application.Constants.StringContants;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
 using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.DeleteProductImagesByProductId;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadPrimaryProductImage;
 using CleanArchitectureTemplate.Application.Features.ProductImageFiles.Commands.UploadSecondaryProductImages;
-using CleanArchitectureTemplate.Application.Constants.StringContants;
-using CleanArchitectureTemplate.Domain.Entities.Shopping;
-using MediatR;
 using CleanArchitectureTemplate.Application.Mappings.Shopping;
+using CleanArchitectureTemplate.Application.Utilities;
+using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using CleanArchitectureTemplate.Domain.Entities.Files;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
+using CleanArchitectureTemplate.Domain.ValueObjects;
+using MediatR;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.UpdateProduct;
 
@@ -44,10 +47,20 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
         if (!_userContextService.IsAdminOrSelf(product.StoreId))
             throw new ForbiddenException();
 
+        EntityHelper.MapNonNullProperties(request, product);
+        IEnumerable<Category>? categories = null;
+
+        if (request.StandardPrice != null)
+        {
+            var currency = Currency.FromIsoCode(request.StandardPrice.CurrencyIsoCode);
+            var standardPrice = new Money(request.StandardPrice.Amount, currency);
+            product.StandardPrice = standardPrice;
+        }
+
         if (request.CategoryIds?.Count > 0)
         {
-            var categories = await _categoryReadRepository.GetByIdRangeAsync(request.CategoryIds);
-            product!.Categories = categories.ToList();
+            categories = await _categoryReadRepository.GetByIdRangeAsync(request.CategoryIds, enableTracking: true);
+            product!.Categories = [.. categories];
         }
 
         if (request.PrimaryProductImage != null)
@@ -92,10 +105,15 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
             $"{nameof(Product.ProductImageFiles)}.{nameof(ProductImageFile.FileDetails)}"
         };
 
-        var uodatedProduct = await _productWriteRepository.UpdateAsync(product!);
-        var detailedProduct = await _productReadRepository.GetByIdAsync(uodatedProduct.Id, includePaths: includes);
+        var updatedProduct = await _productWriteRepository.UpdateAsync(product!);
+        var detailedProduct = await _productReadRepository.GetByIdAsync(updatedProduct.Id, includePaths: includes);
 
         response.SetData(detailedProduct?.ToDto());
+
+        if (categories != null)
+        {
+            await _categoryReadRepository.DisableTrackingAsync(categories);
+        }
 
         return response;
     }

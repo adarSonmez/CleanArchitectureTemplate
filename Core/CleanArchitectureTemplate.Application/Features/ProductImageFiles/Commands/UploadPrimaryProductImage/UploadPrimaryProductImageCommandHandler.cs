@@ -42,7 +42,7 @@ public class UploadPrimaryProductImageCommandHandler : IRequestHandler<UploadPri
     {
         var response = new SingleResponse<ProductImageFileDto>();
 
-        var product = await _productReadRepository.GetByIdAsync(request.ProductId, enableTracking: true)
+        var product = await _productReadRepository.GetByIdAsync(request.ProductId)
             ?? throw new NotFoundException(nameof(Product), request.ProductId);
 
         if (!_userContextService.IsAdminOrSelf(product.StoreId))
@@ -72,7 +72,7 @@ public class UploadPrimaryProductImageCommandHandler : IRequestHandler<UploadPri
         {
             FileDetails = fileDetails,
             IsPrimary = true,
-            Product = product!
+            ProductId = product.Id
         };
 
         await _productImageFileWriteRepository.AddAsync(productImageFile);
