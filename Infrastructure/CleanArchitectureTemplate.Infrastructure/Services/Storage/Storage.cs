@@ -1,4 +1,4 @@
-﻿using CleanArchitectureTemplate.Infrastructure.Utilities;
+﻿using CleanArchitectureTemplate.Application.Utilities;
 using Microsoft.AspNetCore.Http;
 
 namespace CleanArchitectureTemplate.Infrastructure.Services.Storage;

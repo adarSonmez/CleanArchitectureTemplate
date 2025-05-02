@@ -1,6 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services.Storage.Local;
 using CleanArchitectureTemplate.Application.Exceptions;
-using CleanArchitectureTemplate.Infrastructure.Utilities;
+using CleanArchitectureTemplate.Application.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
