@@ -50,7 +50,7 @@ public class ProductsController : ControllerBase
 
     [HttpPut]
     [Authorize(Roles = UserRoles.StoreOrAdmin)]
-    public async Task<IActionResult> Update([FromBody] UpdateProductCommandRequest request)
+    public async Task<IActionResult> Update([FromForm] UpdateProductCommandRequest request)
     {
         return await _mediator.Send(request);
     }

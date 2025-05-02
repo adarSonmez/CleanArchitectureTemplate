@@ -1,9 +1,8 @@
 ﻿using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Shopping;
-using CleanArchitectureTemplate.Domain.ValueObjects;
+using CleanArchitectureTemplate.Application.Dtos.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.UpdateProduct;
 
@@ -28,9 +27,9 @@ public record UpdateProductCommandRequest
     string? Description,
     int? Stock,
     decimal? DiscountRate,
-    Money? StandardPrice,
-    [FromForm] IFormFile PrimaryProductImage,
+    MoneyDto? StandardPrice,
+    IFormFile PrimaryProductImage,
     bool DeleteExistingSecondaryImages,
-    [FromForm] IFormFileCollection? SecondaryProductImages,
+    IFormFileCollection? SecondaryProductImages,
     IList<Guid>? CategoryIds
 ) : IRequest<SingleResponse<ProductDto?>>;

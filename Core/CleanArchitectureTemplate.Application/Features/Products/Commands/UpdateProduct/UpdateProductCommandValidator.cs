@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Common.Validators;
+using CleanArchitectureTemplate.Domain.Constants.SmartEnums.Localizations;
 using FluentValidation;
 
 namespace CleanArchitectureTemplate.Application.Features.Products.Commands.UpdateProduct;
@@ -27,12 +28,33 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
             .GreaterThanOrEqualTo(0)
                 .WithMessage("Stock must be greater than or equal to 0.");
 
-        RuleFor(x => x.StandardPrice)
-            .SetValidator(new MoneyValidator()!)
-            .When(x => x.StandardPrice != null);
+        When(x => x.StandardPrice != null, () =>
+        {
+            RuleFor(x => x.StandardPrice!.CurrencyIsoCode)
+                .NotEmpty()
+                    .WithMessage("Currency ISO code is required.")
+                .Must(code =>
+                {
+                    try
+                    {
+                        _ = Currency.FromIsoCode(code);
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                })
+                .WithMessage("Invalid currency ISO code.");
+
+            RuleFor(x => x.StandardPrice!.Amount)
+                .GreaterThan(0)
+                    .WithMessage("Standard price must be greater than 0.");
+        });
 
         RuleFor(x => x.CategoryIds)
             .NotEmpty()
-                .WithMessage("At least one category is required.");
+                .WithMessage("At least one category is required.")
+            .When(x => x.CategoryIds is not null);
     }
 }
