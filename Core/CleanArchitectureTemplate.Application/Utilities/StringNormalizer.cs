@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CleanArchitectureTemplate.Infrastructure.Utilities;
+namespace CleanArchitectureTemplate.Application.Utilities;
 
 /// <summary>
 /// Utility class for normalizing strings for file, directory, URL, and other naming purposes.

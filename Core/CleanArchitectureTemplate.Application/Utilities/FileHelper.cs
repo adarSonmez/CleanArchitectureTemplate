@@ -1,4 +1,4 @@
-﻿namespace CleanArchitectureTemplate.Infrastructure.Utilities;
+﻿namespace CleanArchitectureTemplate.Application.Utilities;
 
 /// <summary>
 /// Utility class for file-related operations.
