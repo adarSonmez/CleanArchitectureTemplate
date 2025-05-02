@@ -98,4 +98,14 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <returns>A task that represents the asynchronous operation. The task result contains the number of state entries written to the database.</returns>
     /// <remarks>Make sure enable-tracking is set to true before calling this method.</remarks>
     Task<int> SaveChangesAsync();
+
+    /// <summary>
+    /// Disables tracking for the specified entity.
+    /// </summary>
+    Task DisableTrackingAsync(TEntity entity);
+
+    /// <summary>
+    /// Disables tracking for the specified entities.
+    /// </summary>
+    Task DisableTrackingAsync(IEnumerable<TEntity> entities);
 }

@@ -208,4 +208,23 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
     {
         return await _context.SaveChangesAsync();
     }
+
+    /// <inheritdoc/>
+    public async Task DisableTrackingAsync(TEntity entity)
+    {
+        var entry = _context.Entry(entity);
+        if (entry.State == EntityState.Detached)
+            return;
+        entry.State = EntityState.Detached;
+        await Task.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    public async Task DisableTrackingAsync(IEnumerable<TEntity> entities)
+    {
+        foreach (var entity in entities)
+        {
+            await DisableTrackingAsync(entity);
+        }
+    }
 }
