@@ -5,10 +5,10 @@
 /// </summary>
 public enum StorageType
 {
-    Local,
-    Azure,
-    S3,
-    GoogleCloud,
-    Dropbox,
-    OneDrive
+    LocalStorage,
+    AzureStorage,
+    S3Storage,
+    GoogleCloudStorage,
+    DropboxStorage,
+    OneDriveStorage
 }

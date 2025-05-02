@@ -444,7 +444,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Jpg,
             Size = 1024,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var jpg2 = new FileDetails
@@ -453,7 +453,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Jpg,
             Size = 2048,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var jpg3 = new FileDetails
@@ -462,7 +462,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Jpg,
             Size = 4096,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var jpg4 = new FileDetails
@@ -471,7 +471,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Jpg,
             Size = 8192,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png1 = new FileDetails
@@ -480,7 +480,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 1024,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png2 = new FileDetails
@@ -489,7 +489,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 2048,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png3 = new FileDetails
@@ -498,7 +498,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 4096,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png4 = new FileDetails
@@ -507,7 +507,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 8192,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png5 = new FileDetails
@@ -516,7 +516,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 1024,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png6 = new FileDetails
@@ -525,7 +525,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 2048,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png7 = new FileDetails
@@ -534,7 +534,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 4096,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png8 = new FileDetails
@@ -543,7 +543,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 8192,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png9 = new FileDetails
@@ -552,7 +552,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 8192,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png10 = new FileDetails
@@ -561,7 +561,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 8192,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png11 = new FileDetails
@@ -570,7 +570,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 8192,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png12 = new FileDetails
@@ -579,7 +579,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 8192,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png13 = new FileDetails
@@ -588,7 +588,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 8192,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png14 = new FileDetails
@@ -597,7 +597,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 8192,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         var png15 = new FileDetails
@@ -606,7 +606,7 @@ public class EfDataService : IDataService
             Extension = FileExtension.Png,
             Size = 8192,
             Folder = "images",
-            Storage = StorageType.Local,
+            Storage = StorageType.LocalStorage,
         };
 
         await _context.FileDetails.AddRangeAsync(
