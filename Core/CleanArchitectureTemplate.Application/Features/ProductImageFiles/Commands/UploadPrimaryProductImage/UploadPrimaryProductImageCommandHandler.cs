@@ -42,7 +42,7 @@ public class UploadPrimaryProductImageCommandHandler : IRequestHandler<UploadPri
     {
         var response = new SingleResponse<ProductImageFileDto>();
 
-        var product = await _productReadRepository.GetByIdAsync(request.ProductId)
+        var product = await _productReadRepository.GetByIdAsync(request.ProductId, enableTracking: true)
             ?? throw new NotFoundException(nameof(Product), request.ProductId);
 
         if (!_userContextService.IsAdminOrSelf(product.StoreId))

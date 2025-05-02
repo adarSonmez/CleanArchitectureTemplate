@@ -49,10 +49,11 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
         var userId = _userContextService.GetUserId()!;
 
         var product = request.ToEntity();
-        var categories = await _categoryReadRepository.GetByIdRangeAsync(request.CategoryIds);
+        var categories = await _categoryReadRepository.GetByIdRangeAsync(request.CategoryIds, enableTracking: true);
 
         product.Categories = categories.ToList();
         product.StoreId = userId.Value;
+        var addedProduct = await _productWriteRepository.AddAsync(product);
 
         if (request.PrimaryProductImage != null)
         {
@@ -88,7 +89,6 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
             $"{nameof(Product.ProductImageFiles)}.{nameof(ProductImageFile.FileDetails)}"
         };
 
-        var addedProduct = await _productWriteRepository.AddAsync(product);
         var detailedProduct = await _productReadRepository.GetByIdAsync(addedProduct.Id, includePaths: includes)
             ?? throw new NotFoundException(nameof(Product), addedProduct.Id);
 
