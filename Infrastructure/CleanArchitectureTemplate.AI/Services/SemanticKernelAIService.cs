@@ -102,15 +102,14 @@ namespace CleanArchitectureTemplate.AI.Services
 
         private async Task<ChatMessageDto> SendMessageStreamingAsync(string connectionId, CancellationToken cancellationToken)
         {
-            var chatHistory = _chatHistoryService.GetHistory(connectionId) as ChatHistory
-                              ?? throw new ForbiddenException("Chat history not found.");
+            var chatHistory = _chatHistoryService.GetHistory(connectionId) as ChatHistory;
 
             var messageBuilder = new StringBuilder();
             var thinkBuilder = new StringBuilder();
             string? role = null;
             string? modelId = null;
 
-            await foreach (var chunk in _chatCompletionService.GetStreamingChatMessageContentsAsync(chatHistory, _promptExecutionSettings, _kernel, cancellationToken))
+            await foreach (var chunk in _chatCompletionService.GetStreamingChatMessageContentsAsync(chatHistory!, _promptExecutionSettings, _kernel, cancellationToken))
             {
                 cancellationToken.ThrowIfCancellationRequested();
 

@@ -1,5 +1,6 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Messaging;
 using CleanArchitectureTemplate.Application.Dtos.Messaging.PubSub;
+using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Messaging.Factory.RabbitMq;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -25,7 +26,8 @@ public class RabbitMqMessagePublisher : IMessagePublisher
     /// <inheritdoc/>
     public async Task PublishAsync<T>(PublishMessageDto<T> messageDto) where T : class
     {
-        ArgumentNullException.ThrowIfNull(messageDto.Message);
+        if (messageDto.Message == null)
+            throw new ValidationFailedException("Message cannot be null.");
 
         var connection = await _connectionFactory.GetConnectionAsync();
         using var channel = await connection.CreateChannelAsync(cancellationToken: messageDto.CancellationToken);

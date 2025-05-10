@@ -161,7 +161,7 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         if (ids == null || !ids.Any())
         {
             if (throwIfNotFound)
-                throw new ArgumentException($"The collection of IDs is null or empty for {typeof(TEntity).Name}");
+                throw new ValidationFailedException($"The collection of IDs is null or empty for {typeof(TEntity).Name}");
 
             return [];
         }

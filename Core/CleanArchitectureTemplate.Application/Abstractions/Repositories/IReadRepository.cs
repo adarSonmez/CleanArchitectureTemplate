@@ -55,7 +55,6 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <param name="throwIfNotFound">Indicates whether to throw an exception if the entity is not found.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity.</returns>
     /// <remarks>Use this method to retrieve a single entity by its unique identifier.</remarks>
-    /// <exception cref="KeyNotFoundException">Thrown when the entity with the specified ID is not found.</exception>
     Task<TEntity?> GetByIdAsync(
     Guid id,
         IEnumerable<string>? includePaths = null,

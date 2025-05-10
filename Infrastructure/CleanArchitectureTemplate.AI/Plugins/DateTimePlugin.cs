@@ -1,4 +1,5 @@
-﻿using Microsoft.SemanticKernel;
+﻿using CleanArchitectureTemplate.Application.Exceptions;
+using Microsoft.SemanticKernel;
 using System.ComponentModel;
 
 namespace CleanArchitectureTemplate.AI.Plugins;
@@ -45,6 +46,6 @@ public class DateTimePlugin
         {
             return parsedDate.ToString(format);
         }
-        throw new ArgumentException("Invalid date format");
+        throw new ValidationFailedException("Invalid date format");
     }
 }

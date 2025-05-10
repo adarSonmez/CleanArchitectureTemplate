@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Services;
+using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.Options;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -46,7 +47,7 @@ public class MimeKitEmailService : IEmailService
             }
             else
             {
-                throw new ArgumentException("At least one recipient (To) must be specified.");
+                throw new ValidationFailedException("At least one recipient (To) must be specified.");
             }
 
             if (ccAddresses != null)
