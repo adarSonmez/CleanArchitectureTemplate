@@ -9,8 +9,11 @@ namespace CleanArchitectureTemplate.Application.Features.ProductImageFiles.Queri
 /// <summary>
 /// Represents the request for getting a <see cref="ProductImageFile"/>'s by folder.
 /// </summary>
+/// <param name="Pagination">The pagination parameters.</param>
 /// <param name="Folder">The folder name where the images are stored.</param>
+/// <param name="IncludeFileDetails">Indicates whether to include file details in the response.</param>
 public record GetProductImagesByFolderQueryRequest(
     Pagination? Pagination,
-    string Folder
+    string Folder,
+    bool IncludeFileDetails
 ) : IRequest<PagedResponse<ProductImageFileDto?>>;

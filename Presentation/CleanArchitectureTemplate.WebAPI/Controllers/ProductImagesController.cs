@@ -27,25 +27,25 @@ public class ProductImagesController : ControllerBase
 
     [HttpGet("{id}")]
     [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any, NoStore = false)]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetById([FromRoute] Guid id, [FromQuery] bool includeFileDetails)
     {
-        var request = new GetProductImageByIdQueryRequest(id);
+        var request = new GetProductImageByIdQueryRequest(id, includeFileDetails);
         return await _mediator.Send(request);
     }
 
     [HttpGet("product/{productId}")]
     [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any, NoStore = false, VaryByQueryKeys = ["*"])]
-    public async Task<IActionResult> GetByProductId([FromQuery] Pagination pagination, [FromRoute] Guid productId)
+    public async Task<IActionResult> GetByProductId([FromQuery] Pagination pagination, [FromRoute] Guid productId, [FromQuery] bool includeFileDetails)
     {
-        var request = new GetProductImagesByProductIdQueryRequest(pagination, productId);
+        var request = new GetProductImagesByProductIdQueryRequest(pagination, productId, includeFileDetails);
         return await _mediator.Send(request);
     }
 
     [HttpGet("folder/{folderName}")]
     [Authorize(Roles = UserRoles.Admin)]
-    public async Task<IActionResult> GetByFolderName([FromQuery] Pagination pagination, [FromRoute] string folderName)
+    public async Task<IActionResult> GetByFolderName([FromQuery] Pagination pagination, [FromRoute] string folderName, [FromQuery] bool includeFileDetails)
     {
-        var request = new GetProductImagesByFolderQueryRequest(pagination, folderName);
+        var request = new GetProductImagesByFolderQueryRequest(pagination, folderName, includeFileDetails);
         return await _mediator.Send(request);
     }
 

@@ -23,10 +23,11 @@ public class GetProductImageByProductIdQueryHandler : IRequestHandler<GetProduct
     {
         var response = new PagedResponse<ProductImageFileDto?>();
 
-        var includes = new List<string>
+        var includes = new List<string>();
+        if (request.IncludeFileDetails)
         {
-            nameof(ProductImageFile.FileDetails)
-        };
+            includes.Add(nameof(ProductImageFile.FileDetails));
+        }
 
         var (data, totalCount) = await _productImageFileReadRepository.GetAllPaginatedAsync(pi => pi.FileDetails!.Folder == request.Folder, includePaths: includes);
         response.SetData(data.Select(pi => pi.ToDto()), totalCount, request.Pagination?.Page, request.Pagination?.Size);

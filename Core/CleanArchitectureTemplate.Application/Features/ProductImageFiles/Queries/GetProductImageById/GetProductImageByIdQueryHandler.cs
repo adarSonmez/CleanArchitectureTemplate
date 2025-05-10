@@ -2,7 +2,6 @@
 using CleanArchitectureTemplate.Application.Common.Responses;
 using CleanArchitectureTemplate.Application.Dtos.Files;
 using CleanArchitectureTemplate.Domain.Entities.Files;
-using CleanArchitectureTemplate.Application.Exceptions;
 using MediatR;
 using CleanArchitectureTemplate.Application.Mappings.Files;
 
@@ -24,7 +23,13 @@ public class GetProductImageByIdQueryHandler : IRequestHandler<GetProductImageBy
     {
         var response = new SingleResponse<ProductImageFileDto?>();
 
-        var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.Id, throwIfNotFound: true);
+        var includes = new List<string>();
+        if (request.IncludeFileDetails)
+        {
+            includes.Add(nameof(ProductImageFile.FileDetails));
+        }
+
+        var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.Id, includePaths: includes, throwIfNotFound: true);
 
         response.SetData(productImageFile!.ToDto());
 
