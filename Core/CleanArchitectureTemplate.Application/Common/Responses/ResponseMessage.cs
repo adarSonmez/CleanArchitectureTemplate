@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a response message with a type and optional code.
 /// </summary>
-public record ResponseMessage(string Message, ResponseMessageType MessageType, string? Code = null)
+public record ResponseMessage(string Message, string MessageType, string? Code = null)
 {
     /// <summary>
     /// Creates a new success message.
@@ -11,7 +11,7 @@ public record ResponseMessage(string Message, ResponseMessageType MessageType, s
     /// <param name="message">The message.</param>
     /// <returns>The success message.</returns>
     public static ResponseMessage Success(string message) =>
-        new(message, ResponseMessageType.Success);
+        new(message, ResponseConstants.Success);
 
     /// <summary>
     /// Creates a new warning message.
@@ -19,7 +19,7 @@ public record ResponseMessage(string Message, ResponseMessageType MessageType, s
     /// <param name="message">The message.</param>
     /// <returns>The warning message.</returns>
     public static ResponseMessage Warning(string message) =>
-        new(message, ResponseMessageType.Warning);
+        new(message, ResponseConstants.Warning);
 
     /// <summary>
     /// Creates a new error message.
@@ -28,5 +28,5 @@ public record ResponseMessage(string Message, ResponseMessageType MessageType, s
     /// <param name="message">The message.</param>
     /// <returns>The error message.</returns>
     public static ResponseMessage Error(string code, string message) =>
-        new(message, ResponseMessageType.Error, code);
+        new(message, ResponseConstants.Error, code);
 }

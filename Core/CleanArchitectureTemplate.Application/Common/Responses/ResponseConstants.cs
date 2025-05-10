@@ -7,8 +7,8 @@ public static class ResponseConstants
 {
     #region Response Codes
 
-    public const string NotFoundErrorCode = "APP-404";
-    public const string InvalidModelErrorCode = "APP-422";
+    public const string NotFoundErrorCode = "NOT_FOUND";
+    public const string InvalidModelErrorCode = "MODEL_VALIDATION_FAILED";
 
     #endregion Response Codes
 
@@ -20,4 +20,12 @@ public static class ResponseConstants
     public const string PaginatedSuccessMessage = "Items retrieved successfully.";
 
     #endregion Response Messages
+
+    #region Response Types
+
+    public const string Success = "Success";
+    public const string Error = "Error";
+    public const string Warning = "Warning";
+
+    #endregion Response Types
 }

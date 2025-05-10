@@ -13,7 +13,7 @@ public class ResponseResult : IActionResult
     /// Indicates if the response is successful (no errors).
     /// </summary>
     [JsonInclude]
-    public bool IsSuccessful => !Messages.Any(m => m.MessageType == ResponseMessageType.Error);
+    public bool IsSuccessful => !Messages.Any(m => m.MessageType == ResponseConstants.Error);
 
     /// <summary>
     /// List of response messages (success, warnings, errors).
