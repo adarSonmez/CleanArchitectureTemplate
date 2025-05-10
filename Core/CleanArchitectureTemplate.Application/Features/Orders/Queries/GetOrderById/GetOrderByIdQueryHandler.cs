@@ -35,16 +35,15 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQueryRequest
             nameof(Order.Basket),
         };
 
-        var order = await _orderReadRepository.GetByIdAsync(request.Id, includePaths: includes)
-            ?? throw new NotFoundException(nameof(Order), request.Id);
+        var order = await _orderReadRepository.GetByIdAsync(request.Id, includePaths: includes, throwIfNotFound: true);
 
-        if (!_userContextService.IsAdminOrSelf(order.Basket!.CustomerId))
+        if (!_userContextService.IsAdminOrSelf(order!.Basket!.CustomerId))
             throw new ForbiddenException();
 
         if (!request.IncludeBasket)
             order.Basket = null;
 
-        response.SetData(order.ToDto());
+        response.SetData(order!.ToDto());
 
         return response;
     }

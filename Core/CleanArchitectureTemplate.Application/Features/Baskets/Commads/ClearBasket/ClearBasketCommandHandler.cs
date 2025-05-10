@@ -32,10 +32,9 @@ public class ClearBasketCommandHandler : IRequestHandler<ClearBasketCommandReque
     {
         var response = new SingleResponse<BasketDto?>();
 
-        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId)
-            ?? throw new NotFoundException(nameof(Basket), request.BasketId);
+        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, throwIfNotFound: true);
 
-        if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
+        if (!_userContextService.IsAdminOrSelf(basket!.CustomerId))
             throw new ForbiddenException();
 
         foreach (var basketItem in basket.BasketItems)

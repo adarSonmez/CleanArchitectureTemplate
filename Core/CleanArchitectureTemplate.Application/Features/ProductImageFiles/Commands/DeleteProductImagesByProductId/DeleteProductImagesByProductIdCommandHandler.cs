@@ -37,10 +37,9 @@ public class DeleteProductImagesByProductIdCommandHandler : IRequestHandler<Dele
 
     public async Task<ResponseResult> Handle(DeleteProductImagesByProductIdCommandRequest request, CancellationToken cancellationToken)
     {
-        var product = await _productReadRepository.GetByIdAsync(request.ProductId)
-            ?? throw new NotFoundException(nameof(Product), request.ProductId);
+        var product = await _productReadRepository.GetByIdAsync(request.ProductId, throwIfNotFound: true);
 
-        if (!_userContextService.IsAdminOrSelf(product.StoreId))
+        if (!_userContextService.IsAdminOrSelf(product!.StoreId))
             throw new ForbiddenException();
 
         var includes = new List<string>
@@ -48,9 +47,7 @@ public class DeleteProductImagesByProductIdCommandHandler : IRequestHandler<Dele
             nameof(ProductImageFile.FileDetails)
         };
 
-        var (productImageFiles, _) = await _productImageFileReadRepository.GetAllPaginatedAsync(x => x.ProductId == request.ProductId, includePaths: includes);
-
-        if (productImageFiles == null || !productImageFiles.Any()) throw new NotFoundException($"No product images found for the product with ID: {request.ProductId}");
+        var (productImageFiles, _) = await _productImageFileReadRepository.GetAllPaginatedAsync(x => x.ProductId == request.ProductId, includePaths: includes, throwIfNotFound: true);
 
         foreach (var productImageFile in productImageFiles)
         {

@@ -44,13 +44,10 @@ public class DeleteProductImageByIdCommandHandler : IRequestHandler<DeleteProduc
             nameof(ProductImageFile.FileDetails)
         };
 
-        var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.ProductId, includePaths: includes)
-            ?? throw new NotFoundException(nameof(ProductImageFile), request.ProductId);
+        var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.ProductId, includePaths: includes, throwIfNotFound: true);
+        var product = await _productReadRepository.GetByIdAsync(productImageFile!.Product!.Id, throwIfNotFound: true);
 
-        var product = await _productReadRepository.GetByIdAsync(productImageFile.Product!.Id)
-            ?? throw new NotFoundException(nameof(Product), productImageFile.Product.Id);
-
-        if (!_userContextService.IsAdminOrSelf(product.StoreId))
+        if (!_userContextService.IsAdminOrSelf(product!.StoreId))
             throw new ForbiddenException();
 
         await _productImageFileWriteRepository.HardDeleteAsync(productImageFile.Id);

@@ -32,13 +32,10 @@ public class GetBasketItemByIdQueryHandler : IRequestHandler<GetBasketItemByIdQu
     {
         var response = new SingleResponse<BasketItemDto?>();
 
-        var basketItem = await _basketItemReadRepository.GetByIdAsync(request.Id)
-            ?? throw new NotFoundException(nameof(BasketItem), request.Id);
+        var basketItem = await _basketItemReadRepository.GetByIdAsync(request.Id, throwIfNotFound: true);
+        var basket = await _basketReadRepository.GetByIdAsync(basketItem!.BasketId, throwIfNotFound: true);
 
-        var basket = await _basketReadRepository.GetByIdAsync(basketItem.BasketId)
-            ?? throw new NotFoundException(nameof(Basket), basketItem.BasketId);
-
-        if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
+        if (!_userContextService.IsAdminOrSelf(basket!.CustomerId))
             throw new ForbiddenException();
 
         response.SetData(basketItem.ToDto());

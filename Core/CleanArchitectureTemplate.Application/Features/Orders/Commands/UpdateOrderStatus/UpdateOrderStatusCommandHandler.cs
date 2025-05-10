@@ -27,10 +27,9 @@ public class UpdateOrderStatusCommandHandler : IRequestHandler<UpdateOrderStatus
     {
         var response = new SingleResponse<OrderDto?>();
 
-        var order = await _orderReadRepository.GetByIdAsync(request.Id)
-            ?? throw new NotFoundException(nameof(Order), request.Id);
+        var order = await _orderReadRepository.GetByIdAsync(request.Id, throwIfNotFound: true);
 
-        order.Status = request.Status;
+        order!.Status = request.Status;
         await _orderWriteRepository.UpdateAsync(order);
 
         response.SetData(order.ToDto());

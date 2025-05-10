@@ -89,10 +89,9 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
             $"{nameof(Product.ProductImageFiles)}.{nameof(ProductImageFile.FileDetails)}"
         };
 
-        var detailedProduct = await _productReadRepository.GetByIdAsync(addedProduct.Id, includePaths: includes)
-            ?? throw new NotFoundException(nameof(Product), addedProduct.Id);
+        var detailedProduct = await _productReadRepository.GetByIdAsync(addedProduct.Id, includePaths: includes, throwIfNotFound: true);
 
-        var productDto = detailedProduct.ToDto();
+        var productDto = detailedProduct!.ToDto();
 
         response.SetData(productDto);
 

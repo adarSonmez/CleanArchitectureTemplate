@@ -37,10 +37,9 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQueryReq
             includes.Add($"{nameof(Product.ProductImageFiles)}.{nameof(ProductImageFile.FileDetails)}");
         }
 
-        var product = await _productReadRepository.GetByIdAsync(request.Id, includePaths: includes)
-        ?? throw new NotFoundException(nameof(Product), request.Id);
+        var product = await _productReadRepository.GetByIdAsync(request.Id, includePaths: includes, throwIfNotFound: true);
 
-        response.SetData(product.ToDto());
+        response.SetData(product!.ToDto());
 
         return response;
     }

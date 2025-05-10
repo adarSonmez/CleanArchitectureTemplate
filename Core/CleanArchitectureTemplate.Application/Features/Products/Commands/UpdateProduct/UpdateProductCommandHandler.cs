@@ -40,11 +40,9 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
     public async Task<SingleResponse<ProductDto?>> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<ProductDto?>();
+        var product = await _productReadRepository.GetByIdAsync(request.Id, throwIfNotFound: true);
 
-        var product = await _productReadRepository.GetByIdAsync(request.Id)
-        ?? throw new NotFoundException(nameof(Product), request.Id);
-
-        if (!_userContextService.IsAdminOrSelf(product.StoreId))
+        if (!_userContextService.IsAdminOrSelf(product!.StoreId))
             throw new ForbiddenException();
 
         EntityHelper.MapNonNullProperties(request, product);
@@ -106,9 +104,9 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommandR
         };
 
         var updatedProduct = await _productWriteRepository.UpdateAsync(product!);
-        var detailedProduct = await _productReadRepository.GetByIdAsync(updatedProduct.Id, includePaths: includes);
+        var detailedProduct = await _productReadRepository.GetByIdAsync(updatedProduct.Id, includePaths: includes, throwIfNotFound: true);
 
-        response.SetData(detailedProduct?.ToDto());
+        response.SetData(detailedProduct!.ToDto());
 
         if (categories != null)
         {

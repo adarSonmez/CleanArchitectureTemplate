@@ -47,14 +47,12 @@ public class AddBasketItemToBasketCommandHandler : IRequestHandler<AddBasketItem
             p => p.BasketItems
         };
 
-        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId)
-            ?? throw new NotFoundException(nameof(Basket), request.BasketId);
+        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, throwIfNotFound: true);
 
-        if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
+        if (!_userContextService.IsAdminOrSelf(basket!.CustomerId))
             throw new ForbiddenException();
 
-        var product = await _productReadRepository.GetByIdAsync(request.ProductId)
-            ?? throw new NotFoundException(nameof(Product), request.ProductId);
+        var product = await _productReadRepository.GetByIdAsync(request.ProductId, throwIfNotFound: true);
 
         var basketItem = basket.BasketItems.FirstOrDefault(x => x.ProductId == request.ProductId);
         if (basketItem == null)

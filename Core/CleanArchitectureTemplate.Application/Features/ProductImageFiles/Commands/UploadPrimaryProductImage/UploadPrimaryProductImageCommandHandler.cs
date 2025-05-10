@@ -42,10 +42,9 @@ public class UploadPrimaryProductImageCommandHandler : IRequestHandler<UploadPri
     {
         var response = new SingleResponse<ProductImageFileDto>();
 
-        var product = await _productReadRepository.GetByIdAsync(request.ProductId)
-            ?? throw new NotFoundException(nameof(Product), request.ProductId);
+        var product = await _productReadRepository.GetByIdAsync(request.ProductId, throwIfNotFound: true);
 
-        if (!_userContextService.IsAdminOrSelf(product.StoreId))
+        if (!_userContextService.IsAdminOrSelf(product!.StoreId))
             throw new ForbiddenException();
 
         var existingPrimaryImage = await _productImageFileReadRepository.GetAsync(x => x.ProductId == request.ProductId && x.IsPrimary);

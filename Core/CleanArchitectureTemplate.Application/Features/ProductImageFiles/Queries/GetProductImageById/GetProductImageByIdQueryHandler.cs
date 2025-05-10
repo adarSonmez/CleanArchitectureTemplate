@@ -24,10 +24,9 @@ public class GetProductImageByIdQueryHandler : IRequestHandler<GetProductImageBy
     {
         var response = new SingleResponse<ProductImageFileDto?>();
 
-        var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.Id)
-            ?? throw new NotFoundException(nameof(ProductImageFile), request.Id);
+        var productImageFile = await _productImageFileReadRepository.GetByIdAsync(request.Id, throwIfNotFound: true);
 
-        response.SetData(productImageFile.ToDto());
+        response.SetData(productImageFile!.ToDto());
 
         return response;
     }

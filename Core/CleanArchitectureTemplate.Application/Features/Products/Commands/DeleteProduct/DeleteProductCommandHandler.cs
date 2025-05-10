@@ -33,10 +33,9 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommandR
     {
         var response = new SingleResponse<ProductDto?>();
 
-        var product = await _productReadRepository.GetByIdAsync(request.Id)
-            ?? throw new NotFoundException(nameof(Product), request.Id);
+        var product = await _productReadRepository.GetByIdAsync(request.Id, throwIfNotFound: true);
 
-        if (!_userContextService.IsAdminOrSelf(product.StoreId))
+        if (!_userContextService.IsAdminOrSelf(product!.StoreId))
             throw new ForbiddenException();
 
         var deleteProductImagesCommand = new DeleteProductImagesByProductIdCommandRequest(product!.Id);

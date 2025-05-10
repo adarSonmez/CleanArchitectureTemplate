@@ -32,10 +32,9 @@ public class RemoveBasketItemFromBasketCommandHandler : IRequestHandler<RemoveBa
     {
         var response = new SingleResponse<BasketDto?>();
 
-        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId)
-            ?? throw new NotFoundException(nameof(Basket), request.BasketId);
+        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, throwIfNotFound: true);
 
-        if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
+        if (!_userContextService.IsAdminOrSelf(basket!.CustomerId))
             throw new ForbiddenException();
 
         var basketItem = basket.BasketItems.FirstOrDefault(x => x.ProductId == request.ProductId)

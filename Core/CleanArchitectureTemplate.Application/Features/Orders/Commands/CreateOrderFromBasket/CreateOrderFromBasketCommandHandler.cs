@@ -41,10 +41,9 @@ public class CreateOrderFromBasketCommandHandler : IRequestHandler<CreateOrderFr
             nameof(Basket.BasketItems),
         };
 
-        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, includePaths: includes)
-            ?? throw new NotFoundException(nameof(Basket), request.BasketId);
+        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, includePaths: includes, throwIfNotFound: true);
 
-        if (!_userContextService.IsAdminOrSelf(basket.CustomerId))
+        if (!_userContextService.IsAdminOrSelf(basket!.CustomerId))
             throw new ForbiddenException();
 
         if (basket.BasketItems == null || basket.BasketItems.Count == 0)

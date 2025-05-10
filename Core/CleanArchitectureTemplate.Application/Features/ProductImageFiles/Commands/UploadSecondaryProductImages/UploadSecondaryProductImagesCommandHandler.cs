@@ -39,10 +39,9 @@ public class UploadSecondaryProductImagesCommandHandler : IRequestHandler<Upload
     {
         var response = new PagedResponse<ProductImageFileDto?>();
 
-        var product = await _productReadRepository.GetByIdAsync(request.ProductId)
-            ?? throw new NotFoundException(nameof(Product), request.ProductId);
+        var product = await _productReadRepository.GetByIdAsync(request.ProductId, throwIfNotFound: true);
 
-        if (!_userContextService.IsAdminOrSelf(product.StoreId))
+        if (!_userContextService.IsAdminOrSelf(product!.StoreId))
             throw new ForbiddenException();
 
         var productImageFiles = new List<ProductImageFile>();

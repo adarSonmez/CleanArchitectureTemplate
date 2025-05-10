@@ -1,4 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Abstractions.Repositories;
+using CleanArchitectureTemplate.Application.Exceptions;
 using CleanArchitectureTemplate.Application.RequestParameters;
 using CleanArchitectureTemplate.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,8 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool enableTracking = false,
         bool getDeleted = false,
-        Pagination? pagination = null)
+        Pagination? pagination = null,
+        bool throwIfNotFound = false)
     {
         var table = _qTable;
 
@@ -72,6 +74,13 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
 
         var data = await table.ToListAsync();
 
+        if (data == null || data.Count == 0)
+        {
+            if (throwIfNotFound)
+                throw new NotFoundException($"No entities found for {typeof(TEntity).Name} with the specified predicate.");
+            return ([], 0);
+        }
+
         return (data, totalCount);
     }
 
@@ -80,7 +89,8 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         Expression<Func<TEntity, bool>> predicate,
         IEnumerable<string>? includePaths = null,
         bool enableTracking = false,
-        bool getDeleted = false)
+        bool getDeleted = false,
+        bool throwIfNotFound = false)
     {
         var table = _qTable;
 
@@ -98,7 +108,12 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
             table = table.Where(e => !(e as BaseEntity)!.IsDeleted);
 
-        return await table.FirstOrDefaultAsync(predicate);
+        var entity = await table.FirstOrDefaultAsync(predicate);
+
+        if (entity == null && throwIfNotFound)
+            throw new NotFoundException($"The entity {typeof(TEntity).Name} was not found with the specified predicate.");
+
+        return entity;
     }
 
     /// <inheritdoc/>
@@ -106,7 +121,8 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         Guid id,
         IEnumerable<string>? includePaths = null,
         bool enableTracking = false,
-        bool getDeleted = false)
+        bool getDeleted = false,
+        bool throwIfNotFound = false)
     {
         var table = _qTable;
 
@@ -124,8 +140,12 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         if (!getDeleted && typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
             table = table.Where(e => !(e as BaseEntity)!.IsDeleted);
 
-        return await table.FirstOrDefaultAsync(e => e.Id == id)
-            ?? throw new KeyNotFoundException($"The entity of type {typeof(TEntity).Name} with ID {id} was not found.");
+        var entity = await table.FirstOrDefaultAsync(e => e.Id == id);
+
+        if (entity == null && throwIfNotFound)
+            throw new NotFoundException(typeof(TEntity).Name, id);
+
+        return entity;
     }
 
     /// <inheritdoc/>
@@ -136,7 +156,7 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         bool enableTracking = false,
         bool getDeleted = false,
         Pagination? pagination = null,
-        bool throwIfNotFound = true)
+        bool throwIfNotFound = false)
     {
         if (ids == null || !ids.Any())
         {
@@ -174,15 +194,14 @@ public class EfReadRepository<TEntity> : IReadRepository<TEntity>
         if (throwIfNotFound && result.Count != ids.Count())
         {
             var missingIds = ids.Except(result.Select(e => e.Id)).ToList();
-            throw new KeyNotFoundException($"The following IDs were not found in {typeof(TEntity).Name}: {string.Join(", ", missingIds)}");
+            throw new NotFoundException($"The following IDs were not found in {typeof(TEntity).Name}: {string.Join(", ", missingIds)}");
         }
 
         return result;
     }
 
     /// <inheritdoc/>
-    public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate,
-        bool enableTracking = false)
+    public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate, bool enableTracking = false)
     {
         var table = _qTable;
 

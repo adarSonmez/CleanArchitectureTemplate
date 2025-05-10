@@ -21,12 +21,13 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
     /// <param name="pagination">Optional pagination parameters.</param>
+    /// <param name="throwIfNotFound">Indicates whether to throw an exception if no entities are found.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the list of entities and the total count.</returns>
     Task<(IEnumerable<TEntity> Data, int TotalCount)> GetAllPaginatedAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
         IEnumerable<string>? includePaths = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null);
+        bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null, bool throwIfNotFound = false);
 
     /// <summary>
     /// Retrieves a single entity asynchronously based on the predicate.
@@ -35,12 +36,14 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <param name="includePaths">The list of strings representing the paths to include related entities. Use dot notation for nested properties.</param>
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
+    /// <param name="throwIfNotFound">Indicates whether to throw an exception if the entity is not found.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity.</returns>
     Task<TEntity?> GetAsync(
         Expression<Func<TEntity, bool>> predicate,
         IEnumerable<string>? includePaths = null,
         bool enableTracking = false,
-        bool getDeleted = false);
+        bool getDeleted = false,
+        bool throwIfNotFound = false);
 
     /// <summary>
     /// Retrieves a single entity asynchronously based on the ID.
@@ -49,6 +52,7 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     /// <param name="includePaths">The list of strings representing the paths to include related entities. Use dot notation for nested properties.</param>
     /// <param name="enableTracking">Indicates whether to enable entity tracking.</param>
     /// <param name="getDeleted">Indicates whether to include deleted entities.</param>
+    /// <param name="throwIfNotFound">Indicates whether to throw an exception if the entity is not found.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity.</returns>
     /// <remarks>Use this method to retrieve a single entity by its unique identifier.</remarks>
     /// <exception cref="KeyNotFoundException">Thrown when the entity with the specified ID is not found.</exception>
@@ -56,7 +60,8 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
     Guid id,
         IEnumerable<string>? includePaths = null,
     bool enableTracking = false,
-    bool getDeleted = false);
+    bool getDeleted = false,
+    bool throwIfNotFound = false);
 
     /// <summary>
     /// Retrieves all entities asynchronously with provided IDs.
@@ -74,7 +79,7 @@ public interface IReadRepository<TEntity> : IRepository<TEntity> where TEntity :
         IEnumerable<string>? includePaths = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         bool enableTracking = false, bool getDeleted = false, Pagination? pagination = null,
-        bool throwIfNotFound = true);
+        bool throwIfNotFound = false);
 
     /// <summary>
     /// Finds entities synchronously based on the predicate.
