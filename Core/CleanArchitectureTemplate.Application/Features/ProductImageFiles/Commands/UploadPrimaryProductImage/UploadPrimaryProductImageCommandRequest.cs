@@ -17,5 +17,5 @@ public record class UploadPrimaryProductImageCommandRequest
 (
     string Folder,
     Guid ProductId,
-    [FromForm] IFormFile File
+    IFormFile File
 ) : IRequest<SingleResponse<ProductImageFileDto>>;

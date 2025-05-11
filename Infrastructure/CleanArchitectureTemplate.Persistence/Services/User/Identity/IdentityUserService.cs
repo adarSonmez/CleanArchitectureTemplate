@@ -131,15 +131,14 @@ public class IdentityUserService : IUserService
 
         // Format the path by replacing placeholders
         string resetPasswordUrl = $"{baseUrl}{resetPasswordPath}"
-            .Replace("{email}", Uri.EscapeDataString(email))
+            .Replace("{userId}", Uri.EscapeDataString(user.Id.ToString()))
             .Replace("{token}", Uri.EscapeDataString(resetToken));
 
         // Compose email content
         string subject = "Password Reset Request - Clean Architecture Template";
         string body = $@"
             <p>Hello <strong>{user.UserName}</strong>,</p>
-            <p>You requested a password reset. Click the link below to reset your password:</p>
-            <p><a href='{resetPasswordUrl}' target='_blank'>{resetPasswordUrl}</a></p>
+            <p>You requested a password reset. Click the <a href='{resetPasswordUrl}' target='_blank'>here</a> to reset your password:</p>
             <p>If you did not request this, please ignore this email.</p>
             <p>Best regards,<br>Clean Architecture Template Support Team</p>";
 

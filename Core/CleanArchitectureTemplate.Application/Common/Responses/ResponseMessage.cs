@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a response message with a type and optional code.
 /// </summary>
-public record ResponseMessage(string Message, string MessageType, string? Code = null)
+public record ResponseMessage(string Message, string MessageType, string? ErrorCode = null)
 {
     /// <summary>
     /// Creates a new success message.
