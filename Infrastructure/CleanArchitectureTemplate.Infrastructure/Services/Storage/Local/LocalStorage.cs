@@ -59,7 +59,7 @@ public class LocalStorage : Storage, ILocalStorage
         await Task.Run(() =>
         {
             var filePath = Path.Combine(path, fileName);
-            FileHelper.DeleteFileIfExists(filePath);
+            FileHelper.DeleteFileIfExists(GetUploadFolderPath(filePath));
         });
     }
 

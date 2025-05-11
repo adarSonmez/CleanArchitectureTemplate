@@ -63,7 +63,7 @@ public class UploadSecondaryProductImagesCommandHandler : IRequestHandler<Upload
             {
                 FileDetails = fileDetails,
                 IsPrimary = false,
-                Product = product!
+                ProductId = product.Id!
             };
 
             productImageFiles.Add(productImageFile);

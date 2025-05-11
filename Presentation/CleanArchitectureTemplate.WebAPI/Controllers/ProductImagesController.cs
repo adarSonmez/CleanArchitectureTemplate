@@ -56,14 +56,10 @@ public class ProductImagesController : ControllerBase
         return await _mediator.Send(request);
     }
 
-    [HttpPost("upload-secondary/{productId}")]
+    [HttpPost("upload-secondary")]
     [Authorize(Roles = UserRoles.StoreOrAdmin)]
-    public async Task<IActionResult> UploadSecondaryImages(
-        [FromBody] string folder,
-        [FromRoute] Guid productId,
-        [FromForm] IFormFileCollection files)
+    public async Task<IActionResult> UploadSecondaryImages([FromForm] UploadSecondaryProductImagesCommandRequest request)
     {
-        var request = new UploadSecondaryProductImagesCommandRequest(folder, productId, files);
         return await _mediator.Send(request);
     }
 
