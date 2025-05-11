@@ -22,6 +22,12 @@ public class UserAvatarFileConfiguration : IEntityTypeConfiguration<UserAvatarFi
         builder.HasOne<AppUser>()
                .WithOne()
                .HasForeignKey<UserAvatarFile>(c => c.UserId)
+               .OnDelete(DeleteBehavior.Cascade)
                .IsRequired();
+
+        builder.HasOne(f => f.FileDetails)
+               .WithOne()
+               .HasForeignKey<UserAvatarFile>(f => f.FileDetailsId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

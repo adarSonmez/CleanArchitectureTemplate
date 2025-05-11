@@ -13,5 +13,11 @@ public class InvoiceFileConfiguration : IEntityTypeConfiguration<InvoiceFile>
     {
         // Table Configuration
         builder.ToTable("InvoiceFiles", "Files");
+
+        // Relationships
+        builder.HasOne(f => f.FileDetails)
+               .WithOne()
+               .HasForeignKey<InvoiceFile>(f => f.FileDetailsId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

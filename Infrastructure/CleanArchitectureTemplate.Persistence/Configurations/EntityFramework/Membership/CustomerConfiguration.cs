@@ -27,6 +27,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         builder.HasOne<AppUser>()
                .WithOne()
                .HasForeignKey<Customer>(c => c.Id)
+               .OnDelete(DeleteBehavior.Cascade)
                .IsRequired();
     }
 }

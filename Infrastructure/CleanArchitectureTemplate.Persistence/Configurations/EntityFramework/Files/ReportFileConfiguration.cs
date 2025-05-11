@@ -19,5 +19,11 @@ public class ReportFileConfiguration : IEntityTypeConfiguration<ReportFile>
             .HasColumnName("ReportType")
             .HasConversion<string>()
             .HasMaxLength(15);
+
+        // Relationships
+        builder.HasOne(f => f.FileDetails)
+               .WithOne()
+               .HasForeignKey<ReportFile>(f => f.FileDetailsId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

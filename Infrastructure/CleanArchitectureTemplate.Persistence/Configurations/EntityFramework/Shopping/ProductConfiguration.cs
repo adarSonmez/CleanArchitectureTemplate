@@ -1,4 +1,5 @@
-﻿using CleanArchitectureTemplate.Domain.Entities.Shopping;
+﻿using CleanArchitectureTemplate.Domain.Entities.Files;
+using CleanArchitectureTemplate.Domain.Entities.Shopping;
 using CleanArchitectureTemplate.Persistence.ValueConverters.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -40,6 +41,11 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                .IsRequired();
 
         // Relationships
+        builder.HasOne(p => p.Store)
+               .WithMany(s => s.Products)
+               .HasForeignKey(p => p.StoreId)
+               .OnDelete(DeleteBehavior.Cascade);
+
         builder.Property(p => p.StandardPrice)
             .HasConversion(new MoneyConverter())
             .HasMaxLength(50);

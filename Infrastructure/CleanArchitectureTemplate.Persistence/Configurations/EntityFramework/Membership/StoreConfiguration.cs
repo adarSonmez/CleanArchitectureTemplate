@@ -28,6 +28,7 @@ public class StoreConfiguration : IEntityTypeConfiguration<Store>
         builder.HasOne<AppUser>()
                .WithOne()
                .HasForeignKey<Store>(s => s.Id)
+               .OnDelete(DeleteBehavior.Cascade)
                .IsRequired();
     }
 }

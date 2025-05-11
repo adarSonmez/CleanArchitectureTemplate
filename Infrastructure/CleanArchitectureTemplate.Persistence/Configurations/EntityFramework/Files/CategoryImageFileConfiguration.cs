@@ -13,5 +13,16 @@ public class CategoryImageFileConfiguration : IEntityTypeConfiguration<CategoryI
     {
         // Table Configuration
         builder.ToTable("CategoryImageFiles", "Files");
+
+        // Relationships
+        builder.HasOne(f => f.Category)
+               .WithOne()
+               .HasForeignKey<CategoryImageFile>(f => f.CategoryId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(f => f.FileDetails)
+               .WithOne()
+               .HasForeignKey<CategoryImageFile>(f => f.FileDetailsId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

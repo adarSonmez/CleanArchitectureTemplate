@@ -16,5 +16,11 @@ public class BasketConfiguration : IEntityTypeConfiguration<Basket>
 
         // Property Configurations
         builder.Ignore(o => o.TotalAmount);
+
+        // Relationships
+        builder.HasOne(b => b.Customer)
+               .WithMany(c => c.Baskets)
+               .HasForeignKey(b => b.CustomerId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }
