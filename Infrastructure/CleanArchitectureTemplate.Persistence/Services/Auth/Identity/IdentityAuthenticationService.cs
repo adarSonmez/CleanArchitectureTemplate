@@ -229,11 +229,14 @@ public class IdentityAuthenticationService : IAuthenticationService
     #region Refresh Token
 
     /// <inheritdoc />
-    public async Task<TokenDto?> RefreshTokenAsync(RefreshTokenCommandRequest model)
+    public async Task<TokenDto?> RefreshTokenAsync()
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == model.RefreshToken);
+        var refreshToken = _cookieService.GetRefreshTokenFromCookie()
+            ?? throw new UnauthorizedException("Refresh token not found.");
 
-        if (user == null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiration < DateTime.UtcNow)
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+
+        if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiration < DateTime.UtcNow)
         {
             throw new UnauthorizedException("Invalid refresh token.");
         }

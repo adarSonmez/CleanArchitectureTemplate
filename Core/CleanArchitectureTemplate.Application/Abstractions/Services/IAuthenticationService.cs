@@ -46,8 +46,7 @@ public interface IAuthenticationService : IService
     /// <summary>
     /// Refreshes the user token and enables the user to continue using the application.
     /// </summary>
-    /// <param name="model">Model containing the refresh token and the user ID.</param>
-    Task<TokenDto?> RefreshTokenAsync(RefreshTokenCommandRequest model);
+    Task<TokenDto?> RefreshTokenAsync();
 
     /// <summary>
     /// Revokes the refresh token for a given user without signing them out.
