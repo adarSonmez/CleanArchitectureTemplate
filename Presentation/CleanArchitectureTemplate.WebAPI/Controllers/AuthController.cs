@@ -46,9 +46,9 @@ public class AuthController : ControllerBase
     #region Token Actions
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommandRequest request)
+    public async Task<IActionResult> RefreshToken()
     {
-        return await _mediator.Send(request);
+        return await _mediator.Send(new RefreshTokenCommandRequest());
     }
 
     [HttpPost("[action]")]
