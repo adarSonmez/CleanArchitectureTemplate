@@ -42,12 +42,12 @@ public class AddBasketItemToBasketCommandHandler : IRequestHandler<AddBasketItem
     {
         var response = new SingleResponse<BasketDto?>();
 
-        var includes = new List<Expression<Func<Basket, object>>>
+        var includes = new List<string>
         {
-            p => p.BasketItems
+            nameof(Basket.BasketItems)
         };
 
-        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, throwIfNotFound: true);
+        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, throwIfNotFound: true, includePaths: includes);
 
         if (!_userContextService.IsAdminOrSelf(basket!.CustomerId))
             throw new ForbiddenException();

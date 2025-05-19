@@ -31,8 +31,12 @@ public class RemoveBasketItemFromBasketCommandHandler : IRequestHandler<RemoveBa
     public async Task<SingleResponse<BasketDto?>> Handle(RemoveBasketItemFromBasketCommandRequest request, CancellationToken cancellationToken)
     {
         var response = new SingleResponse<BasketDto?>();
+        var includePaths = new List<string>
+        {
+            nameof(Basket.BasketItems)
+        };
 
-        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, throwIfNotFound: true);
+        var basket = await _basketReadRepository.GetByIdAsync(request.BasketId, throwIfNotFound: true, includePaths: includePaths);
 
         if (!_userContextService.IsAdminOrSelf(basket!.CustomerId))
             throw new ForbiddenException();
@@ -42,7 +46,7 @@ public class RemoveBasketItemFromBasketCommandHandler : IRequestHandler<RemoveBa
 
         if (request.Clear)
         {
-            await _basketItemWriteRepository.SoftDeleteAsync(basketItem);
+            await _basketItemWriteRepository.HardDeleteAsync(basketItem);
         }
         else
         {
